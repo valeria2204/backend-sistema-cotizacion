@@ -16,7 +16,7 @@ class CreateCompanyCodesTable extends Migration
         Schema::create('company_codes', function (Blueprint $table) {
             $table->id();
             $table->string("code");
-            $tavle->string("email");
+            $table->string("email");
             $table->foreignId('request_quotitations_id')->constrained();
             $table->timestamps();
         });
