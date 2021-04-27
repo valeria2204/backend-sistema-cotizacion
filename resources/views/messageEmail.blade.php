@@ -28,11 +28,14 @@
             padding:30px;
             font-size: 18px;
         }
+        h3{color:red}
     </style>
 </head>
 <body>
     <div class="contenido">
         <div class="encabezado"><h1>Solicitud de cotización</h1></div>
+        <p>Su codigo de Ingreso: </p>
+        <h3>{{$content->code}}</h3>
         <p> {{$content->description}}</p>
     </div>
 </body>

@@ -27,7 +27,10 @@ Route::post('report/{id}', 'ReportController@store');
 Route::post('upload/{id}', 'RequestQuotitationController@uploadFile');
 Route::get('download', 'RequestQuotitationController@download');
 Route::post('details', 'UserController@details');
-Route::post('sendEmail','EmailController@store');
+
+/**resive los emails y la descripcion del mensage que se enviara a las empresas o a la empresa
+ * y resive el id a la solicitud a la que pertenece*/
+Route::post('sendEmail/{id}','EmailController@store');
 
 Route::group(['middleware' => 'auth:api'], function(){
     
