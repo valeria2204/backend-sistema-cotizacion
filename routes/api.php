@@ -23,6 +23,10 @@ Route::get('quotitations', 'RequestQuotitationController@index');
 Route::get('quotitation/{id}', 'RequestQuotitationController@show');
 
 Route::put('quotitation/status/{id}', 'RequestQuotitationController@updateState');
+
+/**recibe un id de solicitud y responde con los archivos adjuntos que pertenecen a esa solicitud */
+Route::get('requestQuotitation/files/{id}', 'RequestQuotitationController@showFiles');
+
 Route::post('report/{id}', 'ReportController@store');
 Route::post('upload/{id}', 'RequestQuotitationController@uploadFile');
 Route::get('download', 'RequestQuotitationController@download');
