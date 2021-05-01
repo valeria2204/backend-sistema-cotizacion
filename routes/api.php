@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('login', 'UserController@login');
 Route::post('register', 'UserController@register');
+
+/**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
 Route::get('users', 'UserController@index');
 Route::post('quotitation', 'RequestQuotitationController@store');
 Route::get('quotitations', 'RequestQuotitationController@index');

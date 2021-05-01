@@ -74,15 +74,23 @@ class UserController extends Controller
         return response()->json(['success' => $user], $this-> successStatus); 
     } 
     /**
-     * Display a listing of the resource.
+     * Devuelve una lista de usuarios mas su rol
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $users = User::all();
-        return response()->json(['users'=>$users],200);
-    
+        $countUsers = count($users);
+        for ($id = 1; $id <= $countUsers; $id++)
+        {
+             $user = User::find($id);
+             $rol = $user->rols()->get();
+             $user['userRol'] = $rol;
+             $i = $id-1;
+             $users[$i] = $user;
+        }
+        return response()->json(['users'=>$users], $this-> successStatus);
     }
 
     /**
