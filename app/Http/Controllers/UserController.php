@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
-use App\User; 
+use App\User;
+use App\Rol;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 
@@ -56,6 +57,7 @@ class UserController extends Controller
         }
        
         $input = $request->all(); 
+        //$inpu
         $input['password'] = $input['ci'];
         $input['password'] = bcrypt($input['password']); 
         $user = User::create($input); 

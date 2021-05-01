@@ -36,6 +36,10 @@ Route::post('details', 'UserController@details');
  * y resive el id a la solicitud a la que pertenece*/
 Route::post('sendEmail/{id}','EmailController@store');
 
+/**Devuleve la lista de todos los roles */
+Route::get('rols', 'RolController@index');
+
+
 Route::group(['middleware' => 'auth:api'], function(){
     
 });
