@@ -7,6 +7,9 @@
 ### configurar .env-example
 cambiar de nombre a .env agregar el nombre de la base de datos, nombre de usuario, password
 
+### generar nueva llave "key"
+`` php artisan key:generate ``
+
 ### las migraciones
 `` php artisan migrate ``
 
