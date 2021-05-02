@@ -19,7 +19,7 @@ Route::get('users', 'UserController@index');
 Route::post('quotitation', 'RequestQuotitationController@store');
 Route::get('quotitations', 'RequestQuotitationController@index');
 
-/**recibe un id de solitud de aquicion y responde con los detalles que perteneces a esa solicitud */
+/**recibe un id de solitud de adquicion y responde con los detalles que perteneces a esa solicitud */
 Route::get('quotitation/{id}', 'RequestQuotitationController@show');
 
 Route::put('quotitation/status/{id}', 'RequestQuotitationController@updateState');
@@ -28,6 +28,7 @@ Route::post('upload/{id}', 'RequestQuotitationController@uploadFile');
 Route::get('download', 'RequestQuotitationController@download');
 Route::post('details', 'UserController@details');
 Route::post('sendEmail','EmailController@store');
+Route::post('administrativeUnit/new','AdministrativeUnitController@register');
 
 Route::group(['middleware' => 'auth:api'], function(){
     

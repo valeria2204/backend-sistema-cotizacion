@@ -15,6 +15,8 @@ class CreateAdministrativeUnitsTable extends Migration
     {
         Schema::create('administrative_units', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->foreignId('faculties_id')->constrained();  
             $table->timestamps();
         });
     }
