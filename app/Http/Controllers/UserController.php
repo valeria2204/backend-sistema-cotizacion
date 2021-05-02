@@ -56,13 +56,6 @@ class UserController extends Controller
             $mensge = 'El email '.$request['email'].' ya esta registrado';
             return response()->json(['message'=>$mensge], 200); 
         }
-
-        $userEncontrado = User::where('userName',$request['userName'])->get();
-        $valor = count($userEncontrado);
-        if($valor == 1){
-            $mensge = 'El nombre de usuario '.$request['userName'].' ya esta registrado';
-            return response()->json(['message'=>$mensge], 200); 
-        }
        
         $input = $request->all();  
         $input['password'] = $input['ci'];
