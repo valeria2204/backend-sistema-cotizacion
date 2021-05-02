@@ -51,6 +51,15 @@ Route::post('rols/new', 'RolController@store');
 Route::post('sendEmail','EmailController@store');
 Route::post('administrativeUnit/new','AdministrativeUnitController@register');
 
+/**Devuelve la lista de todos las unidades administrativas */
+Route::get('administrativeUnit','AdministrativeUnitController@index');
+
+/**Recibe el nombre de la unidad de gasto y la id de la unidad administrativa dentro de un request para guardarlo */
+Route::post('spendingUnits/new','SpendingUnitController@store');
+
+/**Devuelve la lista de todos las unidades de gasto */
+Route::get('spendingUnits','SpendingUnitController@index');
+
 Route::group(['middleware' => 'auth:api'], function(){
     
 });

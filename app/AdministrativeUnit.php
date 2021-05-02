@@ -3,6 +3,10 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\SpendingUnit;
+use App\Faculty;
+use App\LimiteAmount;
+use App\Quotitation;
 
 class AdministrativeUnit extends Model
 {
@@ -19,5 +23,9 @@ class AdministrativeUnit extends Model
 
     public function limiteAmount(){
         return $this->hasMany(LimiteAmount::class);
+    }
+
+    public function spendingUnits(){
+        return $this->hasMany(SpendingUnit::class);
     }
 }
