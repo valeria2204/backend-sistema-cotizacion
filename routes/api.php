@@ -41,6 +41,8 @@ Route::post('sendEmail/{id}','EmailController@store');
 /**Devuleve la lista de todos los roles */
 Route::get('rols', 'RolController@index');
 
+/**Recibe el nombre y descripcion del nuevo rol para guardarlo */
+Route::post('rols/new', 'RolController@store');
 
 Route::group(['middleware' => 'auth:api'], function(){
     
