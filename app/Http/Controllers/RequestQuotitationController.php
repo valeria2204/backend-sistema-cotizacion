@@ -115,7 +115,8 @@ class RequestQuotitationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {  // guarda todas las solicitudes o tuplas
+        // requestQuot = requests
         $requestQuotitations = RequestQuotitation::all();
         $deils = RequestDetail::where('request_quotitations_id',$id)->get();
         $requestQuotitation = $requestQuotitations->find($id);

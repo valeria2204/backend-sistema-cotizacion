@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdministrativeUnitsTable extends Migration
+class CreateLimiteAmountsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateAdministrativeUnitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('administrative_units', function (Blueprint $table) {
+        Schema::create('limite_amounts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->foreignId('faculties_id')->constrained();  
+            $table->integer('monto');
+            $table->date('dateStamp'); //registro de fecha
+            $table->year('steps');   //gestiones
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateAdministrativeUnitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('administrative_units');
+        Schema::dropIfExists('limite_amounts');
     }
 }
