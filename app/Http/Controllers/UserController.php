@@ -33,7 +33,7 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response 
      */ 
-    public function register(Request $request) 
+    public function register(Request $request, $idRol) 
     { 
         $validator = Validator::make($request->all(), [ 
             'userName' => 'required', 
@@ -43,24 +43,33 @@ class UserController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);            
         }
 
-        $userEncontrado = User::where('email',$request['email'])->get();
-        $valor = count($userEncontrado);
-        if($valor == 1){
-            $mensge = 'El email ya esta registrado '.$request['email'];
-            return response()->json(['message'=>$mensge], 200); 
-        }
         $userEncontrado = User::where('ci',$request['ci'])->get();
         $valor = count($userEncontrado);
         if($valor == 1){
-            $mensge = 'El cedula de identidad ya esta registrado '.$request['ci'];
+            $mensge = 'La cedula de identidad '.$request['ci'].' ya esta registrada ';
+            return response()->json(['message'=>$mensge], 200); 
+        }
+
+        $userEncontrado = User::where('email',$request['email'])->get();
+        $valor = count($userEncontrado);
+        if($valor == 1){
+            $mensge = 'El email '.$request['email'].' ya esta registrado';
+            return response()->json(['message'=>$mensge], 200); 
+        }
+
+        $userEncontrado = User::where('userName',$request['userName'])->get();
+        $valor = count($userEncontrado);
+        if($valor == 1){
+            $mensge = 'El nombre de usuario '.$request['userName'].' ya esta registrado';
             return response()->json(['message'=>$mensge], 200); 
         }
        
-        $input = $request->all(); 
-        //$inpu
+        $input = $request->all();  
         $input['password'] = $input['ci'];
-        $input['password'] = bcrypt($input['password']); 
-        $user = User::create($input); 
+        $input['password'] = bcrypt($input['password']);
+
+        $user = User::create($input);
+        $user->rols()->attach($idRol);
         return response()->json(['message'=>""], $this-> successStatus); 
     }
     /** 
@@ -94,6 +103,19 @@ class UserController extends Controller
     }
 
     /**
+     * Modificar el rol de un usuario ya registrado
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateRol($idUser, $idRol)
+    {
+        $user = User::find($idUser);
+        $user->rols()->sync($idRol);
+        return response()->json(['res'=>true], $this-> successStatus);
+    }
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -126,6 +148,7 @@ class UserController extends Controller
     {
         //
     }
+
 
     /**
      * Remove the specified resource from storage.

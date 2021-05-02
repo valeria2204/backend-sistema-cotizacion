@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::post('login', 'UserController@login');
-Route::post('register', 'UserController@register');
+
+/**Recibe el request con los datos del usuario y aparte el id del rol de usuario para registrar el nuevo usuario */
+Route::post('register/{id}', 'UserController@register');
 
 /**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
 Route::get('users', 'UserController@index');
@@ -40,6 +42,9 @@ Route::post('sendEmail/{id}','EmailController@store');
 
 /**Devuleve la lista de todos los roles */
 Route::get('rols', 'RolController@index');
+
+/**Recibe el id del usuario y el id del rol y modifica el rol de un usuario */
+Route::put('users/update/{idu}/{idr}', 'UserController@updateRol');
 
 /**Recibe el nombre y descripcion del nuevo rol para guardarlo */
 Route::post('rols/new', 'RolController@store');
