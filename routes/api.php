@@ -29,6 +29,8 @@ Route::get('download', 'RequestQuotitationController@download');
 Route::post('details', 'UserController@details');
 Route::post('sendEmail','EmailController@store');
 Route::post('administrativeUnit/new','AdministrativeUnitController@register');
+Route::post('limiteAmount/new','LimiteAmountController@register');
+Route::get('limiteAmounts','LimiteAmountController@index');
 
 Route::group(['middleware' => 'auth:api'], function(){
     

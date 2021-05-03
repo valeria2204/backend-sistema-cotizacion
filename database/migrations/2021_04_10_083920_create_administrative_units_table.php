@@ -17,6 +17,7 @@ class CreateAdministrativeUnitsTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('faculties_id')->constrained();  
+           // $table->foreignId('limiteAmount_id')->constrained(); 
             $table->timestamps();
         });
     }
