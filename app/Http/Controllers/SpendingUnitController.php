@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\SpendingUnit;
+use App\AdministrativeUnit;
+use App\Faculty;
 use Validator;
 
 class SpendingUnitController extends Controller
@@ -18,6 +20,19 @@ class SpendingUnitController extends Controller
     public function index()
     {
         $spendingUnits = SpendingUnit::all();
+        $countSpendingUnits = count($spendingUnits);
+        for ($id = 1; $id <= $countSpendingUnits; $id++)
+        {
+             $spendingUnit = SpendingUnit::find($id);
+             $administrative_unit_id = $spendingUnit['administrative_units_id'];
+             $administrativeUnit = AdministrativeUnit::find($administrative_unit_id);
+             $spendingUnit['administrativeUnit'] = $administrativeUnit;
+             $facultie_id =  $administrativeUnit['faculties_id'];
+             $faculty = Faculty::find($facultie_id);
+             $spendingUnit['faculty'] = $faculty;
+             $i = $id-1;
+             $spendingUnits[$i] = $spendingUnit;
+        }
         return response()->json(['spending units'=> $spendingUnits],$this-> successStatus);
     }
 

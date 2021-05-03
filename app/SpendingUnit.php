@@ -9,7 +9,7 @@ class SpendingUnit extends Model
 {
     //
     protected $fillable = [
-        'nameUnidadGasto','administrative_units_id'
+        'nameUnidadGasto','administrative_units_id', 'administrativeUnit', 'faculty'
     ];
 
     public function admnistrativeUnits(){
