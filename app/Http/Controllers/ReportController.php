@@ -15,6 +15,8 @@ class ReportController extends Controller
      */
     public function index()
     {
+        //metodo with recupera un modelo que carga tambien con la informacion de las tablas que estan
+        //relacionadas
         $report = Report::with('request_quotitations')->get();
         return response()->json(['reports'=>$report],200);
     }
