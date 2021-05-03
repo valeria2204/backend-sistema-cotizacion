@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use App\Mail\EmailModel;
+use App\CompanyCode;
 
 class EmailController extends Controller
 {
@@ -18,18 +19,26 @@ class EmailController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * resive los emails y la descripcion del mensage que se enviara a las empresas o a la empresa
+ * y resive el id a la solicitud a la que pertenece
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,$id)
     {
-        //dd($request);
-        $sabeEmail = $request->all(); 
-        $sabeEmail = $request->email;
-        Mail::to($sabeEmail)->send(new EmailModel($request));
-        return response()->json(['result'=>"El mensage ha sido enviado"],200);
+        $emails = $request->emails;
+        $desciption = $request->description;
+        foreach ($emails as $key => $email) {
+            $input['email']=$email;
+            $input['request_quotitations_id']=$id;
+            $input['code']=substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6);
+            var_dump($input);
+            $request['code']=$input['code'];
+            Mail::to($email)->send(new EmailModel($request));
+            CompanyCode::create($input);
+        }
+        return response()->json(['result'=>"El mensage ha sido enviado"],200); 
     }
 
     /**

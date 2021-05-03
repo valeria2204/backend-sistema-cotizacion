@@ -16,6 +16,7 @@ class CreateSpendingUnitsTable extends Migration
         Schema::create('spending_units', function (Blueprint $table) {
             $table->id();
             $table->string('nameUnidadGasto');
+            $table->foreignId('administrative_units_id')->constrained();  
             $table->timestamps();
         });
     }
