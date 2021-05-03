@@ -49,16 +49,22 @@ Route::put('users/update/{idu}/{idr}', 'UserController@updateRol');
 /**Recibe el nombre y descripcion del nuevo rol para guardarlo */
 Route::post('rols/new', 'RolController@store');
 Route::post('sendEmail','EmailController@store');
-Route::post('administrativeUnit/new','AdministrativeUnitController@register');
 
+/**resgittro de unidad administrativa */
+Route::post('administrativeUnit/new','AdministrativeUnitController@register');
 /**Devuelve la lista de todos las unidades administrativas */
 Route::get('administrativeUnit','AdministrativeUnitController@index');
+
 
 /**Recibe el nombre de la unidad de gasto y la id de la unidad administrativa dentro de un request para guardarlo */
 Route::post('spendingUnits/new','SpendingUnitController@store');
 
 /**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/
 Route::get('spendingUnits','SpendingUnitController@index');
+
+/**CopanyCode */
+/**resive el codigo y lo busca*/
+Route::post('searchCode','CompanyCodeController@searchCode');
 
 Route::group(['middleware' => 'auth:api'], function(){
     
