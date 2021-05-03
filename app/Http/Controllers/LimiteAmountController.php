@@ -16,10 +16,10 @@ class LimiteAmountController extends Controller
 
     public $successStatus = 200;
 
-    public function index()
+    public function index($id)
     {
-        $LimiteAmount = LimiteAmount::all();
-        return response()->json(['Limite_Amount'=>$LimiteAmount],200);
+        $limiteAmount = LimiteAmount::where('administrative_units_id',$id)->get();
+        return response()->json(['Limite_Amounts'=>$limiteAmount],200);
     }
 
 // registra montos limites
@@ -34,13 +34,13 @@ class LimiteAmountController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);            
         }
        
-        $input = $request->all(); 
+        $input = $request->all();//where('administrative_units_id',$id)->get();; 
         $limiteAmount = LimiteAmount::create($input); 
         return response()->json(['message'=>""], $this-> successStatus); 
     
     }
 
-    public function updateLimiteAmount(Request $request)
+    public function updateLimiteAmount(Request $request,$id)
     {
         $validator = Validator::make($request->all(), [ 
             'monto' => 'required', 
@@ -51,15 +51,15 @@ class LimiteAmountController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);            
         }
        
-        $input = $request->all(); 
+        $input = $request->where('administrative_units_id',$id)->get();
         $limiteAmount = LimiteAmount::create($input); 
         return response()->json(['message'=>""], $this-> successStatus); 
     
     }
     // muestra el ultimo registro de los montos limites
-    public function sendCurrentData()
+    public function sendCurrentData($id)
     {
-        $currentLimiteAmount = LimiteAmount::select('monto','steps')->latest()->take(1)->get();
+        $currentLimiteAmount = LimiteAmount::select('monto','steps')->where('administrative_units_id',$id)->latest()->take(1)->get();
         return response()->json(['current_limit_amount'=>$currentLimiteAmount],200);
     }
 

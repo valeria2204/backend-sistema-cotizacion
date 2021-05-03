@@ -30,11 +30,11 @@ Route::post('details', 'UserController@details');
 Route::post('sendEmail','EmailController@store');
 Route::post('administrativeUnit/new','AdministrativeUnitController@register');
 Route::post('limiteAmount/new','LimiteAmountController@register');
-Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
-Route::get('limiteAmounts','LimiteAmountController@index');
+Route::post('updateLimiteAmount/{id}','LimiteAmountController@updateLimiteAmount');
+Route::get('limiteAmounts/{id}','LimiteAmountController@index');
 Route::get('Faculties','FacultyController@index');
-//envia el registro actual de los montos limites
-Route::get('lastRecord','LimiteAmountController@sendCurrentData');
+//envia el registro actual de los montos limites dado un id de unidad administrativa
+Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 
 Route::group(['middleware' => 'auth:api'], function(){
     
