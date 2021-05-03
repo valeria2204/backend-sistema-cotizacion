@@ -57,7 +57,7 @@ Route::get('administrativeUnit','AdministrativeUnitController@index');
 /**Recibe el nombre de la unidad de gasto y la id de la unidad administrativa dentro de un request para guardarlo */
 Route::post('spendingUnits/new','SpendingUnitController@store');
 
-/**Devuelve la lista de todos las unidades de gasto */
+/**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/
 Route::get('spendingUnits','SpendingUnitController@index');
 
 Route::group(['middleware' => 'auth:api'], function(){
