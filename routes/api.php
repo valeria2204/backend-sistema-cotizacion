@@ -49,12 +49,17 @@ Route::put('users/update/{idu}/{idr}', 'UserController@updateRol');
 /**Recibe el nombre y descripcion del nuevo rol para guardarlo */
 Route::post('rols/new', 'RolController@store');
 Route::post('sendEmail','EmailController@store');
+//Registra una unidad administrativa
 Route::post('administrativeUnit/new','AdministrativeUnitController@register');
+//Registra un monto limite
 Route::post('limiteAmount/new','LimiteAmountController@register');
+//Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
 Route::post('updateLimiteAmount/{id}','LimiteAmountController@updateLimiteAmount');
+//Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
 Route::get('limiteAmounts/{id}','LimiteAmountController@index');
+// Devuelve todas las facultades de la base de datos
 Route::get('Faculties','FacultyController@index');
-//envia el registro actual de los montos limites dado un id de unidad administrativa
+//Devuelve el registro actual de los montos limites dado un id de la unidad administrativa a la que pertenece
 Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 
 /**Devuelve la lista de todos las unidades administrativas */
