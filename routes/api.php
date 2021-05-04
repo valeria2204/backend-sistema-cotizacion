@@ -62,6 +62,10 @@ Route::post('spendingUnits/new','SpendingUnitController@store');
 /**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/
 Route::get('spendingUnits','SpendingUnitController@index');
 
+/**Faculty Controller */
+/**devuelve las facultades */
+Route::get('faculties','FacultyController@index');
+
 /**CopanyCode */
 /**resive el codigo y lo busca*/
 Route::post('searchCode','CompanyCodeController@searchCode');
