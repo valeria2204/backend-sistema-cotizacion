@@ -49,9 +49,10 @@ class AdministrativeUnitController extends Controller
             $message = 'El nombre ya esta registrado '.$request['name'];
             return response()->json(['message'=>$message], 200); 
         }
+
         $input = $request->all(); 
         $AdministrativeUnit = AdministrativeUnit::create($input); 
-        return response()->json(['message'=>""], $this-> successStatus);
+        return response()->json(['message'=>"Registro exitoso"], $this-> successStatus);
     }
 
     /**

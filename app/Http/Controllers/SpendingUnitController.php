@@ -33,7 +33,7 @@ class SpendingUnitController extends Controller
              $i = $id-1;
              $spendingUnits[$i] = $spendingUnit;
         }
-        return response()->json(['spending units'=> $spendingUnits],$this-> successStatus);
+        return response()->json(['spending_units'=> $spendingUnits],$this-> successStatus);
     }
 
     /**

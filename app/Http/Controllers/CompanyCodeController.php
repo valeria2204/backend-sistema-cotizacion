@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\CompanyCode;
 
 class CompanyCodeController extends Controller
@@ -55,7 +56,13 @@ class CompanyCodeController extends Controller
      */
     public function show($id)
     {
-        //
+        $coder = $request->only('code');
+        $code = $coder['code'];
+        $companycode = CompanyCode::find($code);
+        $requestQuotitation_id = $companycode['request_quotitations_id'];
+        $deils = RequestDetail::where('request_quotitations_id',$requestQuotitation_id)->get();
+        $companycode['details'] = $deils;
+        return response()->json($requestQuotitation,200);
     }
 
     /**
@@ -66,17 +73,6 @@ class CompanyCodeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }
