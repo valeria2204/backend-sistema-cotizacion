@@ -132,6 +132,40 @@ class RequestQuotitationController extends Controller
         $requestQuotitation->update();
         return response()->json($requestQuotitation,200);
     }
+
+      /**
+     * devuelve los archivos adjuntos de una solicitud cuando te pasan el id de la solicitud
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showFiles($id)
+    {
+        $directory = public_path().'/FilesAquisicion'.'/'.$id;
+        $listDir = $this-> dirToArray($directory);
+        return response()->json($listDir,200);
+    }
+
+    
+    //devuelve un arreglo de archivos de un directorio determinado $dir
+    public function dirToArray($dir) {
+        $listDir = array();
+        if($handler = opendir($dir)) {
+            while (($file = readdir($handler)) !== FALSE) {
+                if ($file != "." && $file != "..") {
+                    if(is_file($dir."/".$file)) {
+                        $listDir[] = $file;
+                    }elseif(is_dir($dir."/".$file)){
+                        $listDir[$file] = $this->dirToArray ($dir."/".$file);
+                    }
+                }
+            }
+            closedir($handler);
+        }
+        return $listDir;
+    }
+
+
     /**
      * Update the specified resource in storage.
      *
