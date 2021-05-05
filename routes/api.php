@@ -64,6 +64,10 @@ Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 
 // Devuelve todas las facultades de la base de datos
 Route::get('Faculties','FacultyController@index');
+// Devuelve solo las facultades que no estan asignadas a una unidad administrativa
+Route::get('faculties/use','FacultyController@noUseFaculties');
+//Crea una nueva facultad 
+Route::post('facultad/new','FacultyController@store');
 
 
 //Registra una unidad administrativa
