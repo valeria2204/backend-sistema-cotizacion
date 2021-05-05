@@ -30,8 +30,8 @@ class EmailController extends Controller
         $emails = $request->emails;
         $desciption = $request->description;
         foreach ($emails as $key => $email) {
-            $correo = $email['correo'];
             $input['email']=$email;
+            var_dump($input['email']);
             $input['request_quotitations_id']=$id;
             $input['code']=substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6);
             //var_dump($input);
