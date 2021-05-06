@@ -18,13 +18,23 @@ class FacultyController extends Controller
     }
 
     /**
+     * Facultades no usadas en niguna unidad administratica
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function noUseFaculties()
+    {
+        $faculties = Faculty::where('inUse',0)->get();
+        return response()->json(['facultades'=>$faculties],200);
+    }
+    
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -35,7 +45,9 @@ class FacultyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $newFaculty = Faculty::create($input);
+        return response()->json(['faculty'=>$newFaculty], 200);
     }
 
     /**
