@@ -24,7 +24,7 @@ class FacultyController extends Controller
      */
     public function noUseFaculties()
     {
-        $faculties = Faculty::where('inUse',false)->get();
+        $faculties = Faculty::where('inUse',0)->get();
         return response()->json(['facultades'=>$faculties],200);
     }
     
@@ -47,7 +47,7 @@ class FacultyController extends Controller
     {
         $input = $request->all();
         $newFaculty = Faculty::create($input);
-        return response()->json(['faculty'=>$newFaculty], $this-> successStatus);
+        return response()->json(['faculty'=>$newFaculty], 200);
     }
 
     /**

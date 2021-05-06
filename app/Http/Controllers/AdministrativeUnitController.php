@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AdministrativeUnit;
+use App\Faculty;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -49,9 +50,12 @@ class AdministrativeUnitController extends Controller
             $message = 'El nombre ya esta registrado '.$request['name'];
             return response()->json(['message'=>$message], 200); 
         }
-
         $input = $request->all(); 
-        $AdministrativeUnit = AdministrativeUnit::create($input); 
+        $id_facultad = $input['faculties_id'];
+        $facultad = Faculty::find($id_facultad);
+        $facultad['inUse']=1;
+        $facultad->save();
+        $AdministrativeUnit = AdministrativeUnit::create($input);
         return response()->json(['message'=>"Registro exitoso"], $this-> successStatus);
     }
 

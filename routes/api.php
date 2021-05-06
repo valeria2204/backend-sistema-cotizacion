@@ -62,6 +62,9 @@ Route::get('limiteAmout','LimiteAmountController@index');
 //Devuelve el registro actual de los montos limites dado un id de la unidad administrativa a la que pertenece
 Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 
+/**Faculty Controller */
+/**devuelve las facultades */
+Route::get('faculties','FacultyController@index');
 // Devuelve todas las facultades de la base de datos
 Route::get('Faculties','FacultyController@index');
 // Devuelve solo las facultades que no estan asignadas a una unidad administrativa
@@ -80,10 +83,6 @@ Route::get('administrativeUnit','AdministrativeUnitController@index');
 Route::post('spendingUnits/new','SpendingUnitController@store');
 /**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/
 Route::get('spendingUnits','SpendingUnitController@index');
-
-/**Faculty Controller */
-/**devuelve las facultades */
-Route::get('faculties','FacultyController@index');
 
 /**CopanyCode */
 /**resive el codigo y lo busca*/
