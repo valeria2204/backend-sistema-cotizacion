@@ -13,7 +13,8 @@ class SpendingUnitController extends Controller
     //
     public $successStatus = 200;
     /**
-     * Devuelve todos las unidades de gasto que existen en la base de datos
+     * Devuelve todos las unidades de gasto que existen en la base de datos, mas su facultad
+     *  y unidad administrativa correspondiente.
      *
      * @return \Illuminate\Http\Response
      */
@@ -24,12 +25,11 @@ class SpendingUnitController extends Controller
         for ($id = 1; $id <= $countSpendingUnits; $id++)
         {
              $spendingUnit = SpendingUnit::find($id);
-             $administrative_unit_id = $spendingUnit['administrative_units_id'];
-             $administrativeUnit = AdministrativeUnit::find($administrative_unit_id);
-             $spendingUnit['administrativeUnit'] = $administrativeUnit;
-             $facultie_id =  $administrativeUnit['faculties_id'];
+             $facultie_id =  $spendingUnit['faculties_id'];
              $faculty = Faculty::find($facultie_id);
-             $spendingUnit['faculty'] = $faculty;
+             $spendingUnit['faculty'] = $faculty;;
+             $administrativeUnit = AdministrativeUnit::find($facultie_id);
+             $spendingUnit['administrativeUnit'] = $administrativeUnit;
              $i = $id-1;
              $spendingUnits[$i] = $spendingUnit;
         }
@@ -46,10 +46,18 @@ class SpendingUnitController extends Controller
     {   
         $validator = Validator::make($request->all(), [ 
             'nameUnidadGasto' => 'required', 
-            'administrative_units_id' => 'required', 
+            'faculties_id' => 'required', 
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
+        }
+
+        $spendingeUnitFound = SpendingUnit::where('nameUnidadGasto',$request['nameUnidadGasto'])->get();
+        $valor = count($spendingeUnitFound);
+        
+        if($valor == 1){
+            $message = 'El nombre '.$request['nameUnidadGasto'].' ya esta registrado ';
+            return response()->json(['message'=>$message], 200); 
         }
 
         $input = $request->all(); 

@@ -13,4 +13,8 @@ class Faculty extends Model
     public function administrativeUnit(){
         return $this->hasOne(AdministrativeUnit::class);
     }
+
+    public function spendingUnit(){
+        return $this->hasMany(SpendingUnit::class);
+    }
 }

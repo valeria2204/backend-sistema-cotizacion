@@ -25,7 +25,4 @@ class AdministrativeUnit extends Model
         return $this->hasMany(LimiteAmount::class);
     }
 
-    public function spendingUnits(){
-        return $this->hasMany(SpendingUnit::class);
-    }
 }

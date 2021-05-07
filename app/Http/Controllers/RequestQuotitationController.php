@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facade\File;
 use App\RequestQuotitation; 
 use App\RequestDetail; 
+use App\SpendingUnit;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -121,6 +122,22 @@ class RequestQuotitationController extends Controller
         $deils = RequestDetail::where('request_quotitations_id',$id)->get();
         $requestQuotitation = $requestQuotitations->find($id);
         $requestQuotitation['details'] = $deils;
+        $dateRequestQuotitation =  $requestQuotitation['requestDate'];
+        $spendingUnit_name = $requestQuotitation['nameUnidadGasto'];
+        $spendingUnit = SpendingUnit::where('nameUnidadGasto',$spendingUnit_name)->get();
+        $facultie_id =  $spendingUnit['faculties_id'];
+        $administrativeUnit = AdministrativeUnit::find($facultie_id);
+        $amountLimites = $administrativeUnit->limiteAmount()->get();
+        
+        //validar fechas de solicitud
+        //$amountLimite = amountLimites->where('dateStamp',$dateRequestQuotitation)->get();
+
+        $amountLimite = LimiteAmount::where('administrative_units_id',$administrativeUnit_id)->get();
+        $spendingUnit['administrativeUnit'] = $administrativeUnit;
+        
+
+        $isHigher = 
+        $requestQuotitation['amountIsHigher'] = $isHigher;
         return response()->json($requestQuotitation,200);
     }
 
