@@ -28,7 +28,22 @@ class RolController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    { 
+        $validator = Validator::make($request->all(), [ 
+        'nameRol' => 'required', 
+        
+    ]);
+    if ($validator->fails()) { 
+        return response()->json(['error'=>$validator->errors()], 401);            
+    }
+
+    $rolFound = Rol::where('nameRol',$request['nameRol'])->get();
+    $valor = count($rolFound);
+    
+    if($valor == 1){
+        $message = 'El rol ya esta registrado '.$request['nameRol'];
+        return response()->json(['message'=>$message], 200); 
+    }
         $input = $request->all(); 
         $rol = Rol::create($input); 
         return response()->json(['message'=> $rol], $this-> successStatus); 
