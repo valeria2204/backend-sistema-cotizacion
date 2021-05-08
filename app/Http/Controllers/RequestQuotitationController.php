@@ -183,6 +183,18 @@ class RequestQuotitationController extends Controller
         }
         return $listDir;
     }
+/*
+    public function getInformation($id)
+    { 
+        $user = User::select('name','lastName')->where('id',$id)->get();
+        $spendingUnit = SpendingUnit:: select('nameUnidadGasto')->where()->get();
+
+        $requestQuotitations = RequestQuotitation::all();
+        $deils = RequestDetail::where('request_quotitations_id',$id)->get();
+        $requestQuotitation = $requestQuotitations->find($id);
+        $requestQuotitation['details'] = $deils;
+        return response()->json($requestQuotitation,200);
+    }*/
 
 
     /**
