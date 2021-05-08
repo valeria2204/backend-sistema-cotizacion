@@ -122,7 +122,9 @@ class RequestQuotitationController extends Controller
         $deils = RequestDetail::where('request_quotitations_id',$id)->get();
         $requestQuotitation = $requestQuotitations->find($id);
         $requestQuotitation['details'] = $deils;
+        //para el mensaje
         $dateRequestQuotitation =  $requestQuotitation['requestDate'];
+        
         $spendingUnit_name = $requestQuotitation['nameUnidadGasto'];
         $spendingUnit = SpendingUnit::where('nameUnidadGasto',$spendingUnit_name)->get();
         $facultie_id =  $spendingUnit['faculties_id'];
