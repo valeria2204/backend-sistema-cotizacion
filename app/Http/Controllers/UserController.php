@@ -63,7 +63,7 @@ class UserController extends Controller
         $input['password'] = bcrypt($input['password']);
 
         $user = User::create($input);
-        $user->rols()->attach($idRol);
+        $user->roles()->attach($idRol);
         return response()->json(['message'=>""], $this-> successStatus); 
     }
     /** 

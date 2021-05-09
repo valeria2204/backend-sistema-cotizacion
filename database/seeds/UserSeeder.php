@@ -37,14 +37,14 @@ class UserSeeder extends Seeder
         $user->roles()->attach(2);
 
         $user = new User();
-        $user->name = "edson";
-        $user->lastName="rosas";
+        $user->name = "admin";
+        $user->lastName="sistema";
         $user->phone="64906868";
         $user->direction="cbba-sacaba";
         $user->ci="96523240";
-        $user->email="edson@gmail.com";
-        $user->userName="edson";
-        $user->password=bcrypt("edson");
+        $user->email="admin@gmail.com";
+        $user->userName="admin";
+        $user->password=bcrypt("admin");
         $user->save();
         $user->roles()->attach(3);
     }
