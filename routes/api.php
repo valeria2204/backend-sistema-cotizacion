@@ -34,7 +34,6 @@ Route::get('requestQuotitation/files/{id}', 'RequestQuotitationController@showFi
 Route::post('report/{id}', 'ReportController@store');
 Route::post('upload/{id}', 'RequestQuotitationController@uploadFile');
 Route::get('download', 'RequestQuotitationController@download');
-Route::post('details', 'UserController@details');
 
 /**resive los emails y la descripcion del mensage que se enviara a las empresas o a la empresa
  * y resive el id a la solicitud a la que pertenece*/
@@ -43,11 +42,11 @@ Route::post('sendEmail','EmailController@store');
 
 /**ROL CONTROLLER */
 /**Devuleve la lista de todos los roles */
-Route::get('rols', 'RolController@index');
+Route::get('rols', 'RoleController@index');
 /**Recibe el id del usuario y el id del rol y modifica el rol de un usuario */
 Route::put('users/update/{idu}/{idr}', 'UserController@updateRol');
 /**Recibe el nombre y descripcion del nuevo rol para guardarlo */
-Route::post('rols/new', 'RolController@store');
+Route::post('rols/new', 'RoleController@store');
 
 
 /**LIMITE CONTROLLER */
@@ -88,6 +87,14 @@ Route::get('spendingUnits','SpendingUnitController@index');
 /**resive el codigo y lo busca*/
 Route::post('searchCode','CompanyCodeController@searchCode');
 
+
+/**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
+ * pasar el token para poder usar las rutas dentro del grupo
+ */
 Route::group(['middleware' => 'auth:api'], function(){
-    
+
+    /**Devuelve todos los detalles del usuario cuando inicia sesion */
+    Route::post('details', 'UserController@details');
+
+
 });

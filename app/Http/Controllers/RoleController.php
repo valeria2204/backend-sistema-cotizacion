@@ -4,44 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Rol;
+use App\Role;
 use Validator;
 
-class RolController extends Controller
+class RoleController extends Controller
 {
     public $successStatus = 200;
     /**
-     * Devuelve todos los roles que existen en la base de datos
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $requestRols = Rol::all();
-        return response()->json(['rols'=> $requestRols],$this-> successStatus);
+        $requestRols = Role::all();
+        return response()->json(['roles'=> $requestRols],$this-> successStatus);
     }
 
     /**
-     * Recibe un solicitud para poder crear una nuevo rol 
+     * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {
         $input = $request->all(); 
-        $rol = Rol::create($input); 
+        $rol = Role::create($input); 
         return response()->json(['message'=> $rol], $this-> successStatus); 
     }
 
     /**
-     * Devuelve el nombre y descripcion del rol cuando te pasan el id del rol
+     * Display the specified resource.
+     *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {     
-        $rol = Rol::find($id);
+    {
+        $rol = Role::find($id);
         return response()->json($rol, $this-> successStatus);
     }
 

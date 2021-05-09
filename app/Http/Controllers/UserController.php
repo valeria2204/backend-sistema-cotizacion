@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use App\User;
-use App\Rol;
+use App\Role;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 
@@ -18,10 +18,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response 
      */ 
     public function login(){ 
-        if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
+        if(Auth::attempt(['userName' => request('userName'), 'password' => request('password')])){ 
             $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            return response()->json(['success' => $success], $this-> successStatus); 
+            //dd($user);
+            $success['token'] =  $user->createToken('MyApp')-> accessToken;
+            return response()->json(['success' => $success], $this-> successStatus);
         } 
         else{ 
             return response()->json(['error'=>'Unauthorised'], 401); 
@@ -72,7 +73,12 @@ class UserController extends Controller
      */ 
     public function details() 
     { 
-        $user = Auth::user(); 
+        $user = Auth::user();
+        $roles=$user->roles;
+        foreach ($roles as $key => $role) {
+            $roles[$key]['permissions']=$role->permissions;
+        }
+        $user['roles']=$roles;
         return response()->json(['success' => $user], $this-> successStatus); 
     } 
     /**
@@ -83,7 +89,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        $countUsers = count($users);
+        /* $countUsers = count($users);
         for ($id = 1; $id <= $countUsers; $id++)
         {
              $user = User::find($id);
@@ -91,7 +97,7 @@ class UserController extends Controller
              $user['userRol'] = $rol;
              $i = $id-1;
              $users[$i] = $user;
-        }
+        } */
         return response()->json(['users'=>$users], $this-> successStatus);
     }
 
