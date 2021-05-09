@@ -31,6 +31,7 @@ Route::put('quotitation/status/{id}', 'RequestQuotitationController@updateState'
 /**recibe un id de solicitud y responde con los archivos adjuntos que pertenecen a esa solicitud */
 Route::get('requestQuotitation/files/{id}', 'RequestQuotitationController@showFiles');
 
+
 Route::post('report/{id}', 'ReportController@store');
 Route::post('upload/{id}', 'RequestQuotitationController@uploadFile');
 Route::get('download', 'RequestQuotitationController@download');
@@ -77,7 +78,6 @@ Route::post('facultad/new','FacultyController@store');
 Route::post('administrativeUnit/new','AdministrativeUnitController@register');
 /**Devuelve la lista de todos las unidades administrativas */
 Route::get('administrativeUnit','AdministrativeUnitController@index');
-
 
 /**Recibe el nombre de la unidad de gasto y la id de la unidad administrativa dentro de un request para guardarlo */
 Route::post('spendingUnits/new','SpendingUnitController@store');
