@@ -195,11 +195,12 @@ class RequestQuotitationController extends Controller
     }
 
 
-    public function getInformation()
+    public function getInformation($id)
     {
-        $spendingUnit = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
-        ->join('users','spending_units.id','=','users.spending_units_id')->get();
-        return response()->json(["User"=> $spendingUnit],200);
+        $dates = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
+        ->join('users','spending_units.id','=','users.spending_units_id')
+        ->where('users.id','=',$id)->get();
+        return response()->json(["User"=> $dates],200);
     }
 
 

@@ -22,8 +22,8 @@ Route::post('register/{id}', 'UserController@register');
 Route::get('users', 'UserController@index');
 Route::post('quotitation', 'RequestQuotitationController@store');
 Route::get('quotitations', 'RequestQuotitationController@index');
-/**Muestra datos del usuario que va a realizar una solicitud */
-Route::get('getInform','RequestQuotitationController@getInformation');
+/**Dado un id de usuario muestra sus datos, nombre de unidad de gasto a la que pertecene y que va a realizar la solicitud */
+Route::get('getInform/{id}','RequestQuotitationController@getInformation');
 
 /**recibe un id de solitud de adquicion y responde con los detalles que perteneces a esa solicitud, 
  * mas un campo que guarda el mensaje de si el monto estimado es superior al monto limite*/
