@@ -18,9 +18,8 @@ class SpendingUnit extends Model
     public function users(){
         return $this->hasMany(User::class);
     }
+
     public function requestQuotitations(){
         return $this->hasMany(RequestQuotitation::class);
-    
-
-    
+    }
 }
