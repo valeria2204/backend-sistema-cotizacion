@@ -16,7 +16,7 @@ class RequestQuotitation extends Model
      */
     protected $fillable = [
 
-        'nameUnidadGasto','aplicantName','requestDate','details','amount','spending_units_id'
+        'nameUnidadGasto','aplicantName','requestDate','details','amount','spending_units_id',"message"
     ];
 
     public function requestDetails(){

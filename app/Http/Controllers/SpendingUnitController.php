@@ -27,7 +27,7 @@ class SpendingUnitController extends Controller
              $spendingUnit = SpendingUnit::find($id);
              $facultie_id =  $spendingUnit['faculties_id'];
              $faculty = Faculty::find($facultie_id);
-             $spendingUnit['faculty'] = $faculty;;
+             $spendingUnit['faculty'] = $faculty;
              $administrativeUnit = AdministrativeUnit::find($facultie_id);
              $spendingUnit['administrativeUnit'] = $administrativeUnit;
              $i = $id-1;
