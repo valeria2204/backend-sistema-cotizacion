@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facade\File;
 use App\RequestQuotitation; 
 use App\RequestDetail; 
+use App\SpendingUnit;
+use App\LimiteAmount;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -121,6 +123,32 @@ class RequestQuotitationController extends Controller
         $deils = RequestDetail::where('request_quotitations_id',$id)->get();
         $requestQuotitation = $requestQuotitations->find($id);
         $requestQuotitation['details'] = $deils;
+        //para el mensaje
+        $amountEstimated =  $requestQuotitation['amount'];
+        $dateRequestQuotitation =  $requestQuotitation['requestDate'];
+        //$spendingUnit_name = $requestQuotitation['nameUnidadGasto'];
+       // $spendingUnit = SpendingUnit::where('nameUnidadGasto',$spendingUnit_name)->get();
+        //$facultie_id =  $spendingUnit['faculties_id'];
+        //$administrativeUnit = AdministrativeUnit::find($facultie_id);
+        //$amountLimites = $administrativeUnit->limiteAmount()->get();
+        
+        //validar fechas de solicitud
+        //$amountLimite = amountLimites->where('dateStamp',$dateRequestQuotitation)->get();
+        //$amountLimite = LimiteAmount::where('administrative_units_id',$administrativeUnit_id)->get();
+        //$spendingUnit['administrativeUnit'] = $administrativeUnit;
+        $amountLimite = LimiteAmount::where('dateStamp','<=',$dateRequestQuotitation)
+                                    ->where('dateEnd','>=',$dateRequestQuotitation)->get();
+       /** $amountLimite = $amountLimites->where('dateStamp','<',$dateRequestQuotitation)
+                                *    ->where('dateEnd','>',$dateRequestQuotitation)->get(); 
+                                    */
+        //sacar el monto limite
+        $prueba = $amountLimite[0];
+        $amountTope = $prueba['monto'];
+        $requestQuotitation['message'] = "";
+        if( $amountEstimated > $amountTope){
+            $requestQuotitation['message'] = "El monto es superior al tope";
+         //$requestQuotitation['message'] = $amountTope;
+        }
         return response()->json($requestQuotitation,200);
     }
 
@@ -163,6 +191,14 @@ class RequestQuotitationController extends Controller
             closedir($handler);
         }
         return $listDir;
+    }
+
+
+    public function getInformation()
+    {
+        $spendingUnit = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
+        ->join('users','spending_units.id','=','users.spending_units_id')->get();
+        return response()->json(["User"=> $spendingUnit],200);
     }
 
 

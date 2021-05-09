@@ -15,7 +15,8 @@ class RequestQuotitation extends Model
      * @var array
      */
     protected $fillable = [
-        'nameUnidadGasto','aplicantName','requestDate','details','amount'
+
+        'nameUnidadGasto','aplicantName','requestDate','details','amount','spending_units_id',"message"
     ];
 
     public function requestDetails(){
@@ -27,5 +28,10 @@ class RequestQuotitation extends Model
     public function companyCodes(){
         return $this->hasMany(CompanyCode::class);
     }
+
+    public function spendingUnits(){
+        return $this->belongsTo(SpendingUnit::class);
+    }
+    
 
 }

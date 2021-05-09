@@ -37,7 +37,7 @@ class EmailController extends Controller
             Mail::to($email)->send(new EmailModel($request));
             CompanyCode::create($input);
         }
-        return response()->json(['result'=>"El mensage ha sido enviado"],200); 
+        return response()->json(['result'=>"El mensaje ha sido enviado"],200); 
     }
 
     /**
