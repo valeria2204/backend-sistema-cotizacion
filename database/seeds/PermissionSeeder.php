@@ -34,7 +34,7 @@ class PermissionSeeder extends Seeder
         $permiso4->url = "/EnviarCotizacion";
         $permiso4->save();
         $permiso5 = new Permission();
-        $permiso5->namePermission ="Ver a detalle la solicitud de contización";
+        $permiso5->namePermission ="Ver el detalle la solicitud de contización";
         $permiso5->description = "Puede ver a detalle la solicitud de adquisición";
         $permiso5->url = "/DetalleSolicitud/:id";
         $permiso5->save();

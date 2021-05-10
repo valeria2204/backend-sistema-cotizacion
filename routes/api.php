@@ -23,16 +23,21 @@ Route::post('searchCode','CompanyCodeController@searchCode');
  * pasar el token para poder usar las rutas dentro del grupo
  */
 Route::group(['middleware' => 'auth:api'], function(){
-
+    /**UserController */
     /**Devuelve todos los detalles del usuario cuando inicia sesion */
     Route::post('details', 'UserController@details');
     /**Recibe el request con los datos del usuario y aparte el id del rol de usuario para registrar el nuevo usuario */
     Route::post('register/{id}', 'UserController@register');
-
+    /**deverlve los permisos del usuario */
+    Route::post('permissions','UserController@permissions');
+    /**deverlve los roles del usuario */
+    Route::post('roles','UserController@roles');
     /**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
     Route::get('users', 'UserController@index');
-    Route::post('quotitation', 'RequestQuotitationController@store');
+
+    /**contization */
     Route::get('quotitations', 'RequestQuotitationController@index');
+    Route::post('quotitation', 'RequestQuotitationController@store');
     /**Muestra datos del usuario que va a realizar una solicitud */
     Route::get('getInform','RequestQuotitationController@getInformation');
 
