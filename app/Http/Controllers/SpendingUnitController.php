@@ -61,7 +61,7 @@ class SpendingUnitController extends Controller
             return response()->json(['message'=>$message], 200); 
         }
 
-        $input = $request->all(); 
+        $input = $request->only('nameUnidadGasto','faculties_id'); 
         $spendingUnit = SpendingUnit::create($input); 
         return response()->json(['message'=> $spendingUnit], $this-> successStatus); 
     }

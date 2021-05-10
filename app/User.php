@@ -6,7 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use App\Rol;
+use App\Role;
 
 class User extends Authenticatable
 {
@@ -39,8 +39,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function rols(){
-        return $this->belongsToMany(Rol::class);
+    public function roles(){
+        return $this->belongsToMany(Role::class);
     }
 
     public function spendingUnits(){

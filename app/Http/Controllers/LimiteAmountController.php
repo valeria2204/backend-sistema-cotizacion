@@ -35,8 +35,8 @@ class LimiteAmountController extends Controller
         }
        
         $input = $request->all();//where('administrative_units_id',$id)->get();; 
-        $limiteAmount = LimiteAmount::create($input); 
-        return response()->json(['message'=>$limiteAmount], $this-> successStatus); 
+        $limiteAmount = LimiteAmount::create($input);
+        return response()->json(['message'=>$limiteAmount],200); 
     
     }
 
