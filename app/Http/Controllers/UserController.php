@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use App\User;
 use App\Role;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth; 
 use Validator;
 
@@ -75,12 +76,47 @@ class UserController extends Controller
     { 
         $user = Auth::user();
         $roles=$user->roles;
-        foreach ($roles as $key => $role) {
-            $roles[$key]['permissions']=$role->permissions;
-        }
         $user['roles']=$roles;
-        return response()->json(['success' => $user], $this-> successStatus); 
-    } 
+        $permissions = array();
+        foreach ($roles as $key => $role) {
+            $permissions[$key]=$role->permissions;
+        }
+        $permi=array();
+        foreach ($permissions as $key => $arraypermi) {
+            foreach ($arraypermi as $key => $permission) {
+                array_push($permi,$permission->namePermission);
+            }
+        }
+        $user['permissions']=$permi;
+        return response()->json(['user' => $user], $this-> successStatus); 
+    }
+    /** 
+     * permisos de usuario 
+     * 
+     * @return \Illuminate\Http\Response 
+     */ 
+    public function permissions() 
+    { 
+        $user = Auth::user();
+        $roles=$user->roles;
+        $permissions = array();
+        foreach ($roles as $key => $role) {
+            $permissions[$key]=$role->permissions;
+        }
+        $permi=array();
+        foreach ($permissions as $key => $arraypermi) {
+            foreach ($arraypermi as $key => $permission) {
+                array_push($permi,$permission->namePermission);
+            }
+        }
+        return response()->json(['permissions' => $permi], $this-> successStatus); 
+    }
+
+    public function roles(){
+        $user = Auth::user();
+        $roles=$user->roles;
+        return response()->json(['roles' => $roles], $this-> successStatus);
+    }
     /**
      * Devuelve una lista de usuarios mas su rol
      *
