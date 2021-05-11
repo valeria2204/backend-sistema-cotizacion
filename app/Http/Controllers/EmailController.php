@@ -27,13 +27,16 @@ class EmailController extends Controller
      */
     public function store(Request $request,$id)
     {
+        //dd($request);
         $emails = $request->emails;
-        $desciption = $request->description;
+        $description = $request->description;
         foreach ($emails as $key => $email) {
             $input['email']=$email;
             $input['request_quotitations_id']=$id;
             $input['code']=substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6);
             $request['code']=$input['code'];
+            //$description=$description.'\n'.'Codigo de acceso: '.$input['code'].'\n'.'Url del sistema: http:/loaclhost';
+            //$request['description']=$description;
             Mail::to($email)->send(new EmailModel($request));
             CompanyCode::create($input);
         }
