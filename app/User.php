@@ -7,6 +7,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Role;
+use App\AdministrativeUnit;
+use App\SpendingUnit;
+
 
 class User extends Authenticatable
 {
@@ -43,9 +46,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
 
-    public function spendingUnits(){
+    public function spendingUnit(){
         return $this->belongsTo(SpendingUnit::class);
     }
-
-   
+    public function administrativeUnit(){
+        return $this->belongsTo(AdministrativeUnit::class);
+    }
 }

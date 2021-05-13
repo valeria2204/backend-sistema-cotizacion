@@ -23,7 +23,7 @@ Route::post('searchCode','CompanyCodeController@searchCode');
  * pasar el token para poder usar las rutas dentro del grupo
  */
 Route::group(['middleware' => 'auth:api'], function(){
-    /**UserController */
+    /**USER CONTROLLER */
     /**Devuelve todos los detalles del usuario cuando inicia sesion */
     Route::post('details', 'UserController@details');
     /**Recibe el request con los datos del usuario y aparte el id del rol de usuario para registrar el nuevo usuario */
@@ -35,7 +35,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
     Route::get('users', 'UserController@index');
 
-    /**contization */
+    /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
     Route::post('quotitation', 'RequestQuotitationController@store');
     /**Muestra datos del usuario que va a realizar una solicitud */
@@ -65,7 +65,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**Recibe el id del usuario y el id del rol y modifica el rol de un usuario */
     Route::put('users/update/{idu}/{idr}', 'UserController@updateRol');
     /**Recibe el nombre y descripcion del nuevo rol para guardarlo */
-    Route::post('rols/new', 'RoleController@store');
+    Route::post('roles/new', 'RoleController@store');
+
+    /**PERMISSION CONTROLLER */
+    Route::get('permissions','PermissionController@index');
 
 
     /**LIMITE CONTROLLER */
