@@ -72,7 +72,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Registra un monto limite
     Route::post('limiteAmount/new','LimiteAmountController@register');
     //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
-    Route::post('updateLimiteAmount/{id}','LimiteAmountController@updateLimiteAmount');
+    Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
     Route::get('limiteAmounts/{id}','LimiteAmountController@show');
     //Devuel todos los montos
