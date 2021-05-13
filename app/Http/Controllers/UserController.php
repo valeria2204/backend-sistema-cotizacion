@@ -118,22 +118,40 @@ class UserController extends Controller
         return response()->json(['roles' => $roles], $this-> successStatus);
     }
     /**
-     * Devuelve una lista de usuarios mas su rol
+     * Devuelve una lista de usuarios mas sus roles
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $users = User::all();
-        /* $countUsers = count($users);
+        $countUsers = count($users);
         for ($id = 1; $id <= $countUsers; $id++)
         {
              $user = User::find($id);
-             $rol = $user->rols()->get();
-             $user['userRol'] = $rol;
+             $roles = $user->roles()->get();
+             $valor = count($roles);
+             if($valor>1){
+                $nameRol = "";
+                for ($i = 0; $i < $valor; $i++)
+                {
+                    $rol = $roles[$i];
+                    if($i==$valor-1){
+                        $nameRol = $nameRol.$rol['nameRol'];
+                    }
+                    else{
+                        $nameRol = $nameRol.$rol['nameRol'].', ';
+                    }
+                }
+                $user['userRol'] = $nameRol;
+             }
+             else{
+                $rold = $roles[0];
+                $user['userRol'] = $rold['nameRol'];
+             }
              $i = $id-1;
              $users[$i] = $user;
-        } */
+        } 
         return response()->json(['users'=>$users], $this-> successStatus);
     }
 

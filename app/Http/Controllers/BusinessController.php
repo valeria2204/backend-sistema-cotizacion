@@ -4,25 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Role;
+use App\Business;
 use Validator;
 
-class RoleController extends Controller
+class BusinessController extends Controller
 {
+    //
     public $successStatus = 200;
     /**
-     * Display a listing of the resource.
+     * Devuelve una lista de empresas
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $requestRols = Role::all();
-        return response()->json(['roles'=> $requestRols],$this-> successStatus);
+        $requestBusiness = Business::all();
+        return response()->json(['business'=> $requestBusiness],$this-> successStatus);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Registra una nueva empresa
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -30,28 +31,27 @@ class RoleController extends Controller
     public function store(Request $request)
     { 
         $validator = Validator::make($request->all(), [ 
-        'nameRol' => 'required', 
-        
+        'nameEmpresa' => 'required',
+        'nit' => 'required',
+        'email' => 'required',
+        'phone' => 'required',
+        'direction' => 'required',
+        'rubro' => 'required',
     ]);
     if ($validator->fails()) { 
         return response()->json(['error'=>$validator->errors()], 401);            
     }
 
-    $rolFound = Role::where('nameRol',$request['nameRol'])->get();
-    $valor = count($rolFound);
+    $emailFound = Business::where('email',$request['email'])->get();
+    $valor = count($emailFound);
     
     if($valor == 1){
-        $message = 'El rol ya esta registrado '.$request['nameRol'];
+        $message = 'El correo '.$request['nameRol'].' ya esta registrado ';
         return response()->json(['message'=>$message], 200); 
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> cadeaaebe684ccaff77d9d0f68e906efcb909092
         $input = $request->all(); 
-        $rol = Role::create($input); 
-        $rol->permissions()->attach($input['permissions']);
-        return response()->json(['message'=> $rol], $this-> successStatus); 
+        $business = Business::create($input); 
+        return response()->json(['message'=> $business], $this-> successStatus); 
     }
 
     /**
@@ -62,8 +62,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $rol = Role::find($id);
-        return response()->json($rol, $this-> successStatus);
+        //
     }
 
     /**

@@ -75,7 +75,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Registra un monto limite
     Route::post('limiteAmount/new','LimiteAmountController@register');
     //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
-    Route::post('updateLimiteAmount/{id}','LimiteAmountController@updateLimiteAmount');
+    Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
     Route::get('limiteAmounts/{id}','LimiteAmountController@show');
     //Devuel todos los montos
@@ -100,9 +100,15 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('administrativeUnit','AdministrativeUnitController@index');
 
 
-    /**Recibe el nombre de la unidad de gasto y la id de la unidad administrativa dentro de un request para guardarlo */
+    /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
     Route::post('spendingUnits/new','SpendingUnitController@store');
     /**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/
     Route::get('spendingUnits','SpendingUnitController@index');
 
+    
+    /**EMPRESA CONTROLLER */
+     /**Recibe los datos de una empresa dentro de un request para guardarlo */
+    Route::post('business/new','BusinessController@store');
+     /**Devuelve la lista de todos las empresas*/
+    Route::get('business','BusinessController@index');
 });
