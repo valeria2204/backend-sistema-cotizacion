@@ -108,8 +108,17 @@ class RequestQuotitationController extends Controller
     public function fileDowload(){
         return response()->download(public_path('Files/db.pdf'), "base de datos");
     }
+    public function downloadFile($id,$namefile){
+        $path = public_path('FilesAquisicion\\'.$id.'\\'.$namefile);
+        //dd($path);
+        return response()->download($path);
 
-
+    }
+    public function showFile($id,$namefile){
+        $path = public_path('FilesAquisicion\\'.$id.'\\'.$namefile);
+        //dd($path);
+        return response()->file($path);
+    }
     /**
      * devuelve el detalle de la solicitud cuando te pasan el id de la solitud
      *
@@ -160,6 +169,8 @@ class RequestQuotitationController extends Controller
         $requestQuotitation->update();
         return response()->json($requestQuotitation,200);
     }
+
+
 
       /**
      * devuelve los archivos adjuntos de una solicitud cuando te pasan el id de la solicitud

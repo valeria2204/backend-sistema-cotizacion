@@ -40,8 +40,9 @@ class LimiteAmountController extends Controller
     
     }
 
-    public function updateLimiteAmount(Request $request,$id)
+    public function updateLimiteAmount(Request $request)
     {
+        //falta terminar
         $validator = Validator::make($request->all(), [ 
             'monto' => 'required', 
             'dateStamp' => 'required', 
@@ -50,10 +51,29 @@ class LimiteAmountController extends Controller
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
-       
-        $input = $request->where('administrative_units_id',$id)->get();
+        //En el caso de cuando se registra un monto por primera vez
+        $montosEncontrados = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])->get();
+        $valor = count($montosEncontrados);
+        //si una unidad administrativa no ha registrado ningun monto
+        if($valor == 0){
+            //se registra el primer monto
+            $input = $request->only('monto', 'dateStamp','steps','administrative_units_id');  
+            LimiteAmount::create($input);
+            return response()->json(['message'=>""], 200); 
+        }
+        //$input = $request->where('administrative_units_id',$id)->get();
+        //En el caso de que ya hay al menos un monto registrado
+        $input = $request->all();
+        $administrativeUnit_id = $request->administrative_units_id;
+        $ultimoMontoRegistrado = $montosEncontrados[$valor-1];
+        //sacar fecha de registro del nuevo monto y ponerla como fecha fin del ultimo monto registrado
+
+        //$ultimoMontoRegistrado = LimiteAmount::select('monto','dateStamp')->where('administrative_units_id',$administrativeUnit_id)->latest()->take(1)->get();
+        //dd($ultimoMontoRegistrado);
+        // $request['dateEnd'] = 
         $limiteAmount = LimiteAmount::create($input); 
-        return response()->json(['message'=>""], $this-> successStatus); 
+        //dd($limiteAmount);
+        return response()->json(['message'=>$limiteAmount], $this-> successStatus); 
     
     }
     // muestra el ultimo registro de los montos limites
