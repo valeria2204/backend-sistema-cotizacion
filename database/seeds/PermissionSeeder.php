@@ -43,21 +43,34 @@ class PermissionSeeder extends Seeder
         $permiso6->description = "Puede ver los montos límites definidos, y poder actualizarlo";
         $permiso6->url = "/montoLimite";
         $permiso6->save();
+
+        $permiso7 = new Permission();
+        $permiso7->namePermission ="Registro de empresas";
+        $permiso7->description = "Puede ver la lista de empresas y registrar nuevas empresas";
+        $permiso7->url = "/empresas";
+        $permiso7->save();
+
         //administrador del sistema
-        $permiso7 = new Permission();
-        $permiso7->namePermission ="Registrar unidades administrativas";
-        $permiso7->description = "Puede ver las unidades administrativas y resgistrar nuevas unidades administrativas";
-        $permiso7->url = "/UnidadesAdministrativas";
-        $permiso7->save();
-        $permiso7 = new Permission();
-        $permiso7->namePermission ="Registrar unidades de gasto";
-        $permiso7->description = "Registrar nuevas unidades de gasto";
-        $permiso7->url = "/unidadesDeGasto";
-        $permiso7->save();
-        $permiso7 = new Permission();
-        $permiso7->namePermission ="Registrar usuarios";
-        $permiso7->description = "Registrar nuevos usuarios";
-        $permiso7->url = "/user";
-        $permiso7->save();
+        $permiso8 = new Permission();
+        $permiso8->namePermission ="Registrar unidades administrativas";
+        $permiso8->description = "Puede ver las unidades administrativas y resgistrar nuevas unidades administrativas";
+        $permiso8->url = "/UnidadesAdministrativas";
+        $permiso8->save();
+        $permiso9 = new Permission();
+        $permiso9->namePermission ="Registrar unidades de gasto";
+        $permiso9->description = "Registrar nuevas unidades de gasto";
+        $permiso9->url = "/unidadesDeGasto";
+        $permiso9->save();
+        $permiso10 = new Permission();
+        $permiso10->namePermission ="Registrar usuarios";
+        $permiso10->description = "Registrar nuevos usuarios";
+        $permiso10->url = "/user";
+        $permiso10->save();
+
+        $permiso11 = new Permission();
+        $permiso11->namePermission ="Administar roles";
+        $permiso11->description = "Puede ver los roles existentes y registrar nuevos roles";
+        $permiso11->url = "/roles";
+        $permiso11->save();
     }
 }
