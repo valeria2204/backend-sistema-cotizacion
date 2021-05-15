@@ -25,6 +25,7 @@ class LimiteAmountController extends Controller
 
     public function updateLimiteAmount(Request $request)
     {
+        //falta terminar
         $validator = Validator::make($request->all(), [ 
             'monto' => 'required', 
             'dateStamp' => 'required', 

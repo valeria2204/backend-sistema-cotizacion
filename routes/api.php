@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
 
 Route::post('login', 'UserController@login');
 
@@ -22,11 +21,18 @@ Route::post('login', 'UserController@login');
 /**resive el codigo y lo busca*/
 Route::post('searchCode','CompanyCodeController@searchCode');
 
+
+Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
+/**mostarar los archivos */
+Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
+
+/**nombres de earchivos */
+Route::get('files/{id}', 'RequestQuotitationController@showFiles');
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo
  */
 Route::group(['middleware' => 'auth:api'], function(){
-    /**UserController */
+    /**USER CONTROLLER */
     /**Devuelve todos los detalles del usuario cuando inicia sesion */
     Route::post('details', 'UserController@details');
     /**Recibe el request con los datos del usuario y aparte el id del rol de usuario para registrar el nuevo usuario */
@@ -38,7 +44,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
     Route::get('users', 'UserController@index');
 
-    /**contization */
+    /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
     Route::post('quotitation', 'RequestQuotitationController@store');
     /**Muestra datos del usuario que va a realizar una solicitud */
@@ -68,13 +74,16 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**Recibe el id del usuario y el id del rol y modifica el rol de un usuario */
     Route::put('users/update/{idu}/{idr}', 'UserController@updateRol');
     /**Recibe el nombre y descripcion del nuevo rol para guardarlo */
-    Route::post('rols/new', 'RoleController@store');
+    Route::post('roles/new', 'RoleController@store');
+
+    /**PERMISSION CONTROLLER */
+    Route::get('permissions','PermissionController@index');
 
 
     /**LIMITE CONTROLLER */
     
     //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
-    //Route::post('updateLimiteAmount/{id}','LimiteAmountController@updateLimiteAmount');
+    Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
     Route::get('limiteAmounts/{id}','LimiteAmountController@show');
     //Devuel todos los montos
