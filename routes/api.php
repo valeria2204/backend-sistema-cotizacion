@@ -21,6 +21,7 @@ Route::post('searchCode','CompanyCodeController@searchCode');
 
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
+
 /**mostarar los archivos */
 Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
 
