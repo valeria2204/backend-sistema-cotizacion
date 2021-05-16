@@ -46,7 +46,8 @@ class LimiteAmountController extends Controller
         $validator = Validator::make($request->all(), [ 
             'monto' => 'required', 
             'dateStamp' => 'required', 
-            'steps' => 'required', 
+            'steps' => 'required',
+            'administrative_units_id' => 'required',
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            

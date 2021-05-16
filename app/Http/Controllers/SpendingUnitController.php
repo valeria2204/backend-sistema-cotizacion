@@ -26,8 +26,10 @@ class SpendingUnitController extends Controller
         {
              $spendingUnit = SpendingUnit::find($id);
              $facultie_id =  $spendingUnit['faculties_id'];
+             //para mostrar en la columna Facultad de la lista de Unidades de gasto
              $faculty = Faculty::find($facultie_id);
              $spendingUnit['faculty'] = $faculty;
+             //para mostrar en la columna Unidad Administrativa de la lista de Unidades de gasto
              $administrativeUnit = AdministrativeUnit::find($facultie_id);
              $spendingUnit['administrativeUnit'] = $administrativeUnit;
              $i = $id-1;
@@ -54,15 +56,15 @@ class SpendingUnitController extends Controller
 
         $spendingeUnitFound = SpendingUnit::where('nameUnidadGasto',$request['nameUnidadGasto'])->get();
         $valor = count($spendingeUnitFound);
-        
+        //devuelve mensaje si ya existe una unidad de gasto con el mismo nombre
         if($valor == 1){
             $message = 'El nombre '.$request['nameUnidadGasto'].' ya esta registrado ';
             return response()->json(['message'=>$message], 200); 
         }
 
-        $input = $request->only('nameUnidadGasto','faculties_id'); 
+        $input = $request->all();
         $spendingUnit = SpendingUnit::create($input); 
-        return response()->json(['message'=> $spendingUnit], $this-> successStatus); 
+        return response()->json(['message'=> ""], $this-> successStatus); 
     }
 
     /**

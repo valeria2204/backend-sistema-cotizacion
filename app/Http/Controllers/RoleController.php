@@ -30,7 +30,8 @@ class RoleController extends Controller
     public function store(Request $request)
     { 
         $validator = Validator::make($request->all(), [ 
-        'nameRol' => 'required', 
+        'nameRol' => 'required',
+        'description' => 'required', 
         
     ]);
     if ($validator->fails()) { 
@@ -41,12 +42,12 @@ class RoleController extends Controller
     $valor = count($rolFound);
     
     if($valor == 1){
-        $message = 'El rol ya esta registrado '.$request['nameRol'];
+        $message = 'El rol '.$request['nameRol'].' ya esta registrado ';
         return response()->json(['message'=>$message], 200); 
     }
         $input = $request->all(); 
         $rol = Role::create($input); 
-        return response()->json(['message'=> $rol], $this-> successStatus); 
+        return response()->json(['message'=> ""], $this-> successStatus); 
     }
 
     /**
