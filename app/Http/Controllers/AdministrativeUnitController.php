@@ -19,8 +19,19 @@ class AdministrativeUnitController extends Controller
 
     public function index()
     {
-        $AdministrativeUnit = AdministrativeUnit::all();
-        return response()->json(['Administrative_unit'=>$AdministrativeUnit],200);
+        $administrativeUnits = AdministrativeUnit::all();
+        $countAdministrativeUnits = count($administrativeUnits);
+        for ($id = 1; $id <= $countAdministrativeUnits; $id++)
+        {
+             $administrativeUnit = AdministrativeUnit::find($id);
+             $facultie_id =  $administrativeUnit['faculties_id'];
+             //para mostrar en la columna Facultad de la lista de Unidades administrativas
+             $faculty = Faculty::find($facultie_id);
+             $administrativeUnit['faculty'] = $faculty;
+             $i = $id-1;
+             $administrativeUnits[$i] = $administrativeUnit;
+        }
+        return response()->json(['Administrative_unit'=>$administrativeUnits],200);
     }
 
     /**
