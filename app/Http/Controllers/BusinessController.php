@@ -51,7 +51,7 @@ class BusinessController extends Controller
     }
         $input = $request->all(); 
         $business = Business::create($input); 
-        return response()->json(['message'=> $business], $this-> successStatus); 
+        return response()->json(['message'=> ""], $this-> successStatus); 
     }
 
     /**

@@ -10,6 +10,8 @@ use App\RequestDetail;
 use App\User;
 use App\SpendingUnit;
 use App\LimiteAmount;
+use App\AdministrativeUnit;
+use App\Faculty;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,6 +31,26 @@ class RequestQuotitationController extends Controller
     }
 
     /**
+     * Devuelve todas las solicitudes que perteneces a esa unidad de gasto
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRequestQuotationGasto($id)
+    {
+        $requestGasto = RequestQuotitation::where('spending_units_id','=',$id)->get();
+        return response()->json(['request_quotitations'=>$requestGasto],200);
+    }
+    /**
+     * Devuelve todas las solicitudes que perteneces a esa unidad administrativa
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRequestQuotationAdministrative($id)
+    {
+        $requestAdmin = RequestQuotitation::where('administrative_unit_id','=',$id)->get();
+        return response()->json(['request_quotitations'=>$requestAdmin],200);
+    }
+    /**
      * resive un solicitud para poder crear una nueva solictud 
      *
      * @param  \Illuminate\Http\Request  $request
@@ -36,7 +58,7 @@ class RequestQuotitationController extends Controller
      */
     public function store(Request $request)
     {   
-        $input = $request->only('nameUnidadGasto', 'aplicantName','requestDate','amount');
+        $input = $request->only('nameUnidadGasto', 'aplicantName','requestDate','amount','spending_units_id');
         $arrayDetails = $request->only('details');
         $arrayDetails=$arrayDetails['details'];
         $validator = Validator::make($request->all(), [ 
@@ -47,7 +69,15 @@ class RequestQuotitationController extends Controller
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
-        } 
+        }
+        //$idGasto = $request->only('spending_units_id');
+        $idGasto = $input['spending_units_id'];
+        $gasto = SpendingUnit::find($idGasto);
+        $idFacultad = $gasto->faculties_id;
+        $unidadadmini  = AdministrativeUnit::where('faculties_id','=',$idFacultad)->get();
+        foreach ($unidadadmini as $key => $admi) {
+            $input['administrative_unit_id'] = $admi->id;
+        }
          $requestQuotitation = RequestQuotitation::create($input);
          $idQuotitation = $requestQuotitation['id'];
          $countDetails = count($arrayDetails);
@@ -65,6 +95,7 @@ class RequestQuotitationController extends Controller
         
         return;
     } */
+
 
     public function upload(Request $request){
         $request->file('archivo')->store('public');
@@ -127,37 +158,27 @@ class RequestQuotitationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {  // guarda todas las solicitudes o tuplas
-        // requestQuot = requests
+    {  
+        //devuelve datos y detalles de una solicitud
         $requestQuotitations = RequestQuotitation::all();
         $deils = RequestDetail::where('request_quotitations_id',$id)->get();
         $requestQuotitation = $requestQuotitations->find($id);
-        $requestQuotitation['details'] = $deils;
-        //para el mensaje
+        $requestQuotitation['details'] = $deils;      
+        //sacar el monto estimado de la solicitud
         $amountEstimated =  $requestQuotitation['amount'];
-        $dateRequestQuotitation =  $requestQuotitation['requestDate'];
-        //$spendingUnit_name = $requestQuotitation['nameUnidadGasto'];
-       // $spendingUnit = SpendingUnit::where('nameUnidadGasto',$spendingUnit_name)->get();
-        //$facultie_id =  $spendingUnit['faculties_id'];
-        //$administrativeUnit = AdministrativeUnit::find($facultie_id);
-        //$amountLimites = $administrativeUnit->limiteAmount()->get();
-        
-        //validar fechas de solicitud
-        //$amountLimite = amountLimites->where('dateStamp',$dateRequestQuotitation)->get();
-        //$amountLimite = LimiteAmount::where('administrative_units_id',$administrativeUnit_id)->get();
-        //$spendingUnit['administrativeUnit'] = $administrativeUnit;
-        $amountLimite = LimiteAmount::where('dateStamp','<=',$dateRequestQuotitation)
-                                    ->where('dateEnd','>=',$dateRequestQuotitation)->get();
-       /** $amountLimite = $amountLimites->where('dateStamp','<',$dateRequestQuotitation)
-                                *    ->where('dateEnd','>',$dateRequestQuotitation)->get(); 
-                                    */
+        //obtener el monto limite que una unidad administrativa tiene para sus unidades de gasto
+         //primero obtener la unidad de gasto desde la cual se hace la solicitud
+        $spendingUnit_id = $requestQuotitation['spending_units_id'];
+        $spendingUnit = SpendingUnit::find($spendingUnit_id);
+        $facultie_id =  $spendingUnit['faculties_id'];
+        $administrativeUnit = AdministrativeUnit::where('faculties_id',$facultie_id)->first();
+        $administrativeUnit_id = $administrativeUnit['id'];
+        $amountLimite = LimiteAmount::where('administrative_units_id',$administrativeUnit_id)->get()->last();
         //sacar el monto limite
-        $prueba = $amountLimite[0];
-        $amountTope = $prueba['monto'];
+        $amountTope = $amountLimite['monto'];
         $requestQuotitation['message'] = "";
         if( $amountEstimated > $amountTope){
             $requestQuotitation['message'] = "El monto es superior al tope";
-         //$requestQuotitation['message'] = $amountTope;
         }
         return response()->json($requestQuotitation,200);
     }

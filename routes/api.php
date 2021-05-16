@@ -23,11 +23,13 @@ Route::post('searchCode','CompanyCodeController@searchCode');
 
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
+
 /**mostarar los archivos */
 Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
 
 /**nombres de earchivos */
 Route::get('files/{id}', 'RequestQuotitationController@showFiles');
+
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo
  */
@@ -46,6 +48,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
+    /**Crear una nueva cotizacion*/
     Route::post('quotitation', 'RequestQuotitationController@store');
     /**Dado un id de usuario muestra datos del usuario que va a realizar una solicitud */
     Route::get('getInform/{id}','RequestQuotitationController@getInformation');
