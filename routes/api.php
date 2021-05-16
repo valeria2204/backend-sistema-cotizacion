@@ -52,7 +52,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('quotitation', 'RequestQuotitationController@store');
     /**Dado un id de usuario muestra datos del usuario que va a realizar una solicitud */
     Route::get('getInform/{id}','RequestQuotitationController@getInformation');
-
+    /**Devuelve todas las solicitudes que perteneces a esa unidad de gasto */
+    Route::post('quotitations/spending/{id}', 'RequestQuotitationController@showRequestQuotationGasto');
+    /**Devuelve todas las solicitudes que perteneces a esa unidad administrativa */
+    Route::post('quotitations/{id}', 'RequestQuotitationController@showRequestQuotationAdministrative');
     /**recibe un id de solitud de adquicion y responde con los detalles que perteneces a esa solicitud, 
      * mas un campo que guarda el mensaje de si el monto estimado es superior al monto limite*/
     Route::get('quotitation/{id}', 'RequestQuotitationController@show');
