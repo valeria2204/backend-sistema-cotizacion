@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facade\File;
 use App\RequestQuotitation; 
 use App\RequestDetail; 
+use App\User;
 use App\SpendingUnit;
 use App\LimiteAmount;
 use App\AdministrativeUnit;
@@ -28,17 +29,38 @@ class RequestQuotitationController extends Controller
         return response()->json(['request_quotitations'=>$requestQuotitation],200);
     }
     /**
+     * Devuelve todas las solicitudes que perteneces a esa unidad de gasto
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRequestQuotationGasto($id)
+    {
+        $requestGasto = RequestQuotitation::where('spending_units_id','=',$id)->get();
+        return response()->json(['request_quotitations'=>$requestGasto],200);
+    }
+    /**
      * Devuelve todas las solicitudes que perteneces a esa unidad administrativa
      *
      * @return \Illuminate\Http\Response
      */
     public function showRequestQuotationAdministrative($id)
     {
-        $unidadAdministrativa = AdministrativeUnit::where('id',$id)->get();
+        $requestAdmin = RequestQuotitation::where('administrative_unit_id','=',$id)->get();
+        return response()->json(['request_quotitations'=>$requestAdmin],200);
+        /* $unidadAdministrativa = AdministrativeUnit::find($id);
         $idFacultad = $unidadAdministrativa->faculties_id;
-        $unidadesGAsto = SpendingUnit::where('faculties_id',$idFacultad);
-        $requestQuotitation = RequestQuotitation::all();
-        return response()->json(['request_quotitations'=>$requestQuotitation],200);
+        $unidadesGasto = SpendingUnit::where('faculties_id',$idFacultad)->get();
+        $idGastos= array();
+        foreach ($unidadesGasto as $key => $gasto) {
+           array_push($idGastos,$gasto->id);
+        }
+        $requestAdmin = array();
+        foreach ($idGastos as $key => $id) {
+            $requestQuo = RequestQuotitation::where('spending_units_id',$id)->get();
+            foreach ($requestQuo as $key => $request) {
+                array_push($requestAdmin,$request);
+            }
+        } */
     }
     /**
      * resive un solicitud para poder crear una nueva solictud 
@@ -48,7 +70,7 @@ class RequestQuotitationController extends Controller
      */
     public function store(Request $request)
     {   
-        $input = $request->only('nameUnidadGasto', 'aplicantName','requestDate','amount');
+        $input = $request->only('nameUnidadGasto', 'aplicantName','requestDate','amount','spending_units_id');
         $arrayDetails = $request->only('details');
         $arrayDetails=$arrayDetails['details'];
         $validator = Validator::make($request->all(), [ 
@@ -59,7 +81,15 @@ class RequestQuotitationController extends Controller
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
-        } 
+        }
+        //$idGasto = $request->only('spending_units_id');
+        $idGasto = $input['spending_units_id'];
+        $gasto = SpendingUnit::find($idGasto);
+        $idFacultad = $gasto->faculties_id;
+        $unidadadmini  = AdministrativeUnit::where('faculties_id','=',$idFacultad)->get();
+        foreach ($unidadadmini as $key => $admi) {
+            $input['administrative_unit_id'] = $admi->id;
+        }
          $requestQuotitation = RequestQuotitation::create($input);
          $idQuotitation = $requestQuotitation['id'];
          $countDetails = count($arrayDetails);
@@ -121,8 +151,17 @@ class RequestQuotitationController extends Controller
     public function fileDowload(){
         return response()->download(public_path('Files/db.pdf'), "base de datos");
     }
+    public function downloadFile($id,$namefile){
+        $path = public_path('FilesAquisicion\\'.$id.'\\'.$namefile);
+        //dd($path);
+        return response()->download($path);
 
-
+    }
+    public function showFile($id,$namefile){
+        $path = public_path('FilesAquisicion\\'.$id.'\\'.$namefile);
+        //dd($path);
+        return response()->file($path);
+    }
     /**
      * devuelve el detalle de la solicitud cuando te pasan el id de la solitud
      *
@@ -174,6 +213,8 @@ class RequestQuotitationController extends Controller
         return response()->json($requestQuotitation,200);
     }
 
+
+
       /**
      * devuelve los archivos adjuntos de una solicitud cuando te pasan el id de la solicitud
      *
@@ -186,7 +227,7 @@ class RequestQuotitationController extends Controller
         $listDir = $this-> dirToArray($directory);
         return response()->json($listDir,200);
     }
-
+    
     
     //devuelve un arreglo de archivos de un directorio determinado $dir
     public function dirToArray($dir) {
@@ -207,11 +248,12 @@ class RequestQuotitationController extends Controller
     }
 
 
-    public function getInformation()
+    public function getInformation($id)
     {
-        $spendingUnit = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
-        ->join('users','spending_units.id','=','users.spending_units_id')->get();
-        return response()->json(["User"=> $spendingUnit],200);
+        $dates = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
+        ->join('users','spending_units.id','=','users.spending_units_id')
+        ->where('users.id','=',$id)->get();
+        return response()->json(["User"=> $dates],200);
     }
 
 

@@ -22,23 +22,6 @@ class LimiteAmountController extends Controller
         return response()->json(['limit_amout'=> $limiteAmount],$this-> successStatus);
     }
 
-// registra montos limites
-    public function register(Request $request)
-    {
-        $validator = Validator::make($request->all(), [ 
-            'monto' => 'required', 
-            'dateStamp' => 'required', 
-            'steps' => 'required', 
-        ]);
-        if ($validator->fails()) { 
-            return response()->json(['error'=>$validator->errors()], 401);            
-        }
-       
-        $input = $request->all();//where('administrative_units_id',$id)->get();; 
-        $limiteAmount = LimiteAmount::create($input);
-        return response()->json(['message'=>$limiteAmount],200); 
-    
-    }
 
     public function updateLimiteAmount(Request $request)
     {
@@ -47,35 +30,39 @@ class LimiteAmountController extends Controller
             'monto' => 'required', 
             'dateStamp' => 'required', 
             'steps' => 'required', 
+            'administrative_units_id' => 'required', 
         ]);
+
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
-        //En el caso de cuando se registra un monto por primera vez
-        $montosEncontrados = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])->get();
-        $valor = count($montosEncontrados);
-        //si una unidad administrativa no ha registrado ningun monto
-        if($valor == 0){
-            //se registra el primer monto
-            $input = $request->only('monto', 'dateStamp','steps','administrative_units_id');  
-            LimiteAmount::create($input);
-            return response()->json(['message'=>""], 200); 
-        }
-        //$input = $request->where('administrative_units_id',$id)->get();
-        //En el caso de que ya hay al menos un monto registrado
-        $input = $request->all();
-        $administrativeUnit_id = $request->administrative_units_id;
-        $ultimoMontoRegistrado = $montosEncontrados[$valor-1];
-        //sacar fecha de registro del nuevo monto y ponerla como fecha fin del ultimo monto registrado
 
-        //$ultimoMontoRegistrado = LimiteAmount::select('monto','dateStamp')->where('administrative_units_id',$administrativeUnit_id)->latest()->take(1)->get();
-        //dd($ultimoMontoRegistrado);
-        // $request['dateEnd'] = 
-        $limiteAmount = LimiteAmount::create($input); 
-        //dd($limiteAmount);
-        return response()->json(['message'=>$limiteAmount], $this-> successStatus); 
+        $montos = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])->get();
+        $existenMontos = count($montos);
+
+        if($existenMontos > 0)
+        {
+
+          $montosIguales = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])
+                                       ->latest()->take(1)->get()-> where('monto',$request['monto']);
+          $valor = count($montosIguales);
+        
+          if($valor == 1){
+              $message = 'El monto '.$request['monto'].' ya esta registrado ';
+              return response()->json(['message'=>$message], 200); 
+          }
     
+          $input = $request->all(); 
+          $limiteAmount = LimiteAmount::create($input);
+          return response()->json(['limiteAmount'=>$limiteAmount],200);
+        }
+
+        $input = $request->all(); 
+        $limiteAmount = LimiteAmount::create($input);
+        return response()->json(['limiteAmount'=>$limiteAmount],200);
+
     }
+
     // muestra el ultimo registro de los montos limites
     public function sendCurrentData($id)
     {
