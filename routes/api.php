@@ -23,6 +23,7 @@ Route::post('searchCode','CompanyCodeController@searchCode');
 
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
+
 /**mostarar los archivos */
 Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
 
@@ -49,12 +50,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('quotitations', 'RequestQuotitationController@index');
     /**Crear una nueva cotizacion*/
     Route::post('quotitation', 'RequestQuotitationController@store');
-    /**Devuelve todas las solicitudes que perteneces a esa unidad administrativa */
-    Route::get('quotitations/{id}', 'RequestQuotitationController@showRequestQuotationAdministrative');
-    /**Devuelve todas las solicitudes que perteneces a esa unidad de gasto */
-    Route::get('quotitations/spending/{id}', 'RequestQuotitationController@showRequestQuotationGasto');
-    /**Muestra datos del usuario que va a realizar una solicitud */
-    Route::get('getInform','RequestQuotitationController@getInformation');
+    /**Dado un id de usuario muestra datos del usuario que va a realizar una solicitud */
+    Route::get('getInform/{id}','RequestQuotitationController@getInformation');
 
     /**recibe un id de solitud de adquicion y responde con los detalles que perteneces a esa solicitud, 
      * mas un campo que guarda el mensaje de si el monto estimado es superior al monto limite*/
