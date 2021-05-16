@@ -57,6 +57,7 @@ class UserSeeder extends Seeder
         $user->email="jenny@gmail.com";
         $user->userName="jenny";
         $user->password=bcrypt("12345671");
+        $user->administrative_units_id=1;
         $user->save();
         $user->roles()->attach(2);
 
@@ -82,6 +83,7 @@ class UserSeeder extends Seeder
         $user->email="dani@gmail.com";
         $user->userName="danii";
         $user->password=bcrypt("12345673");
+        $user->administrative_units_id=3;
         $user->save();
         $user->roles()->attach(2);
 
