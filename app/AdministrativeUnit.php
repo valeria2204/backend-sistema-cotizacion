@@ -11,7 +11,7 @@ use App\User;
 class AdministrativeUnit extends Model
 {
     protected $fillable = [
-        'name','faculties_id'
+        'name','faculties_id','faculty'
     ];
     public function quotitation(){
         return $this->hasMany(Quotitation::class);

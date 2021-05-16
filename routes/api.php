@@ -28,6 +28,7 @@ Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
 
 /**nombres de earchivos */
 Route::get('files/{id}', 'RequestQuotitationController@showFiles');
+Route::get('administrativeUnit','AdministrativeUnitController@index');
 
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo
@@ -106,7 +107,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Registra una unidad administrativa
     Route::post('administrativeUnit/new','AdministrativeUnitController@register');
     /**Devuelve la lista de todos las unidades administrativas */
-    Route::get('administrativeUnit','AdministrativeUnitController@index');
+    //Route::get('administrativeUnit','AdministrativeUnitController@index');
 
 
     /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
