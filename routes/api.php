@@ -49,6 +49,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
     Route::post('quotitation', 'RequestQuotitationController@store');
+    /**Devuelve todas las solicitudes que perteneces a esa unidad administrativa */
+    Route::post('quotitation/{id}', 'RequestQuotitationController@showRequestQuotationAdministrative');
     /**Muestra datos del usuario que va a realizar una solicitud */
     Route::get('getInform','RequestQuotitationController@getInformation');
 

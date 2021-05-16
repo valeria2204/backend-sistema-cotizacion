@@ -11,7 +11,10 @@ use App\User;
 use App\SpendingUnit;
 use App\LimiteAmount;
 use App\AdministrativeUnit;
+<<<<<<< HEAD
 use App\Faculty;
+=======
+>>>>>>> 8c00f561bc606e8562ce8549fdd554de6c4396ba
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -29,7 +32,19 @@ class RequestQuotitationController extends Controller
         $requestQuotitation = RequestQuotitation::all();
         return response()->json(['request_quotitations'=>$requestQuotitation],200);
     }
-
+    /**
+     * Devuelve todas las solicitudes que perteneces a esa unidad administrativa
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRequestQuotationAdministrative($id)
+    {
+        $unidadAdministrativa = AdministrativeUnit::where('id',$id)->get();
+        $idFacultad = $unidadAdministrativa->faculties_id;
+        $unidadesGAsto = SpendingUnit::where('faculties_id',$idFacultad);
+        $requestQuotitation = RequestQuotitation::all();
+        return response()->json(['request_quotitations'=>$requestQuotitation],200);
+    }
     /**
      * resive un solicitud para poder crear una nueva solictud 
      *
