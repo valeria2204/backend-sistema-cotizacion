@@ -47,8 +47,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
     Route::post('quotitation', 'RequestQuotitationController@store');
-    /**Muestra datos del usuario que va a realizar una solicitud */
-    Route::get('getInform','RequestQuotitationController@getInformation');
+    /**Dado un id de usuario muestra datos del usuario que va a realizar una solicitud */
+    Route::get('getInform/{id}','RequestQuotitationController@getInformation');
 
     /**recibe un id de solitud de adquicion y responde con los detalles que perteneces a esa solicitud, 
      * mas un campo que guarda el mensaje de si el monto estimado es superior al monto limite*/
