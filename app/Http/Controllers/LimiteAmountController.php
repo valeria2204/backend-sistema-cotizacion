@@ -29,8 +29,8 @@ class LimiteAmountController extends Controller
         $validator = Validator::make($request->all(), [ 
             'monto' => 'required', 
             'dateStamp' => 'required', 
-            'steps' => 'required', 
-            'administrative_units_id' => 'required', 
+            'steps' => 'required',
+            'administrative_units_id' => 'required',
         ]);
 
         if ($validator->fails()) { 
