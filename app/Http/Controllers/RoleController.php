@@ -48,7 +48,7 @@ class RoleController extends Controller
         $input = $request->all(); 
         $rol = Role::create($input); 
         $rol->permissions()->attach($input['permissions']);
-        return response()->json(['message'=> $rol], $this-> successStatus); 
+        return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
     }
 
     /**

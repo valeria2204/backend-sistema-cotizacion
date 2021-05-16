@@ -65,7 +65,7 @@ class SpendingUnitController extends Controller
 
         $input = $request->all();
         $spendingUnit = SpendingUnit::create($input); 
-        return response()->json(['message'=> ""], $this-> successStatus); 
+        return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
     }
 
     /**
