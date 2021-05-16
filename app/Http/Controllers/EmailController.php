@@ -36,11 +36,12 @@ class EmailController extends Controller
             $input['code']=substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6);
             //dd($input);
             $request['code']=$input['code'];
+            $request['link']="http://127.0.0.1:8000";
             //$description=$description.'\n'.'Codigo de acceso: '.$input['code'].'\n'.'Url del sistema: http:/loaclhost';
             //$request['description']=$description;
             //dd($request);
-           // Mail::to($email)->send(new EmailModel($request));
-            //dd($request);
+            Mail::to($email)->send(new EmailModel($request));
+            dd($input);
             CompanyCode::create($input);
             
         }
