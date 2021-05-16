@@ -11,10 +11,6 @@ use App\User;
 use App\SpendingUnit;
 use App\LimiteAmount;
 use App\AdministrativeUnit;
-<<<<<<< HEAD
-use App\Faculty;
-=======
->>>>>>> 8c00f561bc606e8562ce8549fdd554de6c4396ba
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
