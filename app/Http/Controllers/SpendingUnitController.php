@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 use App\SpendingUnit;
 use App\AdministrativeUnit;
 use App\Faculty;
@@ -76,6 +77,7 @@ class SpendingUnitController extends Controller
     {     
         //
     }
+
 
     /**
      * Update the specified resource in storage.

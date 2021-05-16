@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facade\File;
 use App\RequestQuotitation; 
 use App\RequestDetail; 
+use App\User;
 use App\SpendingUnit;
 use App\LimiteAmount;
 use App\AdministrativeUnit;
@@ -110,8 +111,17 @@ class RequestQuotitationController extends Controller
     public function fileDowload(){
         return response()->download(public_path('Files/db.pdf'), "base de datos");
     }
+    public function downloadFile($id,$namefile){
+        $path = public_path('FilesAquisicion\\'.$id.'\\'.$namefile);
+        //dd($path);
+        return response()->download($path);
 
-
+    }
+    public function showFile($id,$namefile){
+        $path = public_path('FilesAquisicion\\'.$id.'\\'.$namefile);
+        //dd($path);
+        return response()->file($path);
+    }
     /**
      * devuelve el detalle de la solicitud cuando te pasan el id de la solitud
      *
@@ -153,6 +163,8 @@ class RequestQuotitationController extends Controller
         return response()->json($requestQuotitation,200);
     }
 
+
+
       /**
      * devuelve los archivos adjuntos de una solicitud cuando te pasan el id de la solicitud
      *
@@ -186,11 +198,12 @@ class RequestQuotitationController extends Controller
     }
 
 
-    public function getInformation()
+    public function getInformation($id)
     {
-        $spendingUnit = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
-        ->join('users','spending_units.id','=','users.spending_units_id')->get();
-        return response()->json(["User"=> $spendingUnit],200);
+        $dates = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
+        ->join('users','spending_units.id','=','users.spending_units_id')
+        ->where('users.id','=',$id)->get();
+        return response()->json(["User"=> $dates],200);
     }
 
 

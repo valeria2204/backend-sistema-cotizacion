@@ -3,9 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Faculty;
 use App\User;
 use App\RequestQuotitation;
+use App\Faculty;
 
 class SpendingUnit extends Model
 {
