@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
 Route::post('login', 'UserController@login');
 
 /**CopanyCode */
@@ -27,6 +29,7 @@ Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
 
 /**nombres de earchivos */
 Route::get('files/{id}', 'RequestQuotitationController@showFiles');
+
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo
  */
@@ -80,8 +83,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
     /**LIMITE CONTROLLER */
-    //Registra un monto limite
-    Route::post('limiteAmount/new','LimiteAmountController@register');
+    
     //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
     Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece

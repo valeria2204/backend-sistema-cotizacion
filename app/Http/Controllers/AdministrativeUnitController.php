@@ -37,6 +37,7 @@ class AdministrativeUnitController extends Controller
     {
         $validator = Validator::make($request->all(), [ 
             'name' => 'required', 
+            'faculties_id' => 'required', 
             
         ]);
         if ($validator->fails()) { 
@@ -47,7 +48,7 @@ class AdministrativeUnitController extends Controller
         $valor = count($administrativeUnitFound);
         
         if($valor == 1){
-            $message = 'El nombre ya esta registrado '.$request['name'];
+            $message = 'El nombre '.$request['name'].' ya esta registrado ';
             return response()->json(['message'=>$message], 200); 
         }
         $input = $request->all(); 
