@@ -11,6 +11,7 @@ use App\User;
 use App\SpendingUnit;
 use App\LimiteAmount;
 use App\AdministrativeUnit;
+use App\Faculty;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -28,6 +29,17 @@ class RequestQuotitationController extends Controller
         $requestQuotitation = RequestQuotitation::all();
         return response()->json(['request_quotitations'=>$requestQuotitation],200);
     }
+
+    /**
+     * Devuelve todas las solicitudes que perteneces a esa unidad de gasto
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRequestQuotationGasto($id)
+    {
+        $requestGasto = RequestQuotitation::where('spending_units_id','=',$id)->get();
+        return response()->json(['request_quotitations'=>$requestGasto],200);
+    }
     /**
      * Devuelve todas las solicitudes que perteneces a esa unidad administrativa
      *
@@ -35,11 +47,8 @@ class RequestQuotitationController extends Controller
      */
     public function showRequestQuotationAdministrative($id)
     {
-        $unidadAdministrativa = AdministrativeUnit::where('id',$id)->get();
-        $idFacultad = $unidadAdministrativa->faculties_id;
-        $unidadesGAsto = SpendingUnit::where('faculties_id',$idFacultad);
-        $requestQuotitation = RequestQuotitation::all();
-        return response()->json(['request_quotitations'=>$requestQuotitation],200);
+        $requestAdmin = RequestQuotitation::where('administrative_unit_id','=',$id)->get();
+        return response()->json(['request_quotitations'=>$requestAdmin],200);
     }
     /**
      * resive un solicitud para poder crear una nueva solictud 
@@ -49,7 +58,7 @@ class RequestQuotitationController extends Controller
      */
     public function store(Request $request)
     {   
-        $input = $request->only('nameUnidadGasto', 'aplicantName','requestDate','amount');
+        $input = $request->only('nameUnidadGasto', 'aplicantName','requestDate','amount','spending_units_id');
         $arrayDetails = $request->only('details');
         $arrayDetails=$arrayDetails['details'];
         $validator = Validator::make($request->all(), [ 
@@ -60,7 +69,15 @@ class RequestQuotitationController extends Controller
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
-        } 
+        }
+        //$idGasto = $request->only('spending_units_id');
+        $idGasto = $input['spending_units_id'];
+        $gasto = SpendingUnit::find($idGasto);
+        $idFacultad = $gasto->faculties_id;
+        $unidadadmini  = AdministrativeUnit::where('faculties_id','=',$idFacultad)->get();
+        foreach ($unidadadmini as $key => $admi) {
+            $input['administrative_unit_id'] = $admi->id;
+        }
          $requestQuotitation = RequestQuotitation::create($input);
          $idQuotitation = $requestQuotitation['id'];
          $countDetails = count($arrayDetails);
@@ -78,6 +95,7 @@ class RequestQuotitationController extends Controller
         
         return;
     } */
+
 
     public function upload(Request $request){
         $request->file('archivo')->store('public');

@@ -48,9 +48,12 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
+    /**Crear una nueva cotizacion*/
     Route::post('quotitation', 'RequestQuotitationController@store');
     /**Devuelve todas las solicitudes que perteneces a esa unidad administrativa */
-    Route::post('quotitation/{id}', 'RequestQuotitationController@showRequestQuotationAdministrative');
+    Route::get('quotitations/{id}', 'RequestQuotitationController@showRequestQuotationAdministrative');
+    /**Devuelve todas las solicitudes que perteneces a esa unidad de gasto */
+    Route::get('quotitations/spending/{id}', 'RequestQuotitationController@showRequestQuotationGasto');
     /**Muestra datos del usuario que va a realizar una solicitud */
     Route::get('getInform','RequestQuotitationController@getInformation');
 
