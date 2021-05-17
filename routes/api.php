@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
 
 Route::post('login', 'UserController@login');
 

@@ -165,8 +165,19 @@ class UserController extends Controller
     public function updateRol($idUser, $idRol)
     {
         $user = User::find($idUser);
-        $user->rols()->sync($idRol);
+        $user->roles()->sync($idRol);
+
+
         return response()->json(['res'=>true], $this-> successStatus);
+    }
+
+    public function verifyPasswordChange($id)
+    {
+        $user = User::find($id);
+        $password = $user['password'];
+        $ci = $user['ci'];
+        return $ci;
+
     }
     /**
      * Store a newly created resource in storage.
