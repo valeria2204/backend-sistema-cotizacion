@@ -231,7 +231,7 @@ class RequestQuotitationController extends Controller
         $dates = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
         ->join('users','spending_units.id','=','users.spending_units_id')
         ->where('users.id','=',$id)->get();
-        return response()->json(["User"=> $dates],200);
+        return response()->json(["User"=> $dates[0]],200);
     }
 
 
