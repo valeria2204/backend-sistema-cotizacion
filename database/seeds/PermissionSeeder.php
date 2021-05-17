@@ -49,15 +49,25 @@ class PermissionSeeder extends Seeder
         $permiso7->description = "Puede ver las unidades administrativas y resgistrar nuevas unidades administrativas";
         $permiso7->url = "/UnidadesAdministrativas";
         $permiso7->save();
-        $permiso7 = new Permission();
-        $permiso7->namePermission ="Registrar unidades de gasto";
-        $permiso7->description = "Registrar nuevas unidades de gasto";
-        $permiso7->url = "/unidadesDeGasto";
-        $permiso7->save();
-        $permiso7 = new Permission();
-        $permiso7->namePermission ="Registrar usuarios";
-        $permiso7->description = "Registrar nuevos usuarios";
-        $permiso7->url = "/user";
-        $permiso7->save();
+        $permiso8 = new Permission();
+        $permiso8->namePermission ="Registrar unidades de gasto";
+        $permiso8->description = "Registrar nuevas unidades de gasto";
+        $permiso8->url = "/unidadesDeGasto";
+        $permiso8->save();
+        $permiso9 = new Permission();
+        $permiso9->namePermission ="Registrar usuarios";
+        $permiso9->description = "Registrar nuevos usuarios";
+        $permiso9->url = "/user";
+        $permiso9->save();
+        $permiso10 = new Permission();
+        $permiso10->namePermission ="Registro de empresas";
+        $permiso10->description = "Registrar nuevos empresas";
+        $permiso10->url = "/user";
+        $permiso10->save();
+        $permiso11 = new Permission();
+        $permiso11->namePermission ="Administar roles";
+        $permiso11->description = "Agraga nuvos roles, asigna roles";
+        $permiso11->url = "/user";
+        $permiso11->save();
     }
 }

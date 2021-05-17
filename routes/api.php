@@ -106,6 +106,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('Faculties','FacultyController@index');
     // Devuelve solo las facultades que no estan asignadas a una unidad administrativa
     Route::get('faculties/use','FacultyController@noUseFaculties');
+    // Devuelve solo las facultades que si estan asignadas a una unidad administrativa
+    Route::get('faculties/in/use','FacultyController@inUseFaculties');
     //Crea una nueva facultad 
     Route::post('facultad/new','FacultyController@store');
 

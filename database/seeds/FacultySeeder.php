@@ -13,6 +13,7 @@ class FacultySeeder extends Seeder
     {
         $faculty= new Faculty();
         $faculty->nameFacultad = "Ciencias y tecnología";
+        $faculty->inUse = 1;
         $faculty->save();
 
         $faculty1= new Faculty();
@@ -25,6 +26,10 @@ class FacultySeeder extends Seeder
 
         $faculty3= new Faculty();
         $faculty3->nameFacultad = "Humanidades";
+        $faculty3->save();
+
+        $faculty3= new Faculty();
+        $faculty3->nameFacultad = "Arquitectura";
         $faculty3->save();
     }
 }

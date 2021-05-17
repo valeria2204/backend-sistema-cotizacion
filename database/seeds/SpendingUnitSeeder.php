@@ -23,11 +23,11 @@ class SpendingUnitSeeder extends Seeder
         $spending1->save();
 
         $spending2 = new SpendingUnit();
-        $spending2->nameUnidadGasto = "Auditoria";
-        $spending2->faculties_id = 2;
+        $spending2->nameUnidadGasto = "Industrial";
+        $spending2->faculties_id = 1;
         $spending2->save();
 
-        $spending3 = new SpendingUnit();
+        /* $spending3 = new SpendingUnit();
         $spending3->nameUnidadGasto = "Cormercial";
         $spending3->faculties_id = 2;
         $spending3->save();
@@ -40,6 +40,6 @@ class SpendingUnitSeeder extends Seeder
         $spending6 = new SpendingUnit();
         $spending6->nameUnidadGasto = "Musica";
         $spending6->faculties_id = 4;
-        $spending6->save();
+        $spending6->save(); */
     }
 }

@@ -22,19 +22,14 @@ class SpendingUnitController extends Controller
     public function index()
     {
         $spendingUnits = SpendingUnit::all();
-        $countSpendingUnits = count($spendingUnits);
-        for ($id = 1; $id <= $countSpendingUnits; $id++)
-        {
-             $spendingUnit = SpendingUnit::find($id);
-             $facultie_id =  $spendingUnit['faculties_id'];
-             //para mostrar en la columna Facultad de la lista de Unidades de gasto
-             $faculty = Faculty::find($facultie_id);
-             $spendingUnit['faculty'] = $faculty;
-             //para mostrar en la columna Unidad Administrativa de la lista de Unidades de gasto
-             $administrativeUnit = AdministrativeUnit::find($facultie_id);
-             $spendingUnit['administrativeUnit'] = $administrativeUnit;
-             $i = $id-1;
-             $spendingUnits[$i] = $spendingUnit;
+        foreach ($spendingUnits as $key => $gasto) {
+            $id_facultad = $gasto->faculties_id;
+            //para mostrar en la columna Facultad de la lista de Unidades de gasto
+            $facultad = Faculty::find($id_facultad);
+            $gasto['faculty'] = $facultad;
+            //para mostrar en la columna Unidad Administrativa de la lista de Unidades de gasto
+            $administrativeUnit = AdministrativeUnit::where('faculties_id','=',$id_facultad)->get();
+            $gasto['administrativeUnit'] = $administrativeUnit[0];
         }
         return response()->json(['spending_units'=> $spendingUnits],$this-> successStatus);
     }

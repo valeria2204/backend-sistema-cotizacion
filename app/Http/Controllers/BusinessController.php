@@ -46,12 +46,12 @@ class BusinessController extends Controller
     $valor = count($emailFound);
     
     if($valor == 1){
-        $message = 'El correo '.$request['nameRol'].' ya esta registrado ';
+        $message = 'El correo '.$request['email'].' ya esta registrado';
         return response()->json(['message'=>$message], 200); 
     }
         $input = $request->all(); 
         $business = Business::create($input); 
-        return response()->json(['message'=> ""], $this-> successStatus); 
+        return response()->json(['message'=> "Registro exitoso!"], $this-> successStatus); 
     }
 
     /**

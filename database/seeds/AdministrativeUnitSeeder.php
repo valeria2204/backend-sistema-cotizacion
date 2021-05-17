@@ -16,7 +16,7 @@ class AdministrativeUnitSeeder extends Seeder
         $administrativa->faculties_id = 1;
         $administrativa->save();
 
-        $administrativa1 = new AdministrativeUnit();
+        /* $administrativa1 = new AdministrativeUnit();
         $administrativa1->name = "fcye Administrativa";
         $administrativa1->faculties_id = 3;
         $administrativa1->save();
@@ -24,6 +24,6 @@ class AdministrativeUnitSeeder extends Seeder
         $administrativa2 = new AdministrativeUnit();
         $administrativa2->name = "Umanidades Administrativa";
         $administrativa2->faculties_id = 4;
-        $administrativa2->save();
+        $administrativa2->save(); */
     }
 }
