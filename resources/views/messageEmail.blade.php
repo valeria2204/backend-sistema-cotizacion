@@ -29,6 +29,7 @@
             font-size: 18px;
         }
         h3{color:red}
+        h4{color:DodgerBlue}
     </style>
 </head>
 <body>
@@ -37,7 +38,7 @@
         <p>Su codigo de Ingreso: </p>
         <h3>{{$content->code}}</h3>
         <p>Link del Sistema de Cotizaciones: </p>
-        <h1>{{$content->link}}</h1>
+        <h4>{{$content->link}}</h4>
         <p> {{$content->description}}</p>
     </div>
 </body>
