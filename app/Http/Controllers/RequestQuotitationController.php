@@ -66,11 +66,11 @@ class RequestQuotitationController extends Controller
             'aplicantName' => 'required', 
             'requestDate' => 'required', 
             'amount' => 'required', 
-        ]);
-        if ($validator->fails()) { 
-            return response()->json(['error'=>$validator->errors()], 401);            
-        }
-        //$idGasto = $request->only('spending_units_id');
+            ]);
+            if ($validator->fails()) { 
+                return response()->json(['error'=>$validator->errors()], 401);            
+            }
+            //$idGasto = $request->only('spending_units_id');
         $idGasto = $input['spending_units_id'];
         $gasto = SpendingUnit::find($idGasto);
         $idFacultad = $gasto->faculties_id;
@@ -78,15 +78,14 @@ class RequestQuotitationController extends Controller
         foreach ($unidadadmini as $key => $admi) {
             $input['administrative_unit_id'] = $admi->id;
         }
-         $requestQuotitation = RequestQuotitation::create($input);
-         $idQuotitation = $requestQuotitation['id'];
-         $countDetails = count($arrayDetails);
+        $requestQuotitation = RequestQuotitation::create($input);
+        $idQuotitation = $requestQuotitation['id'];
+        $countDetails = count($arrayDetails);
          for ($i = 0; $i < $countDetails; $i++)
          {
              $detailI=$arrayDetails[$i];
              $detailI['request_quotitations_id']= $idQuotitation;
              RequestDetail::create($detailI);
-            
          }
          
          return response()->json(['success' =>$idQuotitation], $this-> successStatus);
@@ -232,7 +231,7 @@ class RequestQuotitationController extends Controller
         $dates = SpendingUnit::select('spending_units.nameUnidadGasto','users.name','users.lastName')
         ->join('users','spending_units.id','=','users.spending_units_id')
         ->where('users.id','=',$id)->get();
-        return response()->json(["User"=> $dates],200);
+        return response()->json(["User"=> $dates[0]],200);
     }
 
 

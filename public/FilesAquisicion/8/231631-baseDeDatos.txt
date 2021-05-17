@@ -1,0 +1,6 @@
+MYSQL_ADDON_HOST=bww5oim8boyyeuniwjqq-mysql.services.clever-cloud.com
+MYSQL_ADDON_DB=bww5oim8boyyeuniwjqq
+MYSQL_ADDON_USER=ui70jxebbnwcukbj
+MYSQL_ADDON_PORT=20758
+MYSQL_ADDON_PASSWORD=NbieUe5mL3hx9jAecU2 
+MYSQL_ADDON_URI=mysql://ui70jxebbnwcukbj:NbieUe5mL3hx9jAecU2@bww5oim8boyyeuniwjqq-mysql.services.clever-cloud.com:20758/bww5oim8boyyeuniwjqq
