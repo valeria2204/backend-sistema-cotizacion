@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Seeder;
 use App\AdministrativeUnit;
-
 class AdministrativeUnitSeeder extends Seeder
 {
     /**

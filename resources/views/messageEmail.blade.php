@@ -29,6 +29,7 @@
             font-size: 18px;
         }
         h3{color:red}
+        h4{color:DodgerBlue}
     </style>
 </head>
 <body>
@@ -36,6 +37,8 @@
         <div class="encabezado"><h1>Solicitud de cotización</h1></div>
         <p>Su codigo de Ingreso: </p>
         <h3>{{$content->code}}</h3>
+        <p>Link del Sistema de Cotizaciones: </p>
+        <h4>{{$content->link}}</h4>
         <p> {{$content->description}}</p>
     </div>
 </body>

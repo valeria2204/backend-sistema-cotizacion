@@ -19,8 +19,16 @@ class AdministrativeUnitController extends Controller
 
     public function index()
     {
-        $AdministrativeUnit = AdministrativeUnit::all();
-        return response()->json(['Administrative_unit'=>$AdministrativeUnit],200);
+        $administrativeUnits = AdministrativeUnit::all();
+        foreach ($administrativeUnits as $key => $administrativeUnit) {
+            $facultie_id =  $administrativeUnit['faculties_id'];
+            //para mostrar en la columna Facultad de la lista de Unidades administrativas
+            $faculty = Faculty::find($facultie_id);
+            $nameFaculty = $faculty['nameFacultad'];
+            $administrativeUnit['faculty'] = $nameFaculty;
+            $administrativeUnits[$key]=$administrativeUnit;
+        }
+        return response()->json(['Administrative_unit'=>$administrativeUnits],200);
     }
 
     /**
@@ -37,6 +45,7 @@ class AdministrativeUnitController extends Controller
     {
         $validator = Validator::make($request->all(), [ 
             'name' => 'required', 
+            'faculties_id' => 'required', 
             
         ]);
         if ($validator->fails()) { 
@@ -47,7 +56,7 @@ class AdministrativeUnitController extends Controller
         $valor = count($administrativeUnitFound);
         
         if($valor == 1){
-            $message = 'El nombre ya esta registrado '.$request['name'];
+            $message = 'El nombre '.$request['name'].' ya esta registrado ';
             return response()->json(['message'=>$message], 200); 
         }
         $input = $request->all(); 
