@@ -17,12 +17,8 @@ class DatabaseSeeder extends Seeder
         $this->call(FacultySeeder::class);
         $this->call(AdministrativeUnitSeeder::class);
         $this->call(SpendingUnitSeeder::class);
-        $this->call(RequestQuotitationSeeder::class);
-        $this->call(RequestDetailSeeder::class);
         $this->call(PermissionSeeder::class);
         $this->call(RoleSeeder::class);
-        $this->call(SpendingUnitSeeder::class);
-        $this->call(AdministrativeUnitSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(LimiteAmountSeeder::class);
         $this->call(RequestQuotationSeeder::class);
