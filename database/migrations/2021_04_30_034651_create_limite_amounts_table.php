@@ -16,7 +16,8 @@ class CreateLimiteAmountsTable extends Migration
         Schema::create('limite_amounts', function (Blueprint $table) {
             $table->id();
             $table->integer('monto');
-            $table->date('dateStamp'); //registro de fecha
+            $table->date('starDate'); //fecha inicio
+            $table->date('endDate')->nullable(); //fecha fin
             $table->year('steps');   //gestiones
             $table->foreignId('administrative_units_id')->nullable()->constrained();
             $table->timestamps();
