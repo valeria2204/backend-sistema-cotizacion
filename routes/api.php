@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
+//Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
 
 Route::post('login', 'UserController@login');

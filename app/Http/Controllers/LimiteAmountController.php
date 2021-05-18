@@ -28,7 +28,7 @@ class LimiteAmountController extends Controller
         //falta terminar
         $validator = Validator::make($request->all(), [ 
             'monto' => 'required', 
-            'dateStamp' => 'required', 
+            'starDate' => 'required', 
             'steps' => 'required',
             'administrative_units_id' => 'required',
         ]);
@@ -51,10 +51,27 @@ class LimiteAmountController extends Controller
               $message = 'El monto '.$request['monto'].' ya esta registrado ';
               return response()->json(['message'=>$message], 200); 
           }
-    
+        
+          $endDate = $request['starDate'];
+
+          $ultimoMonto = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])
+          ->latest()->take(1)->get();
+        
+        //falta que se guarde en la bd esta actualizacion
+         if(count($ultimoMonto)>=1)
+          {
+            
+              $ultimoMonto->endDate = $endDate;
+        
+              $ultimoMonto->save();
+              
+          }
+
+         
           $input = $request->all(); 
           $limiteAmount = LimiteAmount::create($input);
-          return response()->json(['limiteAmount'=>$limiteAmount],200);
+          return response()->json(['limiteAmount'=>$limiteAmount],200);*/
+          
         }
 
         $input = $request->all(); 

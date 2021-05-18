@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LimiteAmount extends Model
 {
     protected $fillable = [
-        'monto','dateStamp','steps','administrative_units_id'
+        'monto','starDate','endDate','steps','administrative_units_id'
     ];
     public function AdministrativeUnit(){
         return $this->belongsTo(AdministrativeUnit::class);
