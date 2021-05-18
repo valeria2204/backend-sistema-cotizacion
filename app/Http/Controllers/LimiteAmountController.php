@@ -54,18 +54,10 @@ class LimiteAmountController extends Controller
         
           $endDate = $request['starDate'];
 
-          $ultimoMonto = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])
+          /*$ultimoMonto = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])
           ->latest()->take(1)->get();
         
-        //falta que se guarde en la bd esta actualizacion
-         if(count($ultimoMonto)>=1)
-          {
-            
-              $ultimoMonto->endDate = $endDate;
-        
-              $ultimoMonto->save();
-              
-          }
+          //falta que se guarde en la bd esta actualizacion*/
 
          
           $input = $request->all(); 
@@ -79,6 +71,8 @@ class LimiteAmountController extends Controller
         return response()->json(['limiteAmount'=>$limiteAmount],200);
 
     }
+
+
 
     // muestra el ultimo registro de los montos limites
     public function sendCurrentData($id)

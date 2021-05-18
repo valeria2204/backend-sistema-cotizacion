@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
-//Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
+Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
+Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
 
 Route::post('login', 'UserController@login');
@@ -92,13 +92,13 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**LIMITE CONTROLLER */
     
     //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
-    Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
+    //Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
     Route::get('limiteAmounts/{id}','LimiteAmountController@show');
     //Devuel todos los montos
     Route::get('limiteAmout','LimiteAmountController@index');
     //Devuelve el registro actual de los montos limites dado un id de la unidad administrativa a la que pertenece
-    Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
+    //Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 
     /**Faculty Controller */
     /**devuelve las facultades */
