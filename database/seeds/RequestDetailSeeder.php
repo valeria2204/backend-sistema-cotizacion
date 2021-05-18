@@ -18,5 +18,19 @@ class RequestDetailSeeder extends Seeder
         $reqDetail->description = "marca php color preferente negro";
         $reqDetail->request_quotitations_id = 1;
         $reqDetail->save();
+
+        $reqDetail = new RequestDetail();
+        $reqDetail->amount = 2;
+        $reqDetail->unitMeasure = "laptops";
+        $reqDetail->description = "marca php color preferente negro";
+        $reqDetail->request_quotitations_id = 2;
+        $reqDetail->save();
+
+        $reqDetail = new RequestDetail();
+        $reqDetail->amount = 2;
+        $reqDetail->unitMeasure = "laptops";
+        $reqDetail->description = "marca php color preferente negro";
+        $reqDetail->request_quotitations_id = 2;
+        $reqDetail->save();
     }
 }
