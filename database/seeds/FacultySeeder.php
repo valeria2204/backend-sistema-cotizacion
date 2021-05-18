@@ -35,5 +35,9 @@ class FacultySeeder extends Seeder
         $faculty3->nameFacultad = "Arquitectura";
         $faculty3->inUse = 0;
         $faculty3->save();
+
+        $faculty3= new Faculty();
+        $faculty3->nameFacultad = "Arquitectura";
+        $faculty3->save();
     }
 }

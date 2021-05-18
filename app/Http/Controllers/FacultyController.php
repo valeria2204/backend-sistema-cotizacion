@@ -27,6 +27,16 @@ class FacultyController extends Controller
         $faculties = Faculty::where('inUse',0)->get();
         return response()->json(['facultades'=>$faculties],200);
     }
+    /**
+     * Facultades usadas en administratica
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function inUseFaculties()
+    {
+        $faculties = Faculty::where('inUse',1)->get();
+        return response()->json(['facultades'=>$faculties],200);
+    }
     
     /**
      * Show the form for creating a new resource.
