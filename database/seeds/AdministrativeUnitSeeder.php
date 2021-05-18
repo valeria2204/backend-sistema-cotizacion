@@ -11,19 +11,24 @@ class AdministrativeUnitSeeder extends Seeder
      */
     public function run()
     {
-        $administrativa = new AdministrativeUnit();
-        $administrativa->name = "fcyt Administrativa";
-        $administrativa->faculties_id = 1;
-        $administrativa->save();
+        $AdministrativeUnit = new AdministrativeUnit();
+        $AdministrativeUnit->name="administracion de tecnologia";
+        $AdministrativeUnit->faculties_id="1";
+        $AdministrativeUnit->save();
 
-        /* $administrativa1 = new AdministrativeUnit();
-        $administrativa1->name = "fcye Administrativa";
-        $administrativa1->faculties_id = 3;
-        $administrativa1->save();
+        $AdministrativeUnit2 = new AdministrativeUnit();
+        $AdministrativeUnit2->name="administracion de derecho";
+        $AdministrativeUnit2->faculties_id="2";
+        $AdministrativeUnit2->save();
 
-        $administrativa2 = new AdministrativeUnit();
-        $administrativa2->name = "Umanidades Administrativa";
-        $administrativa2->faculties_id = 4;
-        $administrativa2->save(); */
+        $AdministrativeUnit3 = new AdministrativeUnit();
+        $AdministrativeUnit3->name="administracion de economia";
+        $AdministrativeUnit3->faculties_id="3";
+        $AdministrativeUnit3->save();
+
+        $AdministrativeUnit4 = new AdministrativeUnit();
+        $AdministrativeUnit4->name="administracion de humanidades";
+        $AdministrativeUnit4->faculties_id="4";
+        $AdministrativeUnit4->save();
     }
 }
