@@ -14,21 +14,21 @@ class RequestDetailSeeder extends Seeder
     {
         $reqDetail = new RequestDetail();
         $reqDetail->amount = 2;
-        $reqDetail->unitMeasure = "laptops";
+        $reqDetail->unitMeasure = "mesas";
         $reqDetail->description = "marca php color preferente negro";
         $reqDetail->request_quotitations_id = 1;
         $reqDetail->save();
 
         $reqDetail = new RequestDetail();
-        $reqDetail->amount = 2;
+        $reqDetail->amount = 5;
         $reqDetail->unitMeasure = "laptops";
         $reqDetail->description = "marca php color preferente negro";
         $reqDetail->request_quotitations_id = 2;
         $reqDetail->save();
 
         $reqDetail = new RequestDetail();
-        $reqDetail->amount = 2;
-        $reqDetail->unitMeasure = "laptops";
+        $reqDetail->amount = 5;
+        $reqDetail->unitMeasure = "mause";
         $reqDetail->description = "marca php color preferente negro";
         $reqDetail->request_quotitations_id = 2;
         $reqDetail->save();

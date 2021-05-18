@@ -16,7 +16,7 @@ class RequestQuotitationSeeder extends Seeder
         $reqQuotation->nameUnidadGasto ="Sistemas" ;
         $reqQuotation->aplicantName = "tom";
         $reqQuotation->requestDate = "2021-02-03";
-        $reqQuotation->amount = "3000";
+        $reqQuotation->amount = "1000";
         $reqQuotation->spending_units_id = 1;
         $reqQuotation->administrative_unit_id = 1;
         $reqQuotation->save();
@@ -25,7 +25,7 @@ class RequestQuotitationSeeder extends Seeder
         $reqQuotation->nameUnidadGasto ="Sistemas" ;
         $reqQuotation->aplicantName = "tom";
         $reqQuotation->requestDate = "2021-04-10";
-        $reqQuotation->amount = "7000";
+        $reqQuotation->amount = "12000";
         $reqQuotation->spending_units_id = 1;
         $reqQuotation->administrative_unit_id = 1;
         $reqQuotation->save();
