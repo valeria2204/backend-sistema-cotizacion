@@ -20,6 +20,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation->status="aceptado";
         $RequestQuotation->spending_units_id=1;
         $RequestQuotation->administrative_unit_id=1;
+        $RequestQuotation->limiteId=1;
         $RequestQuotation->save();
 
         $RequestQuotation2 = new RequestQuotitation();
@@ -30,6 +31,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation2->status="aceptado";
         $RequestQuotation2->spending_units_id=2;
         $RequestQuotation2->administrative_unit_id=3;
+        $RequestQuotation2->limiteId=1;
         $RequestQuotation2->save();
 
         $RequestQuotation3 = new RequestQuotitation();
@@ -40,6 +42,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation3->status="aceptado";
         $RequestQuotation3->spending_units_id=3;
         $RequestQuotation3->administrative_unit_id=1;
+        $RequestQuotation3->limiteId=1;
         $RequestQuotation3->save();
 
         $RequestQuotation4 = new RequestQuotitation();
@@ -50,6 +53,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation4->status="rechazado";
         $RequestQuotation4->spending_units_id=1;
         $RequestQuotation4->administrative_unit_id=1;
+        $RequestQuotation4->limiteId=3;
         $RequestQuotation4->save();
 
         $RequestQuotation5 = new RequestQuotitation();
@@ -60,6 +64,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation5->status="rechazado";
         $RequestQuotation5->spending_units_id=2;
         $RequestQuotation5->administrative_unit_id=3;
+        $RequestQuotation5->limiteId=3;
         $RequestQuotation5->save();
 
         $RequestQuotation6 = new RequestQuotitation();
@@ -70,6 +75,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation6->status="rechazado";
         $RequestQuotation6->spending_units_id=3;
         $RequestQuotation6->administrative_unit_id=1;
+        $RequestQuotation6->limiteId=3;
         $RequestQuotation6->save();
 
         $RequestQuotation7 = new RequestQuotitation();
@@ -80,6 +86,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation7->status="pendiente";
         $RequestQuotation7->spending_units_id=1;
         $RequestQuotation7->administrative_unit_id=1;
+        $RequestQuotation7->limiteId=4;
         $RequestQuotation7->save();
 
         $RequestQuotation8 = new RequestQuotitation();
@@ -90,6 +97,7 @@ class RequestQuotationSeeder extends Seeder
         $RequestQuotation8->status="pendiente";
         $RequestQuotation8->spending_units_id=1;
         $RequestQuotation8->administrative_unit_id=1;
+        $RequestQuotation8->limiteId=4;
         $RequestQuotation8->save();
     }
 }

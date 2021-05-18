@@ -78,6 +78,8 @@ class RequestQuotitationController extends Controller
         foreach ($unidadadmini as $key => $admi) {
             $input['administrative_unit_id'] = $admi->id;
         }
+        $data = LimiteAmount::latest('id')->first();
+        $input['limiteId']=$data->id;
         $requestQuotitation = RequestQuotitation::create($input);
         $idQuotitation = $requestQuotitation['id'];
         $countDetails = count($arrayDetails);
@@ -162,21 +164,16 @@ class RequestQuotitationController extends Controller
         $requestQuotitations = RequestQuotitation::all();
         $deils = RequestDetail::where('request_quotitations_id',$id)->get();
         $requestQuotitation = $requestQuotitations->find($id);
-        $requestQuotitation['details'] = $deils;      
+        $requestQuotitation['details'] = $deils;
         //sacar el monto estimado de la solicitud
         $amountEstimated =  $requestQuotitation['amount'];
-        //obtener el monto limite que una unidad administrativa tiene para sus unidades de gasto
-         //primero obtener la unidad de gasto desde la cual se hace la solicitud
-        $spendingUnit_id = $requestQuotitation['spending_units_id'];
-        $spendingUnit = SpendingUnit::find($spendingUnit_id);
-        $facultie_id =  $spendingUnit['faculties_id'];
-        $administrativeUnit = AdministrativeUnit::where('faculties_id',$facultie_id)->first();
-        $administrativeUnit_id = $administrativeUnit['id'];
-        $amountLimite = LimiteAmount::where('administrative_units_id',$administrativeUnit_id)->get()->last();
         //sacar el monto limite
-        $amountTope = $amountLimite['monto'];
+        $limitId = $requestQuotitation->limiteId;
+        $limite=LimiteAmount::find($limitId);
+        $requestQuotitation['limite'] = $limite;
+        $montoTope = $limite->monto;
         $requestQuotitation['message'] = "";
-        if( $amountEstimated > $amountTope){
+        if( $amountEstimated > $montoTope){
             $requestQuotitation['message'] = "El monto es superior al tope";
         }
         return response()->json($requestQuotitation,200);
