@@ -52,13 +52,6 @@ class AdministrativeUnitController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);            
         }
 
-        $administrativeUnitFound = AdministrativeUnit::where('name',$request['name'])->get();
-        $valor = count($administrativeUnitFound);
-        
-        if($valor == 1){
-            $message = 'El nombre '.$request['name'].' ya esta registrado ';
-            return response()->json(['message'=>$message], 200); 
-        }
         $input = $request->all(); 
         $id_facultad = $input['faculties_id'];
         $facultad = Faculty::find($id_facultad);
