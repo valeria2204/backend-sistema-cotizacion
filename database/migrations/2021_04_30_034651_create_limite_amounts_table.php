@@ -19,6 +19,7 @@ class CreateLimiteAmountsTable extends Migration
             $table->date('dateStamp'); //registro de fecha
             $table->year('steps');   //gestiones
             $table->foreignId('administrative_units_id')->nullable()->constrained();
+            $table->integer('limit_fin')->nullable();
             $table->timestamps();
         });
     }
