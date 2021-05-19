@@ -12,34 +12,19 @@ class SpendingUnitSeeder extends Seeder
      */
     public function run()
     {
-        $spending = new SpendingUnit();
-        $spending->nameUnidadGasto = "Sistemas";
-        $spending->faculties_id = 1;
-        $spending->save();
+        $SpendingUnit=new SpendingUnit();
+        $SpendingUnit->nameUnidadGasto="laboratorios de informatica";
+        $SpendingUnit->faculties_id=1;
+        $SpendingUnit->save();
 
-        $spending1 = new SpendingUnit();
-        $spending1->nameUnidadGasto = "Informática";
-        $spending1->faculties_id = 1;
-        $spending1->save();
+        $SpendingUnit2=new SpendingUnit();
+        $SpendingUnit2->nameUnidadGasto="biblioteca de economia";
+        $SpendingUnit2->faculties_id=3;
+        $SpendingUnit2->save();
 
-        $spending2 = new SpendingUnit();
-        $spending2->nameUnidadGasto = "Industrial";
-        $spending2->faculties_id = 1;
-        $spending2->save();
-
-        /* $spending3 = new SpendingUnit();
-        $spending3->nameUnidadGasto = "Cormercial";
-        $spending3->faculties_id = 2;
-        $spending3->save();
-
-        $spending4 = new SpendingUnit();
-        $spending4->nameUnidadGasto = "Trabajo Social";
-        $spending4->faculties_id = 4;
-        $spending4->save();
-        
-        $spending6 = new SpendingUnit();
-        $spending6->nameUnidadGasto = "Musica";
-        $spending6->faculties_id = 4;
-        $spending6->save(); */
+        $SpendingUnit3=new SpendingUnit();
+        $SpendingUnit3->nameUnidadGasto="biblioteca de tecnologia";
+        $SpendingUnit3->faculties_id=1;
+        $SpendingUnit3->save();
     }
 }

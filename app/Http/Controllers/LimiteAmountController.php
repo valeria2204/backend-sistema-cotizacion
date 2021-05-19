@@ -22,10 +22,12 @@ class LimiteAmountController extends Controller
         return response()->json(['limit_amout'=> $limiteAmount],$this-> successStatus);
     }
 
-
+   /*actualiza un monto limite, guarda la fecha inicio del monto actual en la fecha fin
+   del anterior monto*/
+   
     public function updateLimiteAmount(Request $request)
     {
-        //falta terminar
+        
         $validator = Validator::make($request->all(), [ 
             'monto' => 'required', 
             'starDate' => 'required', 
@@ -54,18 +56,16 @@ class LimiteAmountController extends Controller
         
           $endDate = $request['starDate'];
 
-          /*$ultimoMonto = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])
-          ->latest()->take(1)->get();
-        
-          //falta que se guarde en la bd esta actualizacion*/
+          $ultimoMontoActualizado = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])
+          ->latest()->take(1)->update(['endDate'=>$endDate]);
 
-         
           $input = $request->all(); 
           $limiteAmount = LimiteAmount::create($input);
-          return response()->json(['limiteAmount'=>$limiteAmount],200);*/
+          return response()->json(['limiteAmount'=>$limiteAmount],200);
           
         }
 
+        
         $input = $request->all(); 
         $limiteAmount = LimiteAmount::create($input);
         return response()->json(['limiteAmount'=>$limiteAmount],200);
