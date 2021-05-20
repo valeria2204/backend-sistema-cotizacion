@@ -20,6 +20,7 @@ class CreateLimiteAmountsTable extends Migration
             $table->date('endDate')->nullable(); //fecha fin
             $table->year('steps');   //gestiones
             $table->foreignId('administrative_units_id')->nullable()->constrained();
+            $table->integer('limit_fin')->nullable();
             $table->timestamps();
         });
     }
