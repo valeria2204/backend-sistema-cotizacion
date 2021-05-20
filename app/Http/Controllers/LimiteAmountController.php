@@ -46,7 +46,6 @@ class LimiteAmountController extends Controller
           $montosIguales = LimiteAmount::where('administrative_units_id',$request['administrative_units_id'])
                                        ->latest()->take(1)->get()-> where('monto',$request['monto']);
           $valor = count($montosIguales);
-        
           if($valor == 1){
               $message = 'El monto '.$request['monto'].' ya esta registrado ';
               return response()->json(['message'=>$message], 200); 
