@@ -31,6 +31,7 @@ Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
 /**nombres de earchivos */
 Route::get('files/{id}', 'RequestQuotitationController@showFiles');
 
+
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo
  */
@@ -65,15 +66,19 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**recibe un id de solicitud y responde con los archivos adjuntos que pertenecen a esa solicitud */
     Route::get('requestQuotitation/files/{id}', 'RequestQuotitationController@showFiles');
-
-    Route::post('report/{id}', 'ReportController@store');
     Route::post('upload/{id}', 'RequestQuotitationController@uploadFile');
     Route::get('download', 'RequestQuotitationController@download');
 
+    /**REPORT CONTROLLER */
+    /**Registra informe de una solicitud */
+    Route::post('quotitation/report', 'ReportController@store');
+    /**Devuelve el informe de una solicitud */
+    Route::get('quotitation/report/{id}', 'ReportController@show');
+
+    /**EMAIL CONTROLLER */
     /**resive los emails y la descripcion del mensage que se enviara a las empresas o a la empresa
      * y resive el id a la solicitud a la que pertenece*/
     Route::post('sendEmail/{id}','EmailController@store');
-    
     Route::post('sendEmail','EmailController@store');
 
     /**ROL CONTROLLER */
@@ -99,7 +104,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Devuelve el registro actual de los montos limites dado un id de la unidad administrativa a la que pertenece
     Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 
-    /**Faculty Controller */
+    /**FACULTY CONTROLLER */
     /**devuelve las facultades */
     Route::get('faculties','FacultyController@index');
     // Devuelve todas las facultades de la base de datos
@@ -111,13 +116,13 @@ Route::group(['middleware' => 'auth:api'], function(){
     //Crea una nueva facultad 
     Route::post('facultad/new','FacultyController@store');
 
-
+    /**ADMINISTRATIVE UNIT CONTROLLER */
     //Registra una unidad administrativa
     Route::post('administrativeUnit/new','AdministrativeUnitController@register');
     /**Devuelve la lista de todos las unidades administrativas */
     Route::get('administrativeUnit','AdministrativeUnitController@index');
 
-
+    /**SPENDING UNIT CONTROLLER */
     /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
     Route::post('spendingUnits/new','SpendingUnitController@store');
     /**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/

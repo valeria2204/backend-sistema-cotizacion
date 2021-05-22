@@ -17,6 +17,7 @@ class CreateReportsTable extends Migration
             $table->id();
             $table->string('description');
             $table->date('dateReport');
+            $table->string('administrative_username');
             $table->foreignId('request_quotitations_id')->constrained();
             $table->timestamps();
         });

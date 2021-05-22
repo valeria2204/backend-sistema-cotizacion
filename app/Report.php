@@ -13,7 +13,7 @@ class Report extends Model
      * @var array
      */
     protected $fillable = [
-        'description','dateReport','request_quotitations_id'
+        'description','dateReport','administrative_username','request_quotitations_id'
     ];
     public function requestQuotitation(){
         return $this->belongsTo(RequestQuotitation::class);
