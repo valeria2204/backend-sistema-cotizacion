@@ -13,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+//Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
+//Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
 
 Route::post('login', 'UserController@login');
@@ -31,6 +32,8 @@ Route::get("showFile/{id}/{namefile}", "RequestQuotitationController@showFile");
 /**nombres de earchivos */
 Route::get('files/{id}', 'RequestQuotitationController@showFiles');
 
+/**devuleve el pdf de la solicitud */
+Route::get('requestquotitationpdf/{id}','PDFQuotitationController@requestquotitationPDF');
 
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo

@@ -11,7 +11,6 @@ use Validator;
 
 class SpendingUnitController extends Controller
 {
-    //
     public $successStatus = 200;
     /**
      * Devuelve todos las unidades de gasto que existen en la base de datos, mas su facultad
