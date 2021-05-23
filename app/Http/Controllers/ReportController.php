@@ -43,6 +43,14 @@ class ReportController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);            
         }
 
+        $reportFound = Report::where('request_quotitations_id',$request['request_quotitations_id'])->get();
+        $valor = count($reportFound);
+        //devuelve mensaje si la solicitud ya tiene un informe
+        if($valor >= 1){
+            $message = 'La solicitud ya tiene un informe ';
+            return response()->json(['message'=>$message], 200); 
+        }
+
         $input = $request->all();
         $report = Report::create($input);
         return response()->json(['message'=> "Envio exitoso"], $this-> successStatus);
@@ -57,7 +65,8 @@ class ReportController extends Controller
     public function show($id)
     {
         //devuelve el informe de una determinada solicitud
-        $report = Report::where('request_quotitations_id',$id)->get();
+        $reports = Report::where('request_quotitations_id',$id)->get();
+        $report = $reports[0];
         return response()->json($report , $this-> successStatus);
 
     }

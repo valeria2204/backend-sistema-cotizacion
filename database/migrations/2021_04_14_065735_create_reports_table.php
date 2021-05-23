@@ -15,7 +15,7 @@ class CreateReportsTable extends Migration
     {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
-            $table->string('description');
+            $table->string('description',2000);
             $table->date('dateReport');
             $table->string('administrative_username');
             $table->foreignId('request_quotitations_id')->constrained();
