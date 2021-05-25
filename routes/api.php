@@ -138,4 +138,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('business/new','BusinessController@store');
      /**Devuelve la lista de todos las empresas*/
     Route::get('business','BusinessController@index');
+    /**Devuelve las empresas segun el "rubro" que se quiere buscar */
+    Route::get('business/searchRubro','BusinessController@searchRubro');
 });
