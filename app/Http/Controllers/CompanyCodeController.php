@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\CompanyCode;
-
+use App\RequestDetail;
+use App\Business;
 class CompanyCodeController extends Controller
 {
     /**
@@ -17,14 +18,31 @@ class CompanyCodeController extends Controller
     {
         $code = $request->only('code');
         $companyCode = CompanyCode::where('code',$code)->get();
+        //dd($companyCode);
         $valor = count($companyCode);
         if($valor==1){
-            $companyCode['status']=true;
-            return response()->json($companyCode, 200); 
+            $company = $companyCode[0];
+            $company['status']=true;
+            $empresa = Business::where('email',$company->email)->get();
+           $existeEmpresa = count($empresa);
+           if($existeEmpresa>0){
+               $company['empresa']= $empresa[0];
+           }
+            return response()->json($company, 200); 
         }else{
             $companyCode['status']=false;
             return response()->json($companyCode, 200);
         }
+    }
+    /**
+     * Devuelve los detalles de la cotizacion.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function detailsQuptitations($id)
+    {
+        $detalles = RequestDetail::where('request_quotitations_id',$id)->get();
+        return response()->json($detalles, 200); 
     }
 
     /**
@@ -54,7 +72,7 @@ class CompanyCodeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $coder = $request->only('code');
         $code = $coder['code'];
@@ -62,7 +80,7 @@ class CompanyCodeController extends Controller
         $requestQuotitation_id = $companycode['request_quotitations_id'];
         $deils = RequestDetail::where('request_quotitations_id',$requestQuotitation_id)->get();
         $companycode['details'] = $deils;
-        return response()->json($requestQuotitation,200);
+        //return response()->json($requestQuotitation,200);
     }
 
     /**

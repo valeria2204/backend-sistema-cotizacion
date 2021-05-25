@@ -179,6 +179,30 @@ class UserController extends Controller
         return $ci;
 
     }
+
+    /**
+     * Devuelve todos los usuarios pertenecientes a una unidad administrativa
+     *
+     * @param  int  $id de unidad administrativa
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsersUnitAdministrative($id)
+    {
+        $users = User::where('administrative_units_id',$id)->get();
+        return response()->json(['users'=>$users], $this-> successStatus);
+    }
+    /**
+     * Devuelve todos los usuarios pertenecientes a una unidad de gasto
+     *
+     * @param  int  $id de unidad administrativa
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsersUnitSpending($id)
+    {
+        $users = User::where('spending_units_id',$id)->get();
+        return response()->json(['users'=>$users], $this-> successStatus);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

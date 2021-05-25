@@ -22,7 +22,8 @@ Route::post('login', 'UserController@login');
 /**CopanyCode */
 /**resive el codigo y lo busca*/
 Route::post('searchCode','CompanyCodeController@searchCode');
-
+/** responde los detalles correspondientes a esa solicitud de cotizacion */
+Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations");
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
@@ -51,6 +52,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('roles','UserController@roles');
     /**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
     Route::get('users', 'UserController@index');
+    /**Devuelve los usuarios pertenecientes a una unidad administrativa */
+    Route::get('users/unit/administrative/{id}', 'UserController@showUsersUnitAdministrative');
+     /**Devuelve los usuarios pertenecientes a una unidad de gasto */
+     Route::get('users/unit/spending/{id}', 'UserController@showUsersUnitSpending');
 
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
@@ -98,7 +103,6 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
     /**LIMITE CONTROLLER */
-    
     //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
     Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
