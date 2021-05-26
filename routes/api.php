@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
+
 
 Route::post('login', 'UserController@login');
 
@@ -46,6 +48,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('roles','UserController@roles');
     /**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
     Route::get('users', 'UserController@index');
+    /** Responde con los usuarios que tienen el rol de jefe administrativos y no estan asignados a una unidad administrativa */
+    Route::get('users/WithoutDrives','UserController@usersWithoutDrives');
+
 
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');

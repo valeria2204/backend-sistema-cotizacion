@@ -179,6 +179,56 @@ class UserController extends Controller
         return $ci;
 
     }
+
+    public function usersWithoutDrives()
+    {
+
+        $users = User::select('id','name','lastName')->get();
+        $countUsers = count($users);
+
+        foreach ($users as $key => $user)
+        {
+             $roles = $user->roles()->get();
+             
+             $countRoles = count($roles);
+
+           if($countRoles>0)
+            {
+                    $rol1 = Role::where('nameRol','Jefe Administrativo')->get();
+                    $unRol = $rol1[0];
+                    $idRol = $unRol['id'];
+                    
+                    foreach ($roles as $keyR => $rol) 
+                    {
+                    
+                            
+                            if($rol['id']==$idRol && $user['administrative_units_id']== null)
+                            {
+                            
+                                    $users[$key] = $user;
+                            }
+                            else
+                            {
+                                //array_splice($users, $key,1);
+                                unset($users[$key]);
+                               
+                                
+                            }
+                    }
+            }
+            else
+            {
+                //array_splice($users, $key,1);
+               unset($users[$key]);
+
+            }
+
+        }
+
+        return $users;
+
+    }
+    
     /**
      * Store a newly created resource in storage.
      *
