@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\RequestQuotitation; 
 use App\Report;
+use Validator;
 
 class ReportController extends Controller
 {
+    public $successStatus = 200;
     /**
      * Display a listing of the resource.
      *
@@ -27,14 +29,31 @@ class ReportController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,$id)
+    public function store(Request $request)
     {
-        $input = $request->only('description','dateReport','request_quotitations_id');
-        $stateQuotitation = $request->only('status');
+        $validator = Validator::make($request->all(), [ 
+            'dateReport' => 'required',
+            //nombre de quien realiza el informe
+            'administrative_username' => 'required', 
+            'description' => 'required',
+            'request_quotitations_id' => 'required',
+
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+
+        $reportFound = Report::where('request_quotitations_id',$request['request_quotitations_id'])->get();
+        $valor = count($reportFound);
+        //devuelve mensaje si la solicitud ya tiene un informe
+        if($valor >= 1){
+            $message = 'La solicitud ya tiene un informe ';
+            return response()->json(['message'=>$message], 200); 
+        }
+
+        $input = $request->all();
         $report = Report::create($input);
-        $quotitation = RequestQuotitation::find($id);
-        $quotitation->update($stateQuotitation->all());
-        return response()->json(['success' => $report], $this-> successStatus);
+        return response()->json(['message'=> "Envio exitoso"], $this-> successStatus);
     }
 
     /**
@@ -45,7 +64,11 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        //devuelve el informe de una determinada solicitud
+        $reports = Report::where('request_quotitations_id',$id)->get();
+        $report = $reports[0];
+        return response()->json($report , $this-> successStatus);
+
     }
 
     /**

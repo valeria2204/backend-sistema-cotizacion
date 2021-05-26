@@ -54,6 +54,25 @@ class BusinessController extends Controller
         return response()->json(['message'=> "Registro exitoso!"], $this-> successStatus); 
     }
 
+     /**
+     * Busca empresas segun el rubro
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function searchRubro(Request $request)
+    { 
+        $validator = Validator::make($request->all(), [ 
+        'rubro' => 'required',
+    ]);
+    if ($validator->fails()) { 
+        return response()->json(['error'=>$validator->errors()], 401);            
+    }
+    $rubro = $request['rubro'];
+    $empresasRubro = Business::select("id","nameEmpresa","nit","email","phone","direction","rubro")->where('rubro','like',"%$rubro%")->get();
+    return response()->json(['business'=> $empresasRubro], $this-> successStatus); 
+    }
+
     /**
      * Display the specified resource.
      *
