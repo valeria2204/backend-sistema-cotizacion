@@ -36,7 +36,6 @@ Route::get('files/{id}', 'RequestQuotitationController@showFiles');
 
 /**devuleve el pdf de la solicitud */
 Route::get('requestquotitationpdf/{id}','PDFQuotitationController@requestquotitationPDF');
-//Route::get('business/searchRubro','BusinessController@searchRubro');
 
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo
