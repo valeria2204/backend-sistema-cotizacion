@@ -179,6 +179,79 @@ class UserController extends Controller
         return $ci;
 
     }
+
+    public function usersWithoutDrives()
+    {
+
+        $users = User::select('id','name','lastName')->get();
+        $countUsers = count($users);
+
+        foreach ($users as $key => $user)
+        {
+             $roles = $user->roles()->get();
+             
+             $countRoles = count($roles);
+
+           if($countRoles>0)
+            {
+                    $rol1 = Role::where('nameRol','Jefe Administrativo')->get();
+                    $unRol = $rol1[0];
+                    $idRol = $unRol['id'];
+                    
+                    foreach ($roles as $keyR => $rol) 
+                    {
+                    
+                            
+                            if($rol['id']==$idRol && $user['administrative_units_id']== null)
+                            {
+                            
+                                    $users[$key] = $user;
+                            }
+                            else
+                            {
+                                //array_splice($users, $key,1);
+                                unset($users[$key]);
+                               
+                                
+                            }
+                    }
+            }
+            else
+            {
+                //array_splice($users, $key,1);
+               unset($users[$key]);
+
+            }
+
+        }
+
+        return $users;
+
+    }
+    
+    /**
+     * Devuelve todos los usuarios pertenecientes a una unidad administrativa
+     *
+     * @param  int  $id de unidad administrativa
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsersUnitAdministrative($id)
+    {
+        $users = User::where('administrative_units_id',$id)->get();
+        return response()->json(['users'=>$users], $this-> successStatus);
+    }
+    /**
+     * Devuelve todos los usuarios pertenecientes a una unidad de gasto
+     *
+     * @param  int  $id de unidad administrativa
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsersUnitSpending($id)
+    {
+        $users = User::where('spending_units_id',$id)->get();
+        return response()->json(['users'=>$users], $this-> successStatus);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

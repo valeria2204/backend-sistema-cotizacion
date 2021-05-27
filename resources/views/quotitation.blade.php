@@ -68,7 +68,7 @@
                 <div class="izquierda title-left">universidad mayor de sam simón facultad de {{$facultad->nameFacultad}} aquisiciones</div>
                 <div class="derecha"><p>Cochabamba-Bolivia</p></div>
             </div>
-            <h5 class="title">SOLICITUD DE CONTIZACIÓN</h5>
+            <h5 class="title">SOLICITUD DE COTIZACIÓN</h5>
         </header>
         <main class="principal">
             <div class="razon-social">
