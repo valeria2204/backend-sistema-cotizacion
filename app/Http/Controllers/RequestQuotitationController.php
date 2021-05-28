@@ -12,6 +12,7 @@ use App\SpendingUnit;
 use App\LimiteAmount;
 use App\AdministrativeUnit;
 use App\Faculty;
+use App\Report;
 use Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,9 +26,8 @@ class RequestQuotitationController extends Controller
      */
     public function index()
     {
-        //$requestQuotitation = RequestQuotitation::with('reports','request_details')->get();
-        $requestQuotitation = RequestQuotitation::all();
-        return response()->json(['request_quotitations'=>$requestQuotitation],200);
+        $requestQuotitations = RequestQuotitation::all();
+        return response()->json(['request_quotitations'=>$requestQuotitations],200);
     }
 
     /**
@@ -37,8 +37,21 @@ class RequestQuotitationController extends Controller
      */
     public function showRequestQuotationGasto($id)
     {
-        $requestGasto = RequestQuotitation::where('spending_units_id','=',$id)->get();
-        return response()->json(['request_quotitations'=>$requestGasto],200);
+        $requestQuotitationsGasto = RequestQuotitation::select("id","nameUnidadGasto","requestDate","status","spending_units_id")->where('spending_units_id','=',$id)->get();
+        foreach ($requestQuotitationsGasto as $key => $requestQuotitation) {
+            $id_requestQuotitation = $requestQuotitation['id'];
+            //busca si el id de esta solicitud tiene un informe
+            $report = Report::where('request_quotitations_id',$id_requestQuotitation)->get();
+            $countReport = count($report);
+            if($countReport == 1){
+                $requestQuotitation['statusReport'] = true;
+            }
+            else{
+                $requestQuotitation['statusReport'] = false;
+            }
+            $requestQuotitationsGasto[$key] = $requestQuotitation;
+        }
+        return response()->json(['request_quotitations'=>$requestQuotitationsGasto],200);
     }
     /**
      * Devuelve todas las solicitudes que perteneces a esa unidad administrativa
@@ -47,8 +60,21 @@ class RequestQuotitationController extends Controller
      */
     public function showRequestQuotationAdministrative($id)
     {
-        $requestAdmin = RequestQuotitation::where('administrative_unit_id','=',$id)->get();
-        return response()->json(['request_quotitations'=>$requestAdmin],200);
+        $requestQuotitationsAdmin = RequestQuotitation::select("id","nameUnidadGasto","requestDate","status","administrative_unit_id")->where('administrative_unit_id','=',$id)->get();
+        foreach ($requestQuotitationsAdmin as $key => $requestQuotitation) {
+            $id_requestQuotitation = $requestQuotitation['id'];
+            //busca si el id de esta solicitud tiene un informe
+            $report = Report::where('request_quotitations_id',$id_requestQuotitation)->get();
+            $countReport = count($report);
+            if($countReport == 1){
+                $requestQuotitation['statusReport'] = true;
+            }
+            else{
+                $requestQuotitation['statusReport'] = false;
+            }
+            $requestQuotitationsAdmin[$key] = $requestQuotitation;
+        }
+        return response()->json(['request_quotitations'=>$requestQuotitationsAdmin],200);
     }
     /**
      * resive un solicitud para poder crear una nueva solictud 
