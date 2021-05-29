@@ -107,8 +107,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
     /**LIMITE CONTROLLER */
-    //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
-    // y tambien actualiza la fecha fin del monto anterior con la fecha inicio del nuevo monto
+    /**Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
+     y tambien actualiza la fecha fin del monto anterior con la fecha inicio del nuevo monto*/
     Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
     Route::get('limiteAmounts/{id}','LimiteAmountController@show');
@@ -134,12 +134,17 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('administrativeUnit/new','AdministrativeUnitController@register');
     /**Devuelve la lista de todos las unidades administrativas */
     Route::get('administrativeUnit','AdministrativeUnitController@index');
+    /**Dado un id de usuario y de unidad administrativa, se asigna el usuario como jefe de la unidad */
+    Route::put('assignBossesAdmin/{idU}/{idA}','AdministrativeUnitController@assignHeadUnit');
+
 
     /**SPENDING UNIT CONTROLLER */
     /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
     Route::post('spendingUnits/new','SpendingUnitController@store');
     /**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/
     Route::get('spendingUnits','SpendingUnitController@index');
+    /**Dado un id de usuario y de unidad de gasto, se asigna el usuario como jefe de la unidad */
+    Route::put('assignBossesSpending/{idU}/{idS}','SpendingUnitController@assignHeadUnit');
 
     
     /**EMPRESA CONTROLLER */

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AdministrativeUnit;
 use App\Faculty;
+use App\User;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -59,6 +60,37 @@ class AdministrativeUnitController extends Controller
         $facultad->save();
         $AdministrativeUnit = AdministrativeUnit::create($input);
         return response()->json(['message'=>"Registro exitoso"], $this-> successStatus);
+    }
+
+    public function assignHeadUnit($idU,$idA)
+    {
+        $user = User::where('id',$idU)->get();
+        $countUsers = count($user);
+
+        $unitExist = AdministrativeUnit::where('id',$idA)->get();
+        $countUnits = count($unitExist);
+
+        if($countUsers > 0)
+        {
+            if($countUnits > 0)
+            {
+                $user2 = User::find($idU);
+                $user2['administrative_units_id'] = $idA;
+                $user2->update();
+                return response()->json(['res'=>true], $this-> successStatus);
+            }
+            else
+            {
+                $message = 'La unidad Administrativa con id'. $idA.' no existe  ';
+                return response()->json(['message'=>$message], 200);
+            }
+
+        }
+        else
+        {
+            $message2 = 'El usuario con id'. $idU.' no existe  ';
+            return response()->json(['message'=>$message2], 200);
+        }
     }
 
     /**
