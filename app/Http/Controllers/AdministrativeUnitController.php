@@ -52,14 +52,31 @@ class AdministrativeUnitController extends Controller
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
-
         $input = $request->all(); 
         $id_facultad = $input['faculties_id'];
         $facultad = Faculty::find($id_facultad);
+        //no permite registrar mas de una unidad dentro de la misma facultad
+        if($facultad['inUse'] ==1)
+        {
+              $message = 'La facultad '.$facultad['nameFacultad'].' ya tiene una unidad administrativa ';
+              return response()->json(['message'=>$message], 200); 
+        }
         $facultad['inUse']=1;
         $facultad->save();
-        $AdministrativeUnit = AdministrativeUnit::create($input);
-        return response()->json(['message'=>"Registro exitoso"], $this-> successStatus);
+        $tamInput = count($input);
+         //si se le manda el id del usuario entonces registra a ese usuario como administrador de la unidad creada        if($tamInput==3){
+               $requestAdminUnit = $request->only('name','faculties_id');
+               $administrativeUnit = AdministrativeUnit::create($requestAdminUnit);
+               $id_user = $input['idUser'];
+               $user2 = User::find($id_user);
+               $user2['administrative_units_id'] = $administrativeUnit['id'];
+               $user2->update();
+               return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+        }
+        else{
+                $administrativeUnit = AdministrativeUnit::create($input);
+                return response()->json(['message'=>"Registro exitoso"], $this-> successStatus);
+        }
     }
 
     public function assignHeadUnit($idU,$idA)

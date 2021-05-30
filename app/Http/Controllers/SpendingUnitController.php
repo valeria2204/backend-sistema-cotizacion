@@ -67,14 +67,36 @@ class SpendingUnitController extends Controller
             }
 
           $input = $request->all();
-          $spendingUnit = SpendingUnit::create($input); 
-          return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
-          
+          $tamInput = count($input);
+          if($tamInput==3){
+               $requestSpendingUnit = $request->only('nameUnidadGasto','faculties_id');
+               $spendingUnit = SpendingUnit::create($requestSpendingUnit);
+               $id_user = $input['idUser'];
+               $user2 = User::find($id_user);
+               $user2['spending_units_id'] = $spendingUnit['id'];
+               $user2->update();
+               return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+          }else{
+               $spendingUnit = SpendingUnit::create($input); 
+               return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+          }
         }
 
        $input = $request->all();
-       $spendingUnit = SpendingUnit::create($input); 
-       return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+       $tamInput = count($input);
+       //si se le manda el id del usuario entonces registra a ese usuario como administrador de la unidad creada
+       if($tamInput==3){
+            $requestSpendingUnit = $request->only('nameUnidadGasto','faculties_id');
+            $spendingUnit = SpendingUnit::create($requestSpendingUnit);
+            $id_user = $input['idUser'];
+            $user2 = User::find($id_user);
+            $user2['spending_units_id'] = $spendingUnit['id'];
+            $user2->update();
+            return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+       }else{
+            $spendingUnit = SpendingUnit::create($input); 
+            return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+       }
     }
     
     
