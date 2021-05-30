@@ -107,6 +107,29 @@
                     </tr>
                 </tbody>
             </table>
+            <table class="table table-sm table-bordered text-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th width="4%">N&#176;</th>
+                        <th width="24%">Marca</th>
+                        <th width="24%">Modelo</th>
+                        <th width="24%">Industria</th>
+                        <th width="24%">Tiempo de Garantia</th>
+                    </tr>
+                </thead>
+               <tbody>
+               {{$index=0}}
+                @foreach($details as $detail)
+                    <tr>
+                        <th>{{$index=$index+1}}</th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
             <table  class="table table-sm table-bordered">
                 <thead class="thead-light">
                     <tr>
@@ -119,16 +142,16 @@
                         <td class="celdaPers">Tiempo de entrega:</td>
                     </tr>
                     <tr>
-                        <td class="celdaPers">Forma de pago:</td>
-                        <td class="celdaPers">Tiempo de garantía(si corresponde):</td>
-                    </tr>
-                    <tr>
                         <td class="celdaPers">N&#176; de NIT:</td>
                         <td class="celdaPers">Teléfono:</td>
                     </tr>
                     <tr>
                         <td class="celdaPers">Nombre y firma:</td>
                         <td class="celdaPers">Sello:</td>
+                    </tr>
+                    <tr>
+                        <td class="celdaPers">Forma de pago:</td>
+                        <td class="celdaPers"></td>
                     </tr>
                </tbody>
             </table>

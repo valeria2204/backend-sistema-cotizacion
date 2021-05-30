@@ -189,6 +189,9 @@ class UserController extends Controller
     public function showUsersUnitAdministrative($id)
     {
         $users = User::where('administrative_units_id',$id)->get();
+        foreach ($users as $key => $user) {
+            $user['roles']=$user->roles;
+        }
         return response()->json(['users'=>$users], $this-> successStatus);
     }
     /**
@@ -200,6 +203,9 @@ class UserController extends Controller
     public function showUsersUnitSpending($id)
     {
         $users = User::where('spending_units_id',$id)->get();
+        foreach ($users as $key => $user) {
+            $user['roles']=$user->roles;
+        }
         return response()->json(['users'=>$users], $this-> successStatus);
     }
 

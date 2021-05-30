@@ -55,7 +55,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**Devuelve los usuarios pertenecientes a una unidad administrativa */
     Route::get('users/unit/administrative/{id}', 'UserController@showUsersUnitAdministrative');
      /**Devuelve los usuarios pertenecientes a una unidad de gasto */
-     Route::get('users/unit/spending/{id}', 'UserController@showUsersUnitSpending');
+    Route::get('users/unit/spending/{id}', 'UserController@showUsersUnitSpending');
 
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
