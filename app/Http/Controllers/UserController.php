@@ -182,7 +182,6 @@ class UserController extends Controller
 
     public function usersAdmiWithoutDrives()
     {
-
         $users = User::select('id','name','lastName','administrative_units_id')->get();
         $countUsers = count($users);
         $resp = array();
