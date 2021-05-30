@@ -77,7 +77,8 @@ class AdministrativeUnitController extends Controller
                 $user2 = User::find($idU);
                 $user2['administrative_units_id'] = $idA;
                 $user2->update();
-                return response()->json(['res'=>true], $this-> successStatus);
+                $message2 = 'Registro exitoso ';
+                return response()->json(['message'=>$message2], 200);
             }
             else
             {
@@ -93,6 +94,22 @@ class AdministrativeUnitController extends Controller
         }
     }
 
+    public function getAdmiUser($idUnit)
+    {
+        
+        $admi = User::select('id','name','lastName')->where('administrative_units_id',$idUnit)->get();
+        $admis = count($admi);
+        if($admis>0)
+        {
+           return response()->json(["User"=> $admi],200);
+        }
+        else
+        {
+            $message = 'La unidad administrativa aun no cuenta con un administrador  ';
+            return response()->json(['message'=>$message], 200);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -103,6 +120,7 @@ class AdministrativeUnitController extends Controller
     {
         //
     }
+
 
     /**
      * Display the specified resource.

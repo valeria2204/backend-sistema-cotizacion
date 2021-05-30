@@ -136,7 +136,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('administrativeUnit','AdministrativeUnitController@index');
     /**Dado un id de usuario y de unidad administrativa, se asigna el usuario como jefe de la unidad */
     Route::put('assignBossesAdmin/{idU}/{idA}','AdministrativeUnitController@assignHeadUnit');
-
+    /**Dado un id de unidad administrativa devuelve el jefe de unidad administrativa  */
+    Route::get('getInfoAdmi/{idUnit}','AdministrativeUnitController@getAdmiUser');
 
     /**SPENDING UNIT CONTROLLER */
     /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
