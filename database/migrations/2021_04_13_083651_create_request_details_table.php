@@ -18,7 +18,7 @@ class CreateRequestDetailsTable extends Migration
             $table->integer('amount');
             $table->string('unitMeasure');
             $table->string('description');
-            $table->foreignId('request_quotitations_id')->constrained();           
+            $table->foreignId('request_quotitations_id')->constrained();
             $table->timestamps();
         });
     }

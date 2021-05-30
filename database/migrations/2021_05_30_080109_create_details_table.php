@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuotationsTable extends Migration
+class CreateDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateQuotationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('quotations', function (Blueprint $table) {
+        Schema::create('details', function (Blueprint $table) {
             $table->id();
-            $table->string('business');
-            $table->date('offerValidity');
-            $table->integer('deliveryTime');
-            $table->string('paymentMethod');
-            $table->integer('warrantyTime');
+            $table->integer('unitPrice'); //precion unitario
+            $table->integer('totalPrice');//precio total
+            $table->foreignId('request_details_id')->constrained();
+            $table->foreignId('quotations_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ class CreateQuotationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quotations');
+        Schema::dropIfExists('details');
     }
 }

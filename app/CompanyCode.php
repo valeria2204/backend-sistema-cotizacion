@@ -3,7 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\RequestQuotitation; 
+use App\RequestQuotitation;
+use App\Quotation;
 
 class CompanyCode extends Model
 {
@@ -17,5 +18,8 @@ class CompanyCode extends Model
     ];
     public function requestQuotitation(){
         return $this->belongsTo(RequestQuotitation::class);
+    }
+    public function quotitation(){
+        return $this->belongsTo(Quotation::class);
     }
 }

@@ -26,6 +26,10 @@ Route::post('searchCode','CompanyCodeController@searchCode');
 /** responde los detalles correspondientes a esa solicitud de cotizacion */
 Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations");
 
+/*QuoteResponseController */
+/**registra la Respuesta de cotizacion de la empresa*/
+Route::post("quoteResponse","QuoteResponseController@store");
+
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
 /**mostarar los archivos */
