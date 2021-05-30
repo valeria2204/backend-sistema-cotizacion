@@ -180,6 +180,94 @@ class UserController extends Controller
 
     }
 
+    public function usersAdmiWithoutDrives()
+    {
+
+        $users = User::select('id','name','lastName','administrative_units_id')->get();
+        $countUsers = count($users);
+        $resp = array();
+        foreach ($users as $key => $user)
+        {
+             $roles = $user->roles()->get();
+             
+             $countRoles = count($roles);
+
+           if($countRoles>0)
+            {
+                    $rol1 = Role::where('nameRol','Jefe Administrativo')->get();
+                    $unRol = $rol1[0];
+                    $idRol = $unRol['id'];
+                    
+                    foreach ($roles as $keyR => $rol) 
+                    {
+                        
+                        if($rol['id']==$idRol && $user['administrative_units_id']== null)
+                        {
+                            
+                            
+                            $resp[] = $user;
+                        }
+                        else
+                        {
+                            //no guarda a los usuarios          
+                        }
+                    }
+            }
+            else
+            {
+               //no guarda a los usuarios
+            }
+
+        }
+
+        return response()->json(['users'=>$resp], $this-> successStatus);
+
+    }
+
+    public function usersSpendingWithoutDrives()
+    {
+
+        $users2 = User::select('id','name','lastName','spending_units_id')->get();
+        $countUsers2 = count($users2);
+        $resp2 = array();
+        foreach ($users2 as $key => $user2)
+        {
+             $roles2 = $user2->roles()->get();
+             
+             $countRoles2 = count($roles2);
+
+           if($countRoles2>0)
+            {
+                    $rol2 = Role::where('nameRol','Jefe Unidad de Gasto')->get();
+                    $unRol2 = $rol2[0];
+                    $idRol2 = $unRol2['id'];
+                    
+                    foreach ($roles2 as $keyR2 => $rol2) 
+                    {
+                        
+                        if($rol2['id']==$idRol2 && $user2['spending_units_id']== null)
+                        {
+                            
+                            
+                            $resp2[] = $user2;
+                        }
+                        else
+                        {
+                            //no guarda a los usuarios          
+                        }
+                    }
+            }
+            else
+            {
+               //no guarda a los usuarios
+            }
+
+        }
+
+        return response()->json(['users'=>$resp2], $this-> successStatus);
+
+    }
+    
     /**
      * Devuelve todos los usuarios pertenecientes a una unidad administrativa
      *

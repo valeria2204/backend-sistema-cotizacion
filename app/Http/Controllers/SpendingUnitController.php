@@ -49,18 +49,66 @@ class SpendingUnitController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);            
         }
 
-        $spendingeUnitFound = SpendingUnit::where('nameUnidadGasto',$request['nameUnidadGasto'])->get();
-        $valor = count($spendingeUnitFound);
-        //devuelve mensaje si ya existe una unidad de gasto con el mismo nombre
-        if($valor == 1){
-            $message = 'El nombre '.$request['nameUnidadGasto'].' ya esta registrado ';
-            return response()->json(['message'=>$message], 200); 
+        $spendingUnits = SpendingUnit::where('faculties_id',$request['faculties_id'])->get();
+        $existenUnidadesGasto = count($spendingUnits);
+
+        if($existenUnidadesGasto > 0)
+        {
+          //devuelve los datos si existen nombres de unidades de gasto iguales en una facultad
+          $spendingeUnitFound = SpendingUnit::where('faculties_id',$request['faculties_id'])
+                                       ->get()-> where('nameUnidadGasto',$request['nameUnidadGasto']);
+
+          $valor = count($spendingeUnitFound);
+
+          //devuelve mensaje si ya existe una unidad de gasto con el mismo nombre
+          if($valor == 1){
+              $message = 'El nombre '.$request['nameUnidadGasto'].' ya esta registrado ';
+              return response()->json(['message'=>$message], 200); 
+            }
+
+          $input = $request->all();
+          $spendingUnit = SpendingUnit::create($input); 
+          return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+          
         }
 
-        $input = $request->all();
-        $spendingUnit = SpendingUnit::create($input); 
-        return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+       $input = $request->all();
+       $spendingUnit = SpendingUnit::create($input); 
+       return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
     }
+    
+    
+    public function assignHeadUnit($idU,$idS)
+    {
+        $user = User::where('id',$idU)->get();
+        $countUsers = count($user);
+
+        $unitExist = SpendingUnit::where('id',$idS)->get();
+        $countUnits = count($unitExist);
+
+        if($countUsers > 0)
+        {
+            if($countUnits > 0)
+            {
+                $user2 = User::find($idU);
+                $user2['spending_units_id'] = $idS;
+                $user2->update();
+                return response()->json(['res'=>true], $this-> successStatus);
+            }
+            else
+            {
+                $message = 'La unidad de gasto con id'. $idS.' no existe  ';
+                return response()->json(['message'=>$message], 200);
+            }
+
+        }
+        else
+        {
+            $message2 = 'El usuario con id'. $idU.' no existe  ';
+            return response()->json(['message'=>$message2], 200);
+        }
+    }
+    
 
     /**
      * 

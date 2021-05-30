@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AdministrativeUnit;
 use App\Faculty;
+use App\User;
 use Illuminate\Http\Request;
 use Validator;
 
@@ -52,13 +53,6 @@ class AdministrativeUnitController extends Controller
             return response()->json(['error'=>$validator->errors()], 401);            
         }
 
-        $administrativeUnitFound = AdministrativeUnit::where('name',$request['name'])->get();
-        $valor = count($administrativeUnitFound);
-        
-        if($valor == 1){
-            $message = 'El nombre '.$request['name'].' ya esta registrado ';
-            return response()->json(['message'=>$message], 200); 
-        }
         $input = $request->all(); 
         $id_facultad = $input['faculties_id'];
         $facultad = Faculty::find($id_facultad);
@@ -66,6 +60,54 @@ class AdministrativeUnitController extends Controller
         $facultad->save();
         $AdministrativeUnit = AdministrativeUnit::create($input);
         return response()->json(['message'=>"Registro exitoso"], $this-> successStatus);
+    }
+
+    public function assignHeadUnit($idU,$idA)
+    {
+        $user = User::where('id',$idU)->get();
+        $countUsers = count($user);
+
+        $unitExist = AdministrativeUnit::where('id',$idA)->get();
+        $countUnits = count($unitExist);
+
+        if($countUsers > 0)
+        {
+            if($countUnits > 0)
+            {
+                $user2 = User::find($idU);
+                $user2['administrative_units_id'] = $idA;
+                $user2->update();
+                $message2 = 'Registro exitoso ';
+                return response()->json(['message'=>$message2], 200);
+            }
+            else
+            {
+                $message = 'La unidad Administrativa con id'. $idA.' no existe  ';
+                return response()->json(['message'=>$message], 200);
+            }
+
+        }
+        else
+        {
+            $message2 = 'El usuario con id'. $idU.' no existe  ';
+            return response()->json(['message'=>$message2], 200);
+        }
+    }
+
+    public function getAdmiUser($idUnit)
+    {
+        
+        $admi = User::select('id','name','lastName')->where('administrative_units_id',$idUnit)->get();
+        $admis = count($admi);
+        if($admis>0)
+        {
+           return response()->json(["User"=> $admi],200);
+        }
+        else
+        {
+            $message = 'La unidad administrativa aun no cuenta con un administrador  ';
+            return response()->json(['message'=>$message], 200);
+        }
     }
 
     /**
@@ -78,6 +120,7 @@ class AdministrativeUnitController extends Controller
     {
         //
     }
+
 
     /**
      * Display the specified resource.

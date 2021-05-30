@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-//Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
-//Route::get('lastRecord/{id}','LimiteAmountController@sendCurrentData');
+
+
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
+
 
 Route::post('login', 'UserController@login');
 
@@ -36,7 +37,6 @@ Route::get('files/{id}', 'RequestQuotitationController@showFiles');
 /**devuleve el pdf de la solicitud */
 Route::get('requestquotitationpdf/{id}','PDFQuotitationController@requestquotitationPDF');
 
-
 /**Dentro de este grupo de rutas solo podran acceder si han iniciado sesion por lo tanto tiene que 
  * pasar el token para poder usar las rutas dentro del grupo
  */
@@ -52,6 +52,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('roles','UserController@roles');
     /**Responde con los datos (mas el rol) de todos los usuarios registrados (listado de usuarios)*/
     Route::get('users', 'UserController@index');
+    /** Responde con los usuarios que tienen el rol de jefe administrativos y no estan asignados a una unidad administrativa */
+    Route::get('usersAdmi/WithoutDrives','UserController@usersAdmiWithoutDrives');
+    /** Responde con los usuarios que tienen el rol de jefe de unidad de gasto y no estan asignados a una unidad de gasto */
+    Route::get('usersSpending/WithoutDrives','UserController@usersSpendingWithoutDrives');
     /**Devuelve los usuarios pertenecientes a una unidad administrativa */
     Route::get('users/unit/administrative/{id}', 'UserController@showUsersUnitAdministrative');
      /**Devuelve los usuarios pertenecientes a una unidad de gasto */
@@ -103,7 +107,8 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 
     /**LIMITE CONTROLLER */
-    //Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
+    /**Actualiza un nuevo monto limite dado un id de la unidad administrativa a la que pertenece
+     y tambien actualiza la fecha fin del monto anterior con la fecha inicio del nuevo monto*/
     Route::post('updateLimiteAmount','LimiteAmountController@updateLimiteAmount');
     //Devuelve lista de los montos limites dado un id de la unidad administrativa a la que pertenece
     Route::get('limiteAmounts/{id}','LimiteAmountController@show');
@@ -129,12 +134,18 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('administrativeUnit/new','AdministrativeUnitController@register');
     /**Devuelve la lista de todos las unidades administrativas */
     Route::get('administrativeUnit','AdministrativeUnitController@index');
+    /**Dado un id de usuario y de unidad administrativa, se asigna el usuario como jefe de la unidad */
+    Route::put('assignBossesAdmin/{idU}/{idA}','AdministrativeUnitController@assignHeadUnit');
+    /**Dado un id de unidad administrativa devuelve el jefe de unidad administrativa  */
+    Route::get('getInfoAdmi/{idUnit}','AdministrativeUnitController@getAdmiUser');
 
     /**SPENDING UNIT CONTROLLER */
     /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
     Route::post('spendingUnits/new','SpendingUnitController@store');
     /**Devuelve la lista de todos las unidades de gasto con su facultad y unidad administrativa correspondiente*/
     Route::get('spendingUnits','SpendingUnitController@index');
+    /**Dado un id de usuario y de unidad de gasto, se asigna el usuario como jefe de la unidad */
+    Route::put('assignBossesSpending/{idU}/{idS}','SpendingUnitController@assignHeadUnit');
 
     
     /**EMPRESA CONTROLLER */
