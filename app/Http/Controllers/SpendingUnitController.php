@@ -26,9 +26,32 @@ class SpendingUnitController extends Controller
             //para mostrar en la columna Facultad de la lista de Unidades de gasto
             $facultad = Faculty::find($id_facultad);
             $gasto['faculty'] = $facultad;
-            //para mostrar en la columna Unidad Administrativa de la lista de Unidades de gasto
-            $administrativeUnit = AdministrativeUnit::where('faculties_id','=',$id_facultad)->get();
-            $gasto['administrativeUnit'] = $administrativeUnit[0];
+            $users = User::where('spending_units_id', $gasto['id'])->get();
+            $numUsers = count($users);
+            $gasto['admin']=null;
+            $userF['id'] = '';
+            $userF['name'] = '';
+            $userF['lastName'] = '';
+            if($numUsers>0){
+                foreach($users as $keyu => $user){
+                    $roles = $user->roles()->get();
+                    foreach($roles as $keyr => $rol){
+                        $numRoles = count($roles);
+                        if($rol['nameRol']=='Jefe unidad de gasto'){
+                            $gasto['admin'] = $user;
+                        }
+                        else{
+                            if($gasto['admin']==null && $keyr==$numRoles-1){
+                                $gasto['admin'] = $userF;
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                $gasto['admin'] = $userF;
+            }
+            $spendingUnits[$key]=$gasto;
         }
         return response()->json(['spending_units'=> $spendingUnits],$this-> successStatus);
     }
@@ -131,7 +154,40 @@ class SpendingUnitController extends Controller
         }
     }
     
-
+    /**public function assignPersonal(Request $request){
+        $validator = Validator::make($request->all(), [ 
+            'idUser' => 'required', 
+            'spending_units_id' => 'required', 
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+        $input = $request->all();
+        $tamInput = count($input);
+        $id_user = $input['idUser'];
+        $id_unit = $input['spending_units_id'];
+        //si se le manda el id del rol entonces registra el rol que tendra ese usuario dentro la unidad
+        if($tamInput==3){
+            $idRol = $input['idRol'];
+            $user = User::find($id_user);
+            $user['spending_units_id'] = $id_unit;
+            $user->update();
+            //$user->roles()->attach($idRol);
+            $roles = $user->roles()->get();
+            $numRoles = count($roles);
+            $rol = $roles->last();
+            dd($rol);
+            //$rol['spending_units_id']= $id_unit;
+            //$rol->update();
+            return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+        }
+        else{
+            $user = User::find($id_user);
+            $user['spending_units_id'] = $id_unit;
+            $user->update();
+            return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+        }
+    }*/
     /**
      * 
      * @param  int  $id

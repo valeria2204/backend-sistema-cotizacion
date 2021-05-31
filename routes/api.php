@@ -150,8 +150,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('spendingUnits','SpendingUnitController@index');
     /**Dado un id de usuario y de unidad de gasto, se asigna el usuario como jefe de la unidad */
     Route::put('assignBossesSpending/{idU}/{idS}','SpendingUnitController@assignHeadUnit');
+    /**Regitra a un usuario como parte del personal de una unidad de gasto */
+    Route::post('personal/new','SpendingUnitController@assignPersonal');
 
-    
     /**EMPRESA CONTROLLER */
      /**Recibe los datos de una empresa dentro de un request para guardarlo */
     Route::post('business/new','BusinessController@store');

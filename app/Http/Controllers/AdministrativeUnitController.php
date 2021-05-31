@@ -27,7 +27,32 @@ class AdministrativeUnitController extends Controller
             $faculty = Faculty::find($facultie_id);
             $nameFaculty = $faculty['nameFacultad'];
             $administrativeUnit['faculty'] = $nameFaculty;
-            $administrativeUnits[$key]=$administrativeUnit;
+            $users = User::where('administrative_units_id', $administrativeUnit['id'])->get();
+            $numUsers = count($users);
+            $administrativeUnit['admin']=null;
+            $userF['id'] = '';
+            $userF['name'] = '';
+            $userF['lastName'] = '';
+            if($numUsers>0){
+                foreach($users as $keyu => $user){
+                    $roles = $user->roles()->get();
+                    foreach($roles as $keyr => $rol){
+                        $numRoles = count($roles);
+                        if($rol['nameRol']=='Jefe Administrarivo'){
+                            $administrativeUnit['admin'] = $user;
+                        }
+                        else{
+                            if($administrativeUnit['admin']==null && $keyr==$numRoles-1){
+                                $administrativeUnit['admin'] = $userF;
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                $administrativeUnit['admin'] = $userF;
+            }
+            $administrativeUnits[$key]=$administrativeUnit;           
         }
         return response()->json(['Administrative_unit'=>$administrativeUnits],200);
     }
@@ -64,6 +89,7 @@ class AdministrativeUnitController extends Controller
         $facultad['inUse']=1;
         $facultad->save();
         $tamInput = count($input);
+        if($tamInput==3){
          //si se le manda el id del usuario entonces registra a ese usuario como administrador de la unidad creada        if($tamInput==3){
                $requestAdminUnit = $request->only('name','faculties_id');
                $administrativeUnit = AdministrativeUnit::create($requestAdminUnit);
