@@ -30,8 +30,8 @@ class SpendingUnitController extends Controller
             $numUsers = count($users);
             $gasto['admin']=null;
             $userF['id'] = '';
-            $userF['name'] = '';
-            $userF['lastName'] = '';
+            $userF['name'] = 'Seleccione';
+            $userF['lastName'] = 'administrador';
             if($numUsers>0){
                 foreach($users as $keyu => $user){
                     $roles = $user->roles()->get();
