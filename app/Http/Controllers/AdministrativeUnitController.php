@@ -31,8 +31,8 @@ class AdministrativeUnitController extends Controller
             $numUsers = count($users);
             $administrativeUnit['admin']=null;
             $userF['id'] = '';
-            $userF['name'] = 'Seleccione';
-            $userF['lastName'] = 'administrador';
+            $userF['name'] = '';
+            $userF['lastName'] = '';
             if($numUsers>0){
                 foreach($users as $keyu => $user){
                     $roles = $user->roles()->get();
