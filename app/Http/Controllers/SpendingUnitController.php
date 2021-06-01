@@ -45,7 +45,8 @@ class SpendingUnitController extends Controller
                     $userUnit=User::select("id","name","lastName")->where('spending_units_id', $gasto['id'])->where('id',$id_us)->get();
                     $numUserUnit = count($userUnit);
                     if($numUserUnit==1){
-                        $gasto['admin']=$userUnit;
+                        $userN=$userUnit[0];
+                        $gasto['admin']=$userN;
                     }
                     else{
                         if($gasto['admin']==null && $keyu==$numUsersd-1){

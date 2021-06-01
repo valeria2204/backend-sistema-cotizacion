@@ -44,7 +44,8 @@ class AdministrativeUnitController extends Controller
                     $userUnit=User::select("id","name","lastName")->where('administrative_units_id', $administrativeUnit['id'])->where('id',$id_us)->get();
                     $numUserUnit = count($userUnit);
                     if($numUserUnit==1){
-                        $administrativeUnit['admin']=$userUnit;
+                        $userN=$userUnit[0];
+                        $administrativeUnit['admin']=$userN;
                     }
                     else{
                         if($administrativeUnit['admin']==null && $keyu==$numUsersd-1){
