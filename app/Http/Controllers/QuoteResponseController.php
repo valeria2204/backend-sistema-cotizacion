@@ -38,6 +38,7 @@ class QuoteResponseController extends Controller
         $idempresa= $request->only("empresaId");
         if($idempresa['empresaId']==0){
             $empresa = $request->only("nameEmpresa","email");
+            $empresa["rubro"]=" ";
             $newempresa = Business::create($empresa);
         }
         $response['status']=true;
