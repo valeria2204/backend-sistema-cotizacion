@@ -185,21 +185,13 @@ th {
                     </tr>
                 </thead>
                <tbody>
-                    <tr>
+                    <!-- <tr>
                         <td>Validez de oferta:</td>
                         <td>Tiempo de entrega:</td>
-                    </tr>
-                    <tr>
-                        <td>N&#176; de NIT:</td>
-                        <td>Teléfono:</td>
-                    </tr>
+                    </tr> -->
                     <tr>
                         <td>Nombre y firma:</td>
                         <td>Sello:</td>
-                    </tr>
-                    <tr>
-                        <td>Forma de pago:</td>
-                        <td></td>
                     </tr>
                </tbody>
             </table>

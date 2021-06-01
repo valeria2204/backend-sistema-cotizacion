@@ -66,11 +66,15 @@ class PermissionSeeder extends Seeder
         $permiso10->description = "Registrar nuevos usuarios";
         $permiso10->url = "/user";
         $permiso10->save();
-
         $permiso11 = new Permission();
         $permiso11->namePermission ="Administar roles";
         $permiso11->description = "Puede ver los roles existentes y registrar nuevos roles";
         $permiso11->url = "/roles";
         $permiso11->save();
+        $permiso12 = new Permission();
+        $permiso12->namePermission ="Ver Personal";
+        $permiso12->description = "Puede ver los roles existentes y registrar nuevos roles";
+        $permiso12->url = "/personal";
+        $permiso12->save();
     }
 }

@@ -15,13 +15,13 @@ class RoleSeeder extends Seeder
         $role->nameRol = "Jefe unidad de gasto";
         $role->description = "es el encargado de toda la parte de la unidad de gasto";
         $role->save();
-        $role->permissions()->attach([1,2]);
+        $role->permissions()->attach([1,2,12]);
 
         $role2 = new Role();
         $role2->nameRol = "Jefe Administrativo";
         $role2->description = "es el encargado de toda la parte de la unidad de administración";
         $role2->save();
-        $role2->permissions()->attach([3,4,5,6,7]);
+        $role2->permissions()->attach([3,4,5,6,7,12]);
 
         $role3 = new Role();
         $role3->nameRol = "Administrador del Sistema";

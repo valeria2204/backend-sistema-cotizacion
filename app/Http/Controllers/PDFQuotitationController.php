@@ -30,9 +30,10 @@ class PDFQuotitationController extends Controller
             'details'=>$details,
             'facultad'=>$facultad
         ];
-        $pdf = PDF::loadView('quotitation',$data);
+        $pdf = PDF::loadView('quotitationv2',$data);
+        //dd($pdf);
         //return $pdf->download('Postulantes.pdf');
-        return $pdf->setPaper('a4', 'letter')->stream('quotitation.pdf');
+        return $pdf->setPaper('a4', 'landscape')->stream('quotitation.pdf');
     }
     /**
      * Display a listing of the resource.
