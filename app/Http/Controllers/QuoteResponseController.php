@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Quotation;
 use App\Detail;
+use App\Business;
 
 class QuoteResponseController extends Controller
 {
@@ -33,6 +34,11 @@ class QuoteResponseController extends Controller
         foreach ($details['detalles'] as $key => $detailResponse) {
             $detailResponse['quotations_id'] = $quotation->id;
             $detail=Detail::create($detailResponse);
+        }
+        $idempresa= $request->only("empresaId");
+        if($idempresa['empresaId']==0){
+            $empresa = $request->only("nameEmpresa","email");
+            $newempresa = Business::create($empresa);
         }
         $response['status']=true;
         $response['message']="Envio exitoso";
