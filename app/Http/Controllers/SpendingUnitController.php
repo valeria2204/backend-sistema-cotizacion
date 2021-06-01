@@ -7,6 +7,7 @@ use App\User;
 use App\SpendingUnit;
 use App\AdministrativeUnit;
 use App\Faculty;
+use App\Role;
 use Validator;
 
 class SpendingUnitController extends Controller
@@ -20,21 +21,43 @@ class SpendingUnitController extends Controller
      */
     public function index()
     {
-        $spendingUnits = SpendingUnit::all();
+        $spendingUnits = SpendingUnit::select("id","nameUnidadGasto","faculties_id")->get();
         foreach ($spendingUnits as $key => $gasto) {
             $id_facultad = $gasto->faculties_id;
             //para mostrar en la columna Facultad de la lista de Unidades de gasto
             $facultad = Faculty::find($id_facultad);
-            $gasto['faculty'] = $facultad;
-            $users = User::where('spending_units_id', $gasto['id'])->get();
+            //$nameFaculty = $facultad['nameFacultad'];
+            //$gasto['faculty'] = $nameFaculty;
+            $gasto['faculty'] =  $facultad;
+            $users = User::select("id")->where('spending_units_id', $gasto['id'])->get();
             $numUsers = count($users);
             $gasto['admin']=null;
             $userF['id'] = '';
             $userF['name'] = 'Seleccione';
             $userF['lastName'] = 'administrador';
             if($numUsers>0){
-                foreach($users as $keyu => $user){
-                    $roles = $user->roles()->get();
+                $rolr = Role::where('nameRol','Jefe unidad de gasto')->get();
+                $rol = $rolr[0];
+                $usersd=$rol->users()->get();
+                $numUsersd = count($usersd);
+                foreach($usersd as $keyu => $user){
+                    $id_us=$user['id'];
+                    $userUnit=User::select("id","name","lastName")->where('spending_units_id', $gasto['id'])->where('id',$id_us)->get();
+                    $numUserUnit = count($userUnit);
+                    if($numUserUnit==1){
+                        $gasto['admin']=$userUnit;
+                    }
+                    else{
+                        if($gasto['admin']==null && $keyu==$numUsersd-1){
+                            $gasto['admin'] = $userF;
+                        }
+                    }
+                }
+                //$id_rol = $rol['id'];
+                //dd($er);
+                /**foreach($users as $keyu => $user){
+                    $roles = $user->roles()->orderBy('id','DESC')->get();
+                    //dd($roles);
                     foreach($roles as $keyr => $rol){
                         $numRoles = count($roles);
                         if($rol['nameRol']=='Jefe unidad de gasto'){
@@ -46,7 +69,7 @@ class SpendingUnitController extends Controller
                             }
                         }
                     }
-                }
+                }*/
             }
             else{
                 $gasto['admin'] = $userF;
@@ -66,7 +89,7 @@ class SpendingUnitController extends Controller
     {   
         $validator = Validator::make($request->all(), [ 
             'nameUnidadGasto' => 'required', 
-            'faculties_id' => 'required', 
+            'faculties_id' => 'required',
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
@@ -80,9 +103,7 @@ class SpendingUnitController extends Controller
           //devuelve los datos si existen nombres de unidades de gasto iguales en una facultad
           $spendingeUnitFound = SpendingUnit::where('faculties_id',$request['faculties_id'])
                                        ->get()-> where('nameUnidadGasto',$request['nameUnidadGasto']);
-
           $valor = count($spendingeUnitFound);
-
           //devuelve mensaje si ya existe una unidad de gasto con el mismo nombre
           if($valor == 1){
               $message = 'El nombre '.$request['nameUnidadGasto'].' ya esta registrado ';
@@ -90,12 +111,11 @@ class SpendingUnitController extends Controller
             }
 
           $input = $request->all();
-          $tamInput = count($input);
-          if($tamInput==3){
+          $idUser = $input['idUser'];
+          if($idUser!=null){
                $requestSpendingUnit = $request->only('nameUnidadGasto','faculties_id');
                $spendingUnit = SpendingUnit::create($requestSpendingUnit);
-               $id_user = $input['idUser'];
-               $user2 = User::find($id_user);
+               $user2 = User::find($idUser);
                $user2['spending_units_id'] = $spendingUnit['id'];
                $user2->update();
                return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
@@ -105,13 +125,12 @@ class SpendingUnitController extends Controller
           }
         }
 
-       $input = $request->all();
-       $tamInput = count($input);
+        $input = $request->all();
+        $idUser = $input['idUser'];
        //si se le manda el id del usuario entonces registra a ese usuario como administrador de la unidad creada
-       if($tamInput==3){
+       if($idUser!=null){
             $requestSpendingUnit = $request->only('nameUnidadGasto','faculties_id');
             $spendingUnit = SpendingUnit::create($requestSpendingUnit);
-            $id_user = $input['idUser'];
             $user2 = User::find($id_user);
             $user2['spending_units_id'] = $spendingUnit['id'];
             $user2->update();
@@ -154,10 +173,11 @@ class SpendingUnitController extends Controller
         }
     }
     
-    /**public function assignPersonal(Request $request){
+    public function assignPersonal(Request $request){
         $validator = Validator::make($request->all(), [ 
             'idUser' => 'required', 
             'spending_units_id' => 'required', 
+            'idRol' => 'required',
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
@@ -167,27 +187,34 @@ class SpendingUnitController extends Controller
         $id_user = $input['idUser'];
         $id_unit = $input['spending_units_id'];
         //si se le manda el id del rol entonces registra el rol que tendra ese usuario dentro la unidad
-        if($tamInput==3){
-            $idRol = $input['idRol'];
-            $user = User::find($id_user);
-            $user['spending_units_id'] = $id_unit;
-            $user->update();
-            //$user->roles()->attach($idRol);
-            $roles = $user->roles()->get();
+        $idRol = $input['idRol'];
+        $user = User::find($id_user);
+        $user['spending_units_id'] = $id_unit;
+        $user->update();
+        //$user->roles()->attach($idRol);
+        $roles = $user->roles()->orderBy('id','DESC')->get();
+        dd($roles);
+        foreach($roles as $keyrl => $rol){
             $numRoles = count($roles);
-            $rol = $roles->last();
-            dd($rol);
-            //$rol['spending_units_id']= $id_unit;
-            //$rol->update();
-            return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+            //$ty=$rol[]
+            $rol_user = $rol['pivot'];
+            //$tty= $rol_user['id'];
+            //dd($rol_user);
+            if($rol_user['role_id']==$idRol){
+                $gasto['admin'] = $user;
+            }
+            /*else{
+                if($gasto['admin']==null && $keyr==$numRoles-1){
+                    $gasto['admin'] = $userF;
+                }
+            }*/
         }
-        else{
-            $user = User::find($id_user);
-            $user['spending_units_id'] = $id_unit;
-            $user->update();
-            return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
-        }
-    }*/
+        //$rol = $roles[$numRoles-1];
+        //$rol['spending_units_id']= $id_unit;
+        //$rol->update();
+        return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+    }
+    
     /**
      * 
      * @param  int  $id

@@ -237,7 +237,7 @@ class UserController extends Controller
 
            if($countRoles2>0)
             {
-                    $rol2 = Role::where('nameRol','Jefe Unidad de Gasto')->get();
+                    $rol2 = Role::where('nameRol','Jefe unidad de Gasto')->get();
                     $unRol2 = $rol2[0];
                     $idRol2 = $unRol2['id'];
                     
