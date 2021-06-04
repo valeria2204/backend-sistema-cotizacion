@@ -182,7 +182,6 @@ class UserController extends Controller
 
     public function usersAdmiWithoutDrives()
     {
-
         $users = User::select('id','name','lastName','administrative_units_id')->get();
         $countUsers = count($users);
         $resp = array();
@@ -238,7 +237,7 @@ class UserController extends Controller
 
            if($countRoles2>0)
             {
-                    $rol2 = Role::where('nameRol','Jefe Unidad de Gasto')->get();
+                    $rol2 = Role::where('nameRol','Jefe unidad de Gasto')->get();
                     $unRol2 = $rol2[0];
                     $idRol2 = $unRol2['id'];
                     
@@ -277,6 +276,9 @@ class UserController extends Controller
     public function showUsersUnitAdministrative($id)
     {
         $users = User::where('administrative_units_id',$id)->get();
+        foreach ($users as $key => $user) {
+            $user['roles']=$user->roles;
+        }
         return response()->json(['users'=>$users], $this-> successStatus);
     }
     /**
@@ -288,6 +290,9 @@ class UserController extends Controller
     public function showUsersUnitSpending($id)
     {
         $users = User::where('spending_units_id',$id)->get();
+        foreach ($users as $key => $user) {
+            $user['roles']=$user->roles;
+        }
         return response()->json(['users'=>$users], $this-> successStatus);
     }
 

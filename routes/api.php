@@ -25,6 +25,10 @@ Route::post('searchCode','CompanyCodeController@searchCode');
 /** responde los detalles correspondientes a esa solicitud de cotizacion */
 Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations");
 
+/*QuoteResponseController */
+/**registra la Respuesta de cotizacion de la empresa*/
+Route::post("quoteResponse","QuoteResponseController@store");
+
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
 /**mostarar los archivos */
@@ -58,7 +62,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**Devuelve los usuarios pertenecientes a una unidad administrativa */
     Route::get('users/unit/administrative/{id}', 'UserController@showUsersUnitAdministrative');
      /**Devuelve los usuarios pertenecientes a una unidad de gasto */
-     Route::get('users/unit/spending/{id}', 'UserController@showUsersUnitSpending');
+    Route::get('users/unit/spending/{id}', 'UserController@showUsersUnitSpending');
 
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
@@ -145,8 +149,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('spendingUnits','SpendingUnitController@index');
     /**Dado un id de usuario y de unidad de gasto, se asigna el usuario como jefe de la unidad */
     Route::put('assignBossesSpending/{idU}/{idS}','SpendingUnitController@assignHeadUnit');
+    /**Regitra a un usuario como parte del personal de una unidad de gasto */
+    Route::post('personal/new','SpendingUnitController@assignPersonal');
 
-    
     /**EMPRESA CONTROLLER */
      /**Recibe los datos de una empresa dentro de un request para guardarlo */
     Route::post('business/new','BusinessController@store');

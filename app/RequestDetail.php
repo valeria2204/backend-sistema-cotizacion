@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\RequestQuotitation; 
+use App\Detail;
 
 class RequestDetail extends Model
 {
@@ -17,6 +18,9 @@ class RequestDetail extends Model
     ];
     public function requestQuotitation(){
         return $this->belongsTo(RequestQuotitation::class);
+    }
+    public function details(){
+        return $this->hasMany(Detail::class);
     }
 
 }
