@@ -42,17 +42,25 @@ class AdministrativeUnitController extends Controller
         //
     }
 
-    public function register(Request $request)
+    public function register(Request $request,$idAdmi,$idUser)
     {
         $validator = Validator::make($request->all(), [ 
+            
             'name' => 'required', 
             'faculties_id' => 'required', 
-            
+
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
-
+          /*      
+                $idAdmi = $request['id'];
+                $idUser = $request['idUser'];
+                return $idAdmi;
+                $user = User::find($idU);
+                $user2['administrative_units_id'] = $idA;
+                $user2->update();
+            */
         $input = $request->all(); 
         $id_facultad = $input['faculties_id'];
         $facultad = Faculty::find($id_facultad);
