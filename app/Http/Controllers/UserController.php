@@ -76,6 +76,10 @@ class UserController extends Controller
     { 
         $user = Auth::user();
         $roles=$user->roles;
+        //$pivots = $user->pivot->spending_units_id;
+        //$pivota = $user->pivot->administrative_units_id;
+        //$user['pivs']=$pivots;
+        //$user['piva']=$pivota;
         $user['roles']=$roles;
         $permissions = array();
         foreach ($roles as $key => $role) {
@@ -182,89 +186,106 @@ class UserController extends Controller
 
     public function usersAdmiWithoutDrives()
     {
-        $users = User::select('id','name','lastName','administrative_units_id')->get();
-        $countUsers = count($users);
+        ////$users = User::select('id','name','lastName','administrative_units_id')->get();
+        //$users = User::select('id','name','lastName')->get();
+        ////$countUsers = count($users);
+        //$resp = array();
+        //foreach ($users as $key => $user)
+        //{
+        //     $roles = $user->roles()->get();
+        //     dd($roles);
+        //     $countRoles = count($roles);
+        //   if($countRoles>0)
+        //    {
+        //            $rol1 = Role::where('nameRol','Jefe Administrativo')->get();
+        //            $unRol = $rol1[0];
+        //            $idRol = $unRol['id'];      
+        //            foreach ($roles as $keyR => $rol) 
+        //            {              
+        //                if($rol['id']==$idRol && $user['administrative_units_id']== null)
+        //                {           
+        //                    $resp[] = $user;
+        //                }
+        //                else
+        //                {
+        //                    //no guarda a los usuarios          
+        //                }
+        //            }
+        //    }
+        //    else
+        //    {
+        //       //no guarda a los usuarios
+        //    }
+        //}
+        //$it = 'Jefe Administrativo';
+        //$namerol = 'Jefe Administrativo';
         $resp = array();
-        foreach ($users as $key => $user)
-        {
-             $roles = $user->roles()->get();
-             
-             $countRoles = count($roles);
-
-           if($countRoles>0)
-            {
-                    $rol1 = Role::where('nameRol','Jefe Administrativo')->get();
-                    $unRol = $rol1[0];
-                    $idRol = $unRol['id'];
-                    
-                    foreach ($roles as $keyR => $rol) 
-                    {
-                        
-                        if($rol['id']==$idRol && $user['administrative_units_id']== null)
-                        {
-                            
-                            
-                            $resp[] = $user;
-                        }
-                        else
-                        {
-                            //no guarda a los usuarios          
-                        }
+        $users = User::select('id','name','lastName')->get();
+        foreach ($users as $ku => $user){
+            $arregloRoles = $user->roles()->get();
+            foreach($arregloRoles as $kr => $rol){
+                $namerol = $rol->nameRol;
+                if($namerol=='Jefe Administrativo'){
+                    $rolestatus = $rol->pivot->role_status;
+                    $adminstatus = $rol->pivot->administrative_unit_status;
+                    $spenstatus = $rol->pivot->spending_unit_status;
+                    if($rolestatus==1 && $adminstatus==0 && $spenstatus==0){
+                        $resp[] = $user;
                     }
+                }  
             }
-            else
-            {
-               //no guarda a los usuarios
-            }
-
         }
-
         return response()->json(['users'=>$resp], $this-> successStatus);
-
     }
 
     public function usersSpendingWithoutDrives()
     {
-
-        $users2 = User::select('id','name','lastName','spending_units_id')->get();
-        $countUsers2 = count($users2);
+        //$users2 = User::select('id','name','lastName','spending_units_id')->get();
+        //$countUsers2 = count($users2);
+        //$resp2 = array();
+        //foreach ($users2 as $key => $user2)
+        //{
+        //     $roles2 = $user2->roles()->get();   
+        //     $countRoles2 = count($roles2);
+        //   if($countRoles2>0)
+        //    {
+        //            $rol2 = Role::where('nameRol','Jefe unidad de Gasto')->get();
+        //            $unRol2 = $rol2[0];
+        //            $idRol2 = $unRol2['id'];          
+        //            foreach ($roles2 as $keyR2 => $rol2) 
+        //            {                
+        //                if($rol2['id']==$idRol2 && $user2['spending_units_id']== null)
+        //                {        
+        //                    $resp2[] = $user2;
+        //                }
+        //                else
+        //                {
+        //                    //no guarda a los usuarios          
+        //                }
+        //            }
+        //    }
+        //    else
+        //    {
+        //       //no guarda a los usuarios
+        //    }
+        //}
         $resp2 = array();
-        foreach ($users2 as $key => $user2)
-        {
-             $roles2 = $user2->roles()->get();
-             
-             $countRoles2 = count($roles2);
-
-           if($countRoles2>0)
-            {
-                    $rol2 = Role::where('nameRol','Jefe unidad de Gasto')->get();
-                    $unRol2 = $rol2[0];
-                    $idRol2 = $unRol2['id'];
-                    
-                    foreach ($roles2 as $keyR2 => $rol2) 
-                    {
-                        
-                        if($rol2['id']==$idRol2 && $user2['spending_units_id']== null)
-                        {
-                            
-                            
-                            $resp2[] = $user2;
-                        }
-                        else
-                        {
-                            //no guarda a los usuarios          
-                        }
+        $users = User::select('id','name','lastName')->get();
+        foreach ($users as $ku => $user){
+            $arregloRoles = $user->roles()->get();
+            foreach($arregloRoles as $kr => $rol){
+                $namerol = $rol->nameRol;
+                if($namerol=='Jefe unidad de gasto'){
+                    $rolestatus = $rol->pivot->role_status;
+                    $adminstatus = $rol->pivot->administrative_unit_status;
+                    $spenstatus = $rol->pivot->spending_unit_status;
+                    if($rolestatus==1 && $adminstatus==0 && $spenstatus==0){
+                        $resp2[] = $user;
                     }
+                }  
             }
-            else
-            {
-               //no guarda a los usuarios
-            }
-
         }
-
         return response()->json(['users'=>$resp2], $this-> successStatus);
-
     }
     
     /**

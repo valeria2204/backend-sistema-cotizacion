@@ -21,7 +21,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name','lastName','phone','direction','ci', 'email','userName','password','userRol','spending_units_id','administrative_units_id'
+        //'name','lastName','phone','direction','ci', 'email','userName','password','userRol','spending_units_id','administrative_units_id'
+        'name','lastName','phone','direction','ci', 'email','userName','password','userRol'
     ];
 
     /**
@@ -43,13 +44,22 @@ class User extends Authenticatable
     ];
 
     public function roles(){
-        return $this->belongsToMany(Role::class);
+        return $this->belongsToMany(Role::class)
+                    ->withPivot('administrative_unit_id','spending_unit_id','role_status','administrative_unit_status','spending_unit_status')
+                    ->withTimestamps();
     }
 
     public function spendingUnit(){
-        return $this->belongsTo(SpendingUnit::class);
+        //return $this->belongsTo(SpendingUnit::class);
+        return $this->belongsToMany(SpendingUnit::class)
+                    ->withPivot('role_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status')
+                    ->withTimestamps();
     }
+
     public function administrativeUnit(){
-        return $this->belongsTo(AdministrativeUnit::class);
+        //return $this->belongsTo(AdministrativeUnit::class);
+        return $this->belongsToMany(AdministrativeUnit::class)
+                    ->withPivot('role_id','spending_unit_id','role_status','administrative_unit_status','spending_unit_status')
+                    ->withTimestamps();
     }
 }

@@ -114,11 +114,31 @@ class SpendingUnitController extends Controller
           $input = $request->all();
           $idUser = $input['idUser'];
           if($idUser!=null){
-               $requestSpendingUnit = $request->only('nameUnidadGasto','faculties_id');
-               $spendingUnit = SpendingUnit::create($requestSpendingUnit);
+               //$requestSpendingUnit = $request->only('nameUnidadGasto','faculties_id');
+               //$spendingUnit = SpendingUnit::create($requestSpendingUnit);
                $user2 = User::find($idUser);
-               $user2['spending_units_id'] = $spendingUnit['id'];
-               $user2->update();
+               //$user2->roles()->sync(2,['spending_units_id' =>6,'administrative_units_id' =>237]);
+               $user2->roles()->updateExistingPivot(2,['spending_units_id' =>7111,'administrative_units_id' =>1000]);
+               dd('llego aqui');
+               //$it=2;
+               //consulta para obtener usuarios que pertenecen a un rol
+               //$pp = Role::with(['users' =>  function($query) use($it) {
+                //$query->whereRoleId($it);
+            //}])->get();
+            //otra forma
+            //$pp = Role::has('users')->with(['users' =>  function($query) use($it) {
+             //   $query->whereRoleId($it);
+            //}])->get();
+             //  dd($pp);
+               $trs = $user2->roles;
+               foreach($trs as $ku => $tr){
+                   $eyu = $tr->pivot->spending_units_id;
+                   //dd($eyu);
+                }
+
+                //$user2['spending_units_id'] = $spendingUnit['id'];
+                $user2->update();
+               //$user2->roles()->attach(3,['spending_units_id'=>3,'administrative_units_id'=>2]);
                return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
           }else{
                $spendingUnit = SpendingUnit::create($input); 
@@ -133,8 +153,11 @@ class SpendingUnitController extends Controller
             $requestSpendingUnit = $request->only('nameUnidadGasto','faculties_id');
             $spendingUnit = SpendingUnit::create($requestSpendingUnit);
             $user2 = User::find($id_user);
+            //$user2->roles()->attach(2);
             $user2['spending_units_id'] = $spendingUnit['id'];
             $user2->update();
+            //$user2->roles()->attach(3,['spending_units_id'=>3,'administrative_units_id'=>2]);
+            //$user2->roles()->update();
             return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
        }else{
             $spendingUnit = SpendingUnit::create($input); 
@@ -145,33 +168,54 @@ class SpendingUnitController extends Controller
     
     public function assignHeadUnit($idU,$idS)
     {
-        $user = User::where('id',$idU)->get();
-        $countUsers = count($user);
+        //$user = User::where('id',$idU)->get();
+        //$countUsers = count($user);
+        //$unitExist = SpendingUnit::where('id',$idS)->get();
+        //$countUnits = count($unitExist);
+        //if($countUsers > 0)
+        //{
+        //    if($countUnits > 0)
+        //    {
+        //        $user2 = User::find($idU);
+        //        $user2['spending_units_id'] = $idS;
+        //        $user2->update();
+        //        return response()->json(['res'=>true], $this-> successStatus);
+        //    }
+        //    else
+        //    {
+        //        $message = 'La unidad de gasto con id'. $idS.' no existe  ';
+        //        return response()->json(['message'=>$message], 200);
+        //    }
+        //}
+        //else
+        //{
+        //    $message2 = 'El usuario con id'. $idU.' no existe  ';
+        //    return response()->json(['message'=>$message2], 200);
+        //}
+        $user = User::find($idU);
+        //$arregloRoles = $user->roles()->get();
+        //foreach($arregloRoles as $kr => $rol){
+        //    $namerol = $rol->nameRol;
+        //    if($namerol=='Jefe unidad de gasto'){
+        //        $rolestatus = $rol->pivot->role_status;
+        //        $adminstatus = $rol->pivot->administrative_unit_status;
+        //        $spenstatus = $rol->pivot->spending_unit_status;
+        //        if($rolestatus==1 && $adminstatus==0 && $spenstatus==0){
+        //            $resp2[] = $user;
+        //        }
+        //    }
+        //dd($ar);
+        //if(1==2){
 
-        $unitExist = SpendingUnit::where('id',$idS)->get();
-        $countUnits = count($unitExist);
-
-        if($countUsers > 0)
-        {
-            if($countUnits > 0)
-            {
-                $user2 = User::find($idU);
-                $user2['spending_units_id'] = $idS;
-                $user2->update();
-                return response()->json(['res'=>true], $this-> successStatus);
-            }
-            else
-            {
-                $message = 'La unidad de gasto con id'. $idS.' no existe  ';
-                return response()->json(['message'=>$message], 200);
-            }
-
-        }
-        else
-        {
-            $message2 = 'El usuario con id'. $idU.' no existe  ';
-            return response()->json(['message'=>$message2], 200);
-        }
+        //}
+        //else{
+            $user->roles()->attach(1,['spending_unit_id'=>$idS,'spending_unit_status'=>1]);
+            $user->roles()->updateExistingPivot(1,['spending_unit_status'=>0]);
+            $user->update;
+        //}
+        //dd($are);
+        return response()->json(['message'=>true], 200);
+        
     }
     
     public function assignPersonal(Request $request){
