@@ -24,10 +24,8 @@ class SpendingUnitController extends Controller
         $spendingUnits = SpendingUnit::select("id","nameUnidadGasto","faculties_id")->get();
         foreach ($spendingUnits as $key => $gasto) {
             $id_facultad = $gasto->faculties_id;
-            //para mostrar en la columna Facultad de la lista de Unidades de gasto
+            //para mostrar en la columna Facultad
             $facultad = Faculty::find($id_facultad);
-            //$nameFaculty = $facultad['nameFacultad'];
-            //$gasto['faculty'] = $nameFaculty;
             $gasto['faculty'] =  $facultad;
             $users = User::select("id")->where('spending_units_id', $gasto['id'])->get();
             $numUsers = count($users);

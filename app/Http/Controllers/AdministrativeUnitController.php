@@ -8,70 +8,41 @@ use App\User;
 use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Validator;
 
 class AdministrativeUnitController extends Controller
 {
+    public $successStatus = 200;
     /**
-     * Display a listing of the resource.
+     * Devuelve lista de unidades administrativas mas el respectivo administrador *s*
      *
      * @return \Illuminate\Http\Response
      */
-    
-    public $successStatus = 200;
-
     public function index()
     {
-        $administrativeUnits = AdministrativeUnit::select("id","name","faculties_id")->get();
-        foreach ($administrativeUnits as $key => $administrativeUnit) {
+        $administrativeUnits = AdministrativeUnit::select('id','name','faculties_id')->get();
+        foreach ($administrativeUnits as $kad => $administrativeUnit) {
             $facultie_id =  $administrativeUnit['faculties_id'];
-            //para mostrar en la columna Facultad de la lista de Unidades administrativas
-            $faculty = Faculty::find($facultie_id);
-            $nameFaculty = $faculty['nameFacultad'];
-            $administrativeUnit['faculty'] = $nameFaculty;
-            $users = User::select("id")->where('administrative_units_id', $administrativeUnit['id'])->get();
-            $numUsers = count($users);
-            $administrativeUnit['admin']=null;
-            $userF['id'] = '';
-            $userF['name'] = 'Seleccione';
-            $userF['lastName'] = 'administrador';
-            if($numUsers>0){
-                $rolr = Role::where('nameRol','Jefe Administrativo')->get();
-                $rol = $rolr[0];
-                $usersd=$rol->users()->get();
-                $numUsersd = count($usersd);
-                foreach($usersd as $keyu => $user){
-                    $id_us=$user['id'];
-                    $userUnit=User::select("id","name","lastName")->where('administrative_units_id', $administrativeUnit['id'])->where('id',$id_us)->get();
-                    $numUserUnit = count($userUnit);
-                    if($numUserUnit==1){
-                        $userN=$userUnit[0];
-                        $administrativeUnit['admin']=$userN;
-                    }
-                    else{
-                        if($administrativeUnit['admin']==null && $keyu==$numUsersd-1){
-                            $administrativeUnit['admin'] = $userF;
-                        }
-                    }
-                }/**foreach($users as $keyu => $user){
-                    $roles = $user->roles()->get();
-                    foreach($roles as $keyr => $rol){
-                        $numRoles = count($roles);
-                        if($rol['nameRol']=='Jefe Administrativo'){
-                            $administrativeUnit['admin'] = $user;
-                        }
-                        else{
-                            if($administrativeUnit['admin']==null && $keyr==$numRoles-1){
-                                $administrativeUnit['admin'] = $userF;
-                            }
-                        }
-                    }
-                }*/
-            }
-            else{
+            $faculty = Faculty::select('id','nameFacultad')->where('id',$facultie_id)->get();
+            $administrativeUnit['faculty'] = $faculty;
+            //solo hay un administrador por unidad
+            $useradmin = $administrativeUnit->users()
+                        ->where(['role_id'=>2,'role_status'=>1,'administrative_unit_status'=>1,'global_status'=>1])
+                        ->get();
+            $valor = count($useradmin);
+            if($valor==0){
+                $userF = [['id'=>'','name'=>'Seleccione','lastName'=>'administrador']];
                 $administrativeUnit['admin'] = $userF;
             }
-            $administrativeUnits[$key]=$administrativeUnit;           
+            else{
+                if($valor==1){
+                    $useradm = $useradmin[0];
+                    $admin = [['id'=>$useradm->id,'name'=>$useradm->name,'lastName'=>$useradm->lastName]];
+                    $administrativeUnit['admin'] = $admin;
+                }
+            }
+            $administrativeUnits[$kad]=$administrativeUnit;        
         }
         return response()->json(['Administrative_unit'=>$administrativeUnits],200);
     }
@@ -113,8 +84,9 @@ class AdministrativeUnitController extends Controller
                $requestAdminUnit = $request->only('name','faculties_id');
                $administrativeUnit = AdministrativeUnit::create($requestAdminUnit);
                $user2 = User::find($id_user);
-               $user2['administrative_units_id'] = $administrativeUnit['id'];
-               $user2->update();
+               //if else
+               //$user2['administrative_units_id'] = $administrativeUnit['id'];
+               //$user2->update();
                return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
         }
         else{
