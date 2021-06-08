@@ -11,13 +11,13 @@ class RoleController extends Controller
 {
     public $successStatus = 200;
     /**
-     * Display a listing of the resource.
+     * Devuelve lista de roles *s*
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $requestRols = Role::all();
+        $requestRols = Role::select('id','nameRol','description')->get();
         return response()->json(['roles'=> $requestRols],$this-> successStatus);
     }
 

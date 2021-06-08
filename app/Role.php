@@ -21,19 +21,19 @@ class Role extends Model
 
     public function users(){
         return $this->belongsToMany(User::class)
-                ->withPivot('administrative_unit_id','spending_unit_id','role_status','administrative_unit_status','spending_unit_status')
+                ->withPivot('id','administrative_unit_id','spending_unit_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                 ->withTimestamps();
     }
 
     public function spendingUnits(){
         return $this->belongsToMany(SpendingUnit::class)
-                    ->withPivot('user_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status')
+                    ->withPivot('id','user_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                     ->withTimestamps();
     }
     
     public function administrativeUnits(){
         return $this->belongsToMany(AdministrativeUnit::class)
-                    ->withPivot('user_id','spending_unit_id','role_status','administrative_unit_status','spending_unit_status')
+                    ->withPivot('id','user_id','spending_unit_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                     ->withTimestamps();
     }
 

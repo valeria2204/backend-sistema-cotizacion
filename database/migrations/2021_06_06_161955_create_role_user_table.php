@@ -17,8 +17,6 @@ class CreateRoleUserTable extends Migration
             $table->id();
             $table->unsignedBigInteger('role_id');
             $table->unsignedBigInteger('user_id');
-            //$table->integer('administrative_unit_id')->nullable();
-            //$table->integer('spending_unit_id')->nullable();
             $table->unsignedBigInteger('administrative_unit_id')->nullable();
             $table->unsignedBigInteger('spending_unit_id')->nullable();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
@@ -28,6 +26,7 @@ class CreateRoleUserTable extends Migration
             $table->integer('role_status')->default(1);
             $table->integer('administrative_unit_status')->default(0);
             $table->integer('spending_unit_status')->default(0);
+            $table->integer('global_status')->default(1);
             $table->timestamps();
         });
     }

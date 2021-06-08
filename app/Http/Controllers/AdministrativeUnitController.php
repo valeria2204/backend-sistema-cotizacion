@@ -7,6 +7,7 @@ use App\Faculty;
 use App\User;
 use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class AdministrativeUnitController extends Controller
@@ -170,8 +171,21 @@ class AdministrativeUnitController extends Controller
         //}
         //else{
             $user->roles()->attach(1,['administrative_unit_id'=>$idA,'administrative_unit_status'=>1]);
-            $user->roles()->updateExistingPivot(1,['administrative_unit_status'=>0]);
-            $user->update;
+            //$yt=$user->roles()->get();
+            //$r=$yt[0];
+            //$e = $r->where('pivot_id',19);
+            $users = DB::table('role_user')
+              ->where('id', 19)
+              ->update(['updated_at' => now()]);
+              //->touch();
+              //->update(['administrative_unit_status' =>987]);
+              //->save();
+            //$e ->updateExistingPivot(1,['administrative_unit_status'=>111]);
+            dd('eer');
+            //dd($user->roles()->where('id',19)->get());
+
+            //$user->roles()->updateExistingPivot(1,['administrative_unit_status'=>76])->where('id',19);
+            //$user->update;
         //}
         //dd($are);
         return response()->json(['message'=>true], 200);

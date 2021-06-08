@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Role;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class UserController extends Controller
@@ -21,7 +22,6 @@ class UserController extends Controller
     public function login(){ 
         if(Auth::attempt(['userName' => request('userName'), 'password' => request('password')])){ 
             $user = Auth::user(); 
-            //dd($user);
             $success['token'] =  $user->createToken('MyApp')-> accessToken;
             return response()->json(['success' => $success], $this-> successStatus);
         } 
@@ -31,7 +31,7 @@ class UserController extends Controller
     }
 
     /** 
-     * Register api 
+     * Register api actualizado *s*
      * 
      * @return \Illuminate\Http\Response 
      */ 
@@ -58,40 +58,49 @@ class UserController extends Controller
             $mensge = 'El email '.$request['email'].' ya esta registrado';
             return response()->json(['message'=>$mensge], 200); 
         }
-       
+
+        $userEncontrado = User::where('userName',$request['userName'])->get();
+        $valor = count($userEncontrado);
+        if($valor == 1){
+            $mensge = 'El nombre de usuario '.$request['userName'].' ya esta registrado';
+            return response()->json(['message'=>$mensge], 200); 
+        }
+
         $input = $request->all();  
         $input['password'] = $input['ci'];
         $input['password'] = bcrypt($input['password']);
-
         $user = User::create($input);
-        $user->roles()->attach($idRol);
+        //el registro de rol es opcional, si se pasa un valor valido entonces se añade el rol
+        if($idRol!=0){
+            $user->roles()->attach($idRol);
+        }
         return response()->json(['message'=>""], $this-> successStatus); 
     }
     /** 
-     * details api 
+     * details api actualizado *s*
      * 
      * @return \Illuminate\Http\Response 
      */ 
     public function details() 
     { 
         $user = Auth::user();
-        $roles=$user->roles;
-        //$pivots = $user->pivot->spending_units_id;
-        //$pivota = $user->pivot->administrative_units_id;
-        //$user['pivs']=$pivots;
-        //$user['piva']=$pivota;
-        $user['roles']=$roles;
+        //roles activos de un usuario
+        $rolesactives = $user->roles()
+                        ->where('role_status',1)
+                        ->where('global_status',1)
+                        ->get();
         $permissions = array();
-        foreach ($roles as $key => $role) {
-            $permissions[$key]=$role->permissions;
+        foreach ($rolesactives as $kal => $role) {
+            array_push($permissions,$role->permissions);
         }
-        $permi=array();
-        foreach ($permissions as $key => $arraypermi) {
-            foreach ($arraypermi as $key => $permission) {
-                array_push($permi,$permission->namePermission);
+        $user['roles']=$rolesactives;
+        $nameallpermissions=array();
+        foreach ($permissions as $kp => $arraypermi) {
+            foreach ($arraypermi as $kap => $permission) {
+                array_push($nameallpermissions,$permission->namePermission);
             }
         }
-        $user['permissions']=$permi;
+        $user['permissions']=$nameallpermissions;
         return response()->json(['user' => $user], $this-> successStatus); 
     }
     /** 
@@ -122,45 +131,50 @@ class UserController extends Controller
         return response()->json(['roles' => $roles], $this-> successStatus);
     }
     /**
-     * Devuelve una lista de usuarios mas sus roles
+     * Devuelve una lista de usuarios mas sus roles *s*
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $users = User::all();
-        $countUsers = count($users);
-        for ($id = 1; $id <= $countUsers; $id++)
+        $users = User::select('id','name','lastName','ci','phone','email')->get();
+        foreach ($users as $key =>$user)
         {
-             $user = User::find($id);
-             $roles = $user->roles()->get();
-             $valor = count($roles);
+             $rolesactindex = $user->roles()
+                    ->where('role_status',1)
+                    ->where('global_status',1)
+                    ->get();
+             $valor = count($rolesactindex);
              if($valor>1){
                 $nameRol = "";
                 for ($i = 0; $i < $valor; $i++)
                 {
-                    $rol = $roles[$i];
+                    $rolm = $rolesactindex[$i];
                     if($i==$valor-1){
-                        $nameRol = $nameRol.$rol['nameRol'];
+                        $nameRol = $nameRol.$rolm['nameRol'];
                     }
                     else{
-                        $nameRol = $nameRol.$rol['nameRol'].', ';
+                        $nameRol = $nameRol.$rolm['nameRol'].', ';
                     }
                 }
                 $user['userRol'] = $nameRol;
              }
              else{
-                $rold = $roles[0];
-                $user['userRol'] = $rold['nameRol'];
+                 if($valor==1 ){
+                    $rold = $rolesactindex[0];
+                    $user['userRol'] = $rold['nameRol'];
+                 }
+                 if($valor==0 ){
+                    $user['userRol'] = '';
+                 }
              }
-             $i = $id-1;
-             $users[$i] = $user;
-        } 
+             $users[$key] = $user;
+        }
         return response()->json(['users'=>$users], $this-> successStatus);
     }
 
     /**
-     * Modificar el rol de un usuario ya registrado
+     * Modificar el rol de un usuario ya registrado actualizado *s*
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -168,10 +182,12 @@ class UserController extends Controller
      */
     public function updateRol($idUser, $idRol)
     {
+        $qupdaterol = DB::table('role_user')
+              ->where(['user_id'=>$idUser,'role_status'=>1,'global_status'=>1])
+              ->whereBetween('role_id',[1,3])
+              ->update(['role_status'=>0,'global_status'=>0,'updated_at' => now()]);
         $user = User::find($idUser);
-        $user->roles()->sync($idRol);
-
-
+        $user->roles()->attach($idRol);
         return response()->json(['res'=>true], $this-> successStatus);
     }
 
@@ -274,6 +290,7 @@ class UserController extends Controller
         foreach ($users as $ku => $user){
             $arregloRoles = $user->roles()->get();
             foreach($arregloRoles as $kr => $rol){
+                dd($rol);
                 $namerol = $rol->nameRol;
                 if($namerol=='Jefe unidad de gasto'){
                     $rolestatus = $rol->pivot->role_status;
