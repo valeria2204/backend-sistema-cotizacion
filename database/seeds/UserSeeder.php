@@ -33,10 +33,10 @@ class UserSeeder extends Seeder
         $user->email="jenny@gmail.com";
         $user->userName="jenny";
         $user->password=bcrypt("jenny");
-        $user->administrative_units_id=1;
+        //$user->administrative_units_id=1;
         $user->save();
-        $user->roles()->attach(2);
-
+        $user->roles()->attach(2,['administrative_unit_id'=>1,'administrative_unit_status'=>1]);
+//
         $user = new User();
         $user->name = "Ricardo";
         $user->lastName="Martinez";
@@ -46,9 +46,9 @@ class UserSeeder extends Seeder
         $user->email="ricardo@gmail.com";
         $user->userName="ricardo";
         $user->password=bcrypt("ricardo");
-        $user->	spending_units_id=1;
+        //$user->	spending_units_id=1;
         $user->save();
-        $user->roles()->attach(1);
+        $user->roles()->attach(1,['spending_unit_id'=>1,'spending_unit_status'=>1]);
 
         $user = new User();
         $user->name = "Daniela";
@@ -59,9 +59,9 @@ class UserSeeder extends Seeder
         $user->email="dani@gmail.com";
         $user->userName="danii";
         $user->password=bcrypt("danii");
-        $user->administrative_units_id=3;
+        //$user->administrative_units_id=3;
         $user->save();
-        $user->roles()->attach(2);
+        $user->roles()->attach(2,['administrative_unit_id'=>3,'administrative_unit_status'=>1]);
 
         $user = new User();
         $user->name = "Nicole";
@@ -72,9 +72,9 @@ class UserSeeder extends Seeder
         $user->email="nicole@gmail.com";
         $user->userName="nicol";
         $user->password=bcrypt("nicol");
-        $user->	spending_units_id=2;
+        //$user->	spending_units_id=2;
         $user->save();
-        $user->roles()->attach(1);
+        $user->roles()->attach(1,['spending_unit_id'=>2,'spending_unit_status'=>1]);
 
         $user = new User();
         $user->name = "Juan Carlos";
@@ -85,8 +85,8 @@ class UserSeeder extends Seeder
         $user->email="juan10@gmail.com";
         $user->userName="juan10";
         $user->password=bcrypt("juan10");
-        $user->	spending_units_id=3;
+        //$user->	spending_units_id=3;
         $user->save();
-        $user->roles()->attach(1);
+        $user->roles()->attach(1,['spending_unit_id'=>3,'spending_unit_status'=>1]);
     }
 }
