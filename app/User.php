@@ -48,16 +48,14 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    public function spendingUnit(){
-        //return $this->belongsTo(SpendingUnit::class);
-        return $this->belongsToMany(SpendingUnit::class)
+    public function spendingUnits(){
+        return $this->belongsToMany(SpendingUnit::class,'role_user')
                     ->withPivot('id','role_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                     ->withTimestamps();
     }
 
-    public function administrativeUnit(){
-        //return $this->belongsTo(AdministrativeUnit::class);
-        return $this->belongsToMany(AdministrativeUnit::class)
+    public function administrativeUnits(){
+        return $this->belongsToMany(AdministrativeUnit::class,'role_user')
                     ->withPivot('id','role_id','spending_unit_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                     ->withTimestamps();
     }
