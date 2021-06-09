@@ -28,6 +28,8 @@ Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations
 /*QuoteResponseController */
 /**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quoteResponse","QuoteResponseController@store");
+/**Dado un id de una cotizacion y un id de solicitud de cotizacion, entrega los detalles de esa cotizacion */
+Route::get("quote/{idCo}/{idRe}","QuoteResponseController@show");
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
