@@ -13,7 +13,7 @@ class Detail extends Model
      * @var array
     */
     protected $fillable = [
-        'unitPrice','totalPrice','request_details_id','quotations_id'
+        'unitPrice','totalPrice','request_details_id','quotations_id','brand','industry','model','warrantyTime'
     ];
     public function quotitation(){
         return $this->belongsTo(Quotation::class);

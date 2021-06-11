@@ -26,9 +26,16 @@ Route::post('searchCode','CompanyCodeController@searchCode');
 /** responde los detalles correspondientes a esa solicitud de cotizacion */
 Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations");
 
-/*QuoteResponseController */
+/*RESPUESTA EMPRESA COTIZACION */
 /**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quoteResponse","QuoteResponseController@store");
+/**registra la Respuesta de cotizacion de la empresa*/
+Route::post("quotitacion/response","QuoteResponseController@storageQuote");
+/**registra la Respuesta de cotizacion de la empresa*/
+Route::post("quotitacion/response/{id}","QuoteResponseController@storageDetails");
+/**registra la Respuesta de cotizacion de la empresa*/
+Route::post("quotitacion/response/file/{id}","QuoteResponseController@uploadFile");
+
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
@@ -83,6 +90,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /**recibe un id de solicitud y responde con los archivos adjuntos que pertenecen a esa solicitud */
     Route::get('requestQuotitation/files/{id}', 'RequestQuotitationController@showFiles');
+    /*recive los archivos para guardar */
     Route::post('upload/{id}', 'RequestQuotitationController@uploadFile');
     Route::get('download', 'RequestQuotitationController@download');
 
