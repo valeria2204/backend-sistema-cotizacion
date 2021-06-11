@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Quotation;
 use App\Detail;
+use App\RequestDetail;
 use App\Business;
 
 class QuoteResponseController extends Controller
@@ -82,9 +83,25 @@ class QuoteResponseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($idCo,$idRe)
     {
-        //
+        $quote = Quotation::select('id','offerValidity','deliveryTime','answerDate','paymentMethod','observation')
+        ->where('id',$idCo)->get();
+ 
+        $requestDetail = RequestDetail::select('id','amount','unitMeasure','description')
+                                        ->where('request_quotitations_id',$idRe)->get();
+
+        foreach ($requestDetail as $key => $detail)
+        {
+            $idDetail = $detail->id;
+            $res = Detail::select('id','unitPrice','totalPrice')->where('request_details_id',$idDetail)
+            ->where('quotations_id',$idCo)->get();
+            $detail['detalle']= $res;
+        }
+        
+        $quote['details'] = $requestDetail;
+        return $quote;
+        
     }
 
     /**
