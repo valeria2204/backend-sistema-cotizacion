@@ -126,7 +126,6 @@ class RequestQuotitationController extends Controller
 
     public function upload(Request $request){
         $request->file('archivo')->store('public');
-        
     }
 
     public function uploadOne(Request $req,$id){
@@ -142,8 +141,6 @@ class RequestQuotitationController extends Controller
 
     public function uploadFile(Request $request,$id)
     {
-       
-        $tamanio = count($request->file());
         $files = $request->file();
         foreach ($files as $file) {
             $filename = $file->getClientOriginalName();
@@ -158,11 +155,6 @@ class RequestQuotitationController extends Controller
         }
        
         return response()->json(["messaje"=>"Archivos guardados"]);
-        /* if($request->hasFile('file')){
-           
-        }else{
-            return response()->json(["messaje"=>"Error"]);
-        } */
     }
     public function fileDowload(){
         return response()->download(public_path('Files/db.pdf'), "base de datos");

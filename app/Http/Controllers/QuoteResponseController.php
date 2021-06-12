@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Quotation;
 use App\Detail;
+use App\RequestDetail;
 use App\Business;
 
 class QuoteResponseController extends Controller
@@ -29,31 +30,78 @@ class QuoteResponseController extends Controller
     public function store(Request $request)
     {
         $quotationResponse = $request->only("offerValidity","deliveryTime","paymentMethod","answerDate","observation","company_codes_id");
+        $response['message']="Envio exitoso";
         $quotation = Quotation::create($quotationResponse);
         $details = $request->only("detalles");
         foreach ($details['detalles'] as $key => $detailResponse) {
             $detailResponse['quotations_id'] = $quotation->id;
             $detail=Detail::create($detailResponse);
-        }
+        } 
         $idempresa= $request->only("empresaId");
         if($idempresa['empresaId']==0){
-            $empresa = $request->only("nameEmpresa","email");
+            $empresa = $request->only("nameEmpresa","email","nit","rubro");
             $newempresa = Business::create($empresa);
         }
+        
         $response['status']=true;
-        $response['message']="Envio exitoso";
+        
         return response()->json(["response"=>$response], $this-> successStatus);
     }
-
+    public function storageQuote(Request $request){
+        $quotationResponse = $request->only("offerValidity","deliveryTime","paymentMethod","answerDate","observation","company_codes_id");
+        $response['message']="Envio exitoso";
+        $quotation = Quotation::create($quotationResponse);
+        $response['id'] = $quotation->id;
+        return response()->json(["response"=>$response], $this-> successStatus);
+    }
+    public function storageDetails(Request $request,$id){
+        $detailResponse = $request->only("unitPrice","totalPrice","request_details_id","brand","industry","model","warrantyTime");
+        $detailResponse['quotations_id'] = $id;
+        $detail=Detail::create($detailResponse);
+        return response()->json(["response"=>$detail->id], $this-> successStatus);
+    }
+    public function uploadFile(Request $request,$id)
+    {
+        $files = $request->file();
+        foreach ($files as $file) {
+            $filename = $file->getClientOriginalName();
+        
+            $filename= pathinfo($filename, PATHINFO_FILENAME);
+            $name_File = str_replace(" ","_",$filename);
+    
+            $extension = $file->getClientOriginalExtension();
+    
+            $name = $id. "-" . $name_File . "." .$extension;
+            $file->move(public_path('FilesResponseBusiness/'),$name);
+        }
+       
+        return response()->json(["messaje"=>"Archivos guardados"]);
+    }
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($idCo,$idRe)
     {
-        //
+        $quote = Quotation::select('id','offerValidity','deliveryTime','answerDate','paymentMethod','observation')
+        ->where('id',$idCo)->get();
+ 
+        $requestDetail = RequestDetail::select('id','amount','unitMeasure','description')
+                                        ->where('request_quotitations_id',$idRe)->get();
+
+        foreach ($requestDetail as $key => $detail)
+        {
+            $idDetail = $detail->id;
+            $res = Detail::select('id','unitPrice','totalPrice')->where('request_details_id',$idDetail)
+            ->where('quotations_id',$idCo)->get();
+            $detail['detalle']= $res;
+        }
+        
+        $quote['details'] = $requestDetail;
+        return $quote;
+        
     }
 
     /**

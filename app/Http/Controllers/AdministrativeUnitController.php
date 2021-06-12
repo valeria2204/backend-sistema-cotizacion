@@ -65,9 +65,10 @@ class AdministrativeUnitController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [ 
+            
             'name' => 'required', 
             'faculties_id' => 'required', 
-            
+
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
