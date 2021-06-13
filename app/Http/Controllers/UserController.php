@@ -361,6 +361,64 @@ class UserController extends Controller
     }
 
     /**
+     * Devuelve todos los usuarios que no pertenecen a una unidad administrativa *s*
+     *
+     * @param  int  $id de unidad administrativa
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsersOutUnitAdministrative($id)
+    {
+        $users = User::select('id','name','lastName')->get();
+        $usersOutUnit = array();
+        foreach ($users as $kuo => $user) {
+             $userHaveroles = $user->roles()->get();
+             $valor = count($userHaveroles);
+             if($valor==0){
+                array_push($usersOutUnit,$user);
+             }            
+             else{//usuario perteneciente a la unidad
+                $userWithUnit = $user->roles()
+                        ->where(['administrative_unit_id'=>$id,'administrative_unit_status'=>1,'global_status'=>1])
+                        ->get();
+                $valort = count($userWithUnit);
+                if($valort==0){
+                   array_push($usersOutUnit,$user);
+                } 
+             }
+        }
+        return response()->json(['users'=>$usersOutUnit], $this-> successStatus);
+    }
+
+    /**
+     * Devuelve todos los usuarios que no pertenecen a una unidad de gasto *s*
+     *
+     * @param  int  $id de unidad administrativa
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsersOutUnitSpending($id)
+    {
+        $users = User::select('id','name','lastName')->get();
+        $usersOutUnit = array();
+        foreach ($users as $kso => $user) {
+             $userHaveroles = $user->roles()->get();
+             $valor = count($userHaveroles);
+             if($valor==0){
+                array_push($usersOutUnit,$user);
+             }            
+             else{//usuario perteneciente a la unidad
+                $userWithUnit = $user->roles()
+                        ->where(['spending_unit_id'=>$id,'spending_unit_status'=>1,'global_status'=>1])
+                        ->get();
+                $valort = count($userWithUnit);
+                if($valort==0){
+                   array_push($usersOutUnit,$user);
+                } 
+             }
+        }
+        return response()->json(['users'=>$usersOutUnit], $this-> successStatus);
+    }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
