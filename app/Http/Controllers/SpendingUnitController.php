@@ -8,6 +8,7 @@ use App\SpendingUnit;
 use App\AdministrativeUnit;
 use App\Faculty;
 use App\Role;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class SpendingUnitController extends Controller
