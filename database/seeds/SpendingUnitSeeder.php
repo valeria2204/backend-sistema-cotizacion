@@ -18,13 +18,18 @@ class SpendingUnitSeeder extends Seeder
         $SpendingUnit->save();
 
         $SpendingUnit2=new SpendingUnit();
-        $SpendingUnit2->nameUnidadGasto="biblioteca de economia";
-        $SpendingUnit2->faculties_id=3;
+        $SpendingUnit2->nameUnidadGasto="biblioteca de derecho";
+        $SpendingUnit2->faculties_id=2;
         $SpendingUnit2->save();
 
         $SpendingUnit3=new SpendingUnit();
-        $SpendingUnit3->nameUnidadGasto="biblioteca de tecnologia";
-        $SpendingUnit3->faculties_id=1;
+        $SpendingUnit3->nameUnidadGasto="biblioteca de economia";
+        $SpendingUnit3->faculties_id=3;
         $SpendingUnit3->save();
+
+        $SpendingUnit4=new SpendingUnit();
+        $SpendingUnit4->nameUnidadGasto="biblioteca de tecnologia";
+        $SpendingUnit4->faculties_id=1;
+        $SpendingUnit4->save();
     }
 }

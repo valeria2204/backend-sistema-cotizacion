@@ -199,107 +199,77 @@ class UserController extends Controller
         return $ci;
 
     }
-
+    /**
+     * Devuelve una lista de usuarios con rol de jefe administrativo sin unidad *s*
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function usersAdmiWithoutDrives()
     {
-        ////$users = User::select('id','name','lastName','administrative_units_id')->get();
-        //$users = User::select('id','name','lastName')->get();
-        ////$countUsers = count($users);
-        //$resp = array();
-        //foreach ($users as $key => $user)
-        //{
-        //     $roles = $user->roles()->get();
-        //     dd($roles);
-        //     $countRoles = count($roles);
-        //   if($countRoles>0)
-        //    {
-        //            $rol1 = Role::where('nameRol','Jefe Administrativo')->get();
-        //            $unRol = $rol1[0];
-        //            $idRol = $unRol['id'];      
-        //            foreach ($roles as $keyR => $rol) 
-        //            {              
-        //                if($rol['id']==$idRol && $user['administrative_units_id']== null)
-        //                {           
-        //                    $resp[] = $user;
-        //                }
-        //                else
-        //                {
-        //                    //no guarda a los usuarios          
-        //                }
-        //            }
-        //    }
-        //    else
-        //    {
-        //       //no guarda a los usuarios
-        //    }
-        //}
-        //$it = 'Jefe Administrativo';
-        //$namerol = 'Jefe Administrativo';
         $resp = array();
-        $users = User::select('id','name','lastName')->get();
-        foreach ($users as $ku => $user){
-            $arregloRoles = $user->roles()->get();
-            foreach($arregloRoles as $kr => $rol){
-                $namerol = $rol->nameRol;
-                if($namerol=='Jefe Administrativo'){
-                    $rolestatus = $rol->pivot->role_status;
-                    $adminstatus = $rol->pivot->administrative_unit_status;
-                    $spenstatus = $rol->pivot->spending_unit_status;
-                    if($rolestatus==1 && $adminstatus==0 && $spenstatus==0){
-                        $resp[] = $user;
+        $rol_head_admin = Role::find(2);
+        //usuarios con rol de jefe administrativo
+        $users = $rol_head_admin->users()->get();
+        foreach ($users as $ksu => $user){
+            $admin_new = $user->roles()
+                            ->where(['role_status'=>1,'administrative_unit_status'=>0,'global_status'=>1])
+                            ->whereNull('administrative_unit_id')
+                            ->get();       
+            $admin_new_valor = count($admin_new);     
+            if($admin_new_valor == 1){//usuarios con rol de jefe activo y sin unidad
+                $admin = ['id'=>$user->id,'name'=>$user->name,'lastName'=>$user->lastName];
+                array_push($resp,$admin);
+            }
+            else{
+                if($admin_new_valor==0){
+                    $admin_old = $user->roles()
+                            ->where(['role_status'=>1,'administrative_unit_status'=>0,'global_status'=>0])
+                            ->whereNotNull('administrative_unit_id')
+                            ->get();
+                    $admin_old_valor = count($admin_old);
+                    if($admin_old_valor >= 1){//usuarios con rol de jefe activo y que pertenecieron antes a una unidad
+                        $admin = ['id'=>$user->id,'name'=>$user->name,'lastName'=>$user->lastName];
+                        array_push($resp,$admin);
                     }
-                }  
+                }
             }
         }
         return response()->json(['users'=>$resp], $this-> successStatus);
     }
 
+    /**
+     * Devuelve una lista de usuarios con rol de jefe de gasto sin unidad *s*
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function usersSpendingWithoutDrives()
     {
-        //$users2 = User::select('id','name','lastName','spending_units_id')->get();
-        //$countUsers2 = count($users2);
-        //$resp2 = array();
-        //foreach ($users2 as $key => $user2)
-        //{
-        //     $roles2 = $user2->roles()->get();   
-        //     $countRoles2 = count($roles2);
-        //   if($countRoles2>0)
-        //    {
-        //            $rol2 = Role::where('nameRol','Jefe unidad de Gasto')->get();
-        //            $unRol2 = $rol2[0];
-        //            $idRol2 = $unRol2['id'];          
-        //            foreach ($roles2 as $keyR2 => $rol2) 
-        //            {                
-        //                if($rol2['id']==$idRol2 && $user2['spending_units_id']== null)
-        //                {        
-        //                    $resp2[] = $user2;
-        //                }
-        //                else
-        //                {
-        //                    //no guarda a los usuarios          
-        //                }
-        //            }
-        //    }
-        //    else
-        //    {
-        //       //no guarda a los usuarios
-        //    }
-        //}
         $resp2 = array();
-        $users = User::select('id','name','lastName')->get();
-        foreach ($users as $ku => $user){
-            $arregloRoles = $user->roles()->get();
-            foreach($arregloRoles as $kr => $rol){
-                dd($rol);
-                $namerol = $rol->nameRol;
-                if($namerol=='Jefe unidad de gasto'){
-                    $rolestatus = $rol->pivot->role_status;
-                    $adminstatus = $rol->pivot->administrative_unit_status;
-                    $spenstatus = $rol->pivot->spending_unit_status;
-                    if($rolestatus==1 && $adminstatus==0 && $spenstatus==0){
-                        $resp2[] = $user;
+        $rol_head_spen = Role::find(1);
+        //usuarios con rol de jefe de gasto
+        $users = $rol_head_spen->users()->get();
+        foreach ($users as $kdu => $user){
+            $admin_new = $user->roles()
+                            ->where(['role_status'=>1,'spending_unit_status'=>0,'global_status'=>1])
+                            ->whereNull('spending_unit_id')
+                            ->get();       
+            $admin_new_valor = count($admin_new);     
+            if($admin_new_valor == 1){//usuarios con rol de jefe activo y sin unidad
+                $admin = ['id'=>$user->id,'name'=>$user->name,'lastName'=>$user->lastName];
+                array_push($resp2,$admin);
+            }
+            else{
+                if($admin_new_valor==0){
+                    $admin_old = $user->roles()
+                            ->where(['role_status'=>1,'spending_unit_status'=>0,'global_status'=>0])
+                            ->whereNotNull('spending_unit_id')
+                            ->get();
+                    $admin_old_valor = count($admin_old);
+                    if($admin_old_valor >= 1){//usuarios con rol de jefe activo y que pertenecieron antes a una unidad
+                        $admin = ['id'=>$user->id,'name'=>$user->name,'lastName'=>$user->lastName];
+                        array_push($resp2,$admin);
                     }
-                }  
+                }
             }
         }
         return response()->json(['users'=>$resp2], $this-> successStatus);
