@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('usersAdmi/WithoutDrives','UserController@usersAdmiWithoutDrives');
     /** Responde con los usuarios que tienen el rol de jefe de unidad de gasto y no estan asignados a una unidad de gasto */
     Route::get('usersSpending/WithoutDrives','UserController@usersSpendingWithoutDrives');
+    /**SECTION PERSONAL */
     /**Devuelve los usuarios pertenecientes a una unidad administrativa */
     Route::get('users/unit/administrative/{id}', 'UserController@showUsersUnitAdministrative');
      /**Devuelve los usuarios pertenecientes a una unidad de gasto */

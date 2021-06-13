@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller; 
 use App\User;
 use App\Role;
+use App\SpendingUnit;
+use App\AdministrativeUnit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -276,30 +278,84 @@ class UserController extends Controller
     }
     
     /**
-     * Devuelve todos los usuarios pertenecientes a una unidad administrativa
+     * Devuelve todos los usuarios pertenecientes a una unidad administrativa *s*
      *
      * @param  int  $id de unidad administrativa
      * @return \Illuminate\Http\Response
      */
     public function showUsersUnitAdministrative($id)
     {
-        $users = User::where('administrative_units_id',$id)->get();
+        $administrativeUnit = AdministrativeUnit::select('id')->where('id',$id)->first();
+        $users = $administrativeUnit->users()
+                ->where(['role_status'=>1,'administrative_unit_status'=>1,'global_status'=>1])
+                ->get();
         foreach ($users as $key => $user) {
-            $user['roles']=$user->roles;
+            $rolesactindex = $user->roles()
+                    ->where('role_status',1)
+                    ->where('global_status',1)
+                    ->get();
+             $valor = count($rolesactindex);
+             $nameRol = "";
+             if($valor>1){
+                for ($i = 0; $i < $valor; $i++){
+                    $rolm = $rolesactindex[$i];
+                    if($i==$valor-1){
+                        $nameRol = $nameRol.$rolm['nameRol'];
+                    }
+                    else{
+                        $nameRol = $nameRol.$rolm['nameRol'].', ';
+                    }
+                }
+             }
+             else{
+                 if($valor==1 ){
+                    $rold = $rolesactindex[0];
+                    $nameRol = $rold['nameRol'];
+                 }
+             }
+             $userP = ['id'=>$user->id,'name'=>$user->name,'lastName'=>$user->lastName,'ci'=>$user->ci,'phone'=>$user->phone,'roles'=>$nameRol];
+             $users[$key] = $userP;
         }
         return response()->json(['users'=>$users], $this-> successStatus);
     }
     /**
-     * Devuelve todos los usuarios pertenecientes a una unidad de gasto
+     * Devuelve todos los usuarios pertenecientes a una unidad de gasto *s*
      *
      * @param  int  $id de unidad administrativa
      * @return \Illuminate\Http\Response
      */
     public function showUsersUnitSpending($id)
     {
-        $users = User::where('spending_units_id',$id)->get();
+        $spendingUnit = SpendingUnit::select('id')->where('id',$id)->first();
+        $users = $spendingUnit->users()
+                ->where(['role_status'=>1,'spending_unit_status'=>1,'global_status'=>1])
+                ->get();
         foreach ($users as $key => $user) {
-            $user['roles']=$user->roles;
+            $rolesactindex = $user->roles()
+                    ->where('role_status',1)
+                    ->where('global_status',1)
+                    ->get();
+             $valor = count($rolesactindex);
+             $nameRol = "";
+             if($valor>1){
+                for ($i = 0; $i < $valor; $i++){
+                    $rolm = $rolesactindex[$i];
+                    if($i==$valor-1){
+                        $nameRol = $nameRol.$rolm['nameRol'];
+                    }
+                    else{
+                        $nameRol = $nameRol.$rolm['nameRol'].', ';
+                    }
+                }
+             }
+             else{
+                 if($valor==1 ){
+                    $rold = $rolesactindex[0];
+                    $nameRol = $rold['nameRol'];
+                 }
+             }
+             $userP = ['id'=>$user->id,'name'=>$user->name,'lastName'=>$user->lastName,'ci'=>$user->ci,'phone'=>$user->phone,'roles'=>$nameRol];
+             $users[$key] = $userP;
         }
         return response()->json(['users'=>$users], $this-> successStatus);
     }
