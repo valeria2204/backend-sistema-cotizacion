@@ -180,49 +180,34 @@ class SpendingUnitController extends Controller
         }
         return response()->json(['message'=> "Asignacion de jefe exitosa"], $this-> successStatus);
         //return response()->json(['message'=>true], 200);
-        
     }
-    
+
+    /**
+     * Asigna personal a una unidad de gasto *s*
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function assignPersonal(Request $request){
         $validator = Validator::make($request->all(), [ 
             'idUser' => 'required', 
-            'spending_units_id' => 'required', 
+            'idUnit' => 'required',  
             'idRol' => 'required',
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
-        $input = $request->all();
-        $tamInput = count($input);
-        $id_user = $input['idUser'];
-        $id_unit = $input['spending_units_id'];
-        //si se le manda el id del rol entonces registra el rol que tendra ese usuario dentro la unidad
-        $idRol = $input['idRol'];
-        $user = User::find($id_user);
-        $user['spending_units_id'] = $id_unit;
-        $user->update();
-        //$user->roles()->attach($idRol);
-        $roles = $user->roles()->orderBy('id','DESC')->get();
-        dd($roles);
-        foreach($roles as $keyrl => $rol){
-            $numRoles = count($roles);
-            //$ty=$rol[]
-            $rol_user = $rol['pivot'];
-            //$tty= $rol_user['id'];
-            //dd($rol_user);
-            if($rol_user['role_id']==$idRol){
-                $gasto['admin'] = $user;
+
+        $arr_id_roles = $request->idRol;
+        $user = User::find($request->idUser);
+        foreach($arr_id_roles as $or => $id_one_rol){
+            //se le puede asignar todos los roles excepto administrador del sistema y jefe de unidad
+            if($id_one_rol!=1 && $id_one_rol!=2 && $id_one_rol!=3){
+                $rol_user_unit = $user->roles()
+                ->attach($id_one_rol,['spending_unit_id'=>$request->idUnit,'spending_unit_status'=>1]);
             }
-            /*else{
-                if($gasto['admin']==null && $keyr==$numRoles-1){
-                    $gasto['admin'] = $userF;
-                }
-            }*/
         }
-        //$rol = $roles[$numRoles-1];
-        //$rol['spending_units_id']= $id_unit;
-        //$rol->update();
-        return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
+        $message = $user->name." ".$user->lastName." se agrego al personal de su unidad";    
+        return response()->json(['message'=> $message], $this-> successStatus); 
     }
     
     /**

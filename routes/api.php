@@ -156,6 +156,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('assignBossesAdmin/{idU}/{idA}','AdministrativeUnitController@assignHeadUnit');
     /**Dado un id de unidad administrativa devuelve el jefe de unidad administrativa  */
     Route::get('getInfoAdmi/{idUnit}','AdministrativeUnitController@getAdmiUser');
+    /**SECTION PERSONAL */
+    /**Asigna a un usuario mas un rol como parte del personal de una unidad administrativa*/
+    Route::post('administrativeUnit/personal/new','AdministrativeUnitController@assignPersonal');
 
     /**SPENDING UNIT CONTROLLER */
     /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
@@ -164,8 +167,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('spendingUnits','SpendingUnitController@index');
     /**Dado un id de usuario y de unidad de gasto, se asigna el usuario como jefe de la unidad */
     Route::put('assignBossesSpending/{idU}/{idS}','SpendingUnitController@assignHeadUnit');
-    /**Regitra a un usuario como parte del personal de una unidad de gasto */
-    Route::post('personal/new','SpendingUnitController@assignPersonal');
+    /**SECTION PERSONAL */
+    /**Asigna a un usuario mas un rol como parte del personal de una unidad de gasto */
+    Route::post('spendingUnit/personal/new','SpendingUnitController@assignPersonal');
 
     /**EMPRESA CONTROLLER */
      /**Recibe los datos de una empresa dentro de un request para guardarlo */
