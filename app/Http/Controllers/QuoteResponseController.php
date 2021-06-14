@@ -91,17 +91,23 @@ class QuoteResponseController extends Controller
  
         $requestDetail = RequestDetail::select('id','amount','unitMeasure','description')
                                         ->where('request_quotitations_id',$idRe)->get();
+        $quo = array();
+        $quo = $quote;
 
         foreach ($requestDetail as $key => $detail)
         {
             $idDetail = $detail->id;
-            $res = Detail::select('id','unitPrice','totalPrice')->where('request_details_id',$idDetail)
-            ->where('quotations_id',$idCo)->get();
-            $detail['detalle']= $res;
-        }
+
+            $req = RequestDetail::select('request_details.id','request_details.amount'
+             ,'request_details.unitMeasure','request_details.description','details.unitPrice','details.totalPrice')
+             ->join('details','request_details.id','=','details.request_details_id')
+             ->where('request_details.id','=',$idDetail)
+             ->where('details.quotations_id','=',$idCo)->get();
+            $quo[] = $req;
         
-        $quote['details'] = $requestDetail;
-        return response()->json(['Cotizacion'=>$quote], $this-> successStatus);
+        }
+
+        return response()->json(['Cotizacion'=>$quo], $this-> successStatus);
        
         
     }
