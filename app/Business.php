@@ -16,4 +16,7 @@ class Business extends Model
         'nameEmpresa','nit','email','phone','direction','rubro'
     ];
 
+    public function quotations(){
+        return $this->hasMany(Quotation::class);
+    }
 }

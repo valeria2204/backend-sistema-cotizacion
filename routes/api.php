@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
 
+
 Route::post('login', 'UserController@login');
 
 /**CopanyCode */
@@ -34,9 +35,10 @@ Route::post("quotitacion/response","QuoteResponseController@storageQuote");
 Route::post("quotitacion/response/{id}","QuoteResponseController@storageDetails");
 /**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quotitacion/response/file/{id}","QuoteResponseController@uploadFile");
-
 /**Dado un id de una cotizacion y un id de solicitud de cotizacion, entrega los detalles de esa cotizacion */
 Route::get("quote/{idCo}/{idRe}","QuoteResponseController@show");
+/**Dado un id de solicitud de cotizacion devuelve todas las cotizaciones con sus respectivos detalles */
+Route::get("listQuotation/{idRe}","QuoteResponseController@getQuotes");
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
@@ -68,10 +70,15 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('usersAdmi/WithoutDrives','UserController@usersAdmiWithoutDrives');
     /** Responde con los usuarios que tienen el rol de jefe de unidad de gasto y no estan asignados a una unidad de gasto */
     Route::get('usersSpending/WithoutDrives','UserController@usersSpendingWithoutDrives');
+    /**SECTION PERSONAL */
     /**Devuelve los usuarios pertenecientes a una unidad administrativa */
     Route::get('users/unit/administrative/{id}', 'UserController@showUsersUnitAdministrative');
      /**Devuelve los usuarios pertenecientes a una unidad de gasto */
     Route::get('users/unit/spending/{id}', 'UserController@showUsersUnitSpending');
+    /**Devuelve los usuarios que no pertenecen a una unidad administrativa */
+    Route::get('users/unit/administrative/out/{id}', 'UserController@showUsersOutUnitAdministrative');
+    /**Devuelve los usuarios que no pertenecen a una unidad de gasto */
+    Route::get('users/unit/spending/out/{id}', 'UserController@showUsersOutUnitSpending');
 
     /**COTIZATION CONTROLLER */
     Route::get('quotitations', 'RequestQuotitationController@index');
@@ -151,6 +158,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('assignBossesAdmin/{idU}/{idA}','AdministrativeUnitController@assignHeadUnit');
     /**Dado un id de unidad administrativa devuelve el jefe de unidad administrativa  */
     Route::get('getInfoAdmi/{idUnit}','AdministrativeUnitController@getAdmiUser');
+    /**SECTION PERSONAL */
+    /**Asigna a un usuario mas un rol como parte del personal de una unidad administrativa*/
+    Route::post('administrativeUnit/personal/new','AdministrativeUnitController@assignPersonal');
 
     /**SPENDING UNIT CONTROLLER */
     /**Recibe el nombre de la unidad de gasto y la id de la FACULTAD dentro de un request para guardarlo */
@@ -159,8 +169,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('spendingUnits','SpendingUnitController@index');
     /**Dado un id de usuario y de unidad de gasto, se asigna el usuario como jefe de la unidad */
     Route::put('assignBossesSpending/{idU}/{idS}','SpendingUnitController@assignHeadUnit');
-    /**Regitra a un usuario como parte del personal de una unidad de gasto */
-    Route::post('personal/new','SpendingUnitController@assignPersonal');
+    /**SECTION PERSONAL */
+    /**Asigna a un usuario mas un rol como parte del personal de una unidad de gasto */
+    Route::post('spendingUnit/personal/new','SpendingUnitController@assignPersonal');
 
     /**EMPRESA CONTROLLER */
      /**Recibe los datos de una empresa dentro de un request para guardarlo */

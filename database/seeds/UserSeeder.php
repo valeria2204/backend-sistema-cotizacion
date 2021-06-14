@@ -33,8 +33,8 @@ class UserSeeder extends Seeder
         $user->email="jenny@gmail.com";
         $user->userName="jenny";
         $user->password=bcrypt("jenny");
-        //$user->administrative_units_id=1;
         $user->save();
+        //jefe de la unidad administrativa 1
         $user->roles()->attach(2,['administrative_unit_id'=>1,'administrative_unit_status'=>1]);
 //
         $user = new User();
@@ -46,8 +46,8 @@ class UserSeeder extends Seeder
         $user->email="ricardo@gmail.com";
         $user->userName="ricardo";
         $user->password=bcrypt("ricardo");
-        //$user->	spending_units_id=1;
         $user->save();
+        //jefe de la unidad de gasto 1
         $user->roles()->attach(1,['spending_unit_id'=>1,'spending_unit_status'=>1]);
 
         $user = new User();
@@ -59,8 +59,8 @@ class UserSeeder extends Seeder
         $user->email="dani@gmail.com";
         $user->userName="danii";
         $user->password=bcrypt("danii");
-        //$user->administrative_units_id=3;
         $user->save();
+        //jefe de la unidad administrativa 3
         $user->roles()->attach(2,['administrative_unit_id'=>3,'administrative_unit_status'=>1]);
 
         $user = new User();
@@ -72,8 +72,8 @@ class UserSeeder extends Seeder
         $user->email="nicole@gmail.com";
         $user->userName="nicol";
         $user->password=bcrypt("nicol");
-        //$user->	spending_units_id=2;
         $user->save();
+        //jefe de la unidad de gasto 2
         $user->roles()->attach(1,['spending_unit_id'=>2,'spending_unit_status'=>1]);
 
         $user = new User();
@@ -85,8 +85,34 @@ class UserSeeder extends Seeder
         $user->email="juan10@gmail.com";
         $user->userName="juan10";
         $user->password=bcrypt("juan10");
-        //$user->	spending_units_id=3;
+        //jefe de la unidad de gasto 3
         $user->save();
         $user->roles()->attach(1,['spending_unit_id'=>3,'spending_unit_status'=>1]);
+
+        $user = new User();
+        $user->name = "Diego";
+        $user->lastName="Vargas";
+        $user->phone="64376328";
+        $user->direction="cbba-sacaba";
+        $user->ci="16511253";
+        $user->email="diegov@gmail.com";
+        $user->userName="diego";
+        $user->password=bcrypt("diego");
+        $user->save();
+        //usuario con rol jefe administrativo sin unidad
+        $user->roles()->attach(2);
+
+        $user = new User();
+        $user->name = "Valeria";
+        $user->lastName="Zurita";
+        $user->phone="68387728";
+        $user->direction="cbba-sacaba";
+        $user->ci="16123453";
+        $user->email="valeria12@gmail.com";
+        $user->userName="valeria";
+        $user->password=bcrypt("valeria");
+        $user->save();
+        //usuario con rol jefe de gasto sin unidad
+        $user->roles()->attach(1);
     }
 }

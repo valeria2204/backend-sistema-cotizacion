@@ -24,8 +24,8 @@ class AdministrativeUnitController extends Controller
         $administrativeUnits = AdministrativeUnit::select('id','name','faculties_id')->get();
         foreach ($administrativeUnits as $kad => $administrativeUnit) {
             $facultie_id =  $administrativeUnit['faculties_id'];
-            $faculty = Faculty::select('id','nameFacultad')->where('id',$facultie_id)->get();
-            $administrativeUnit['faculty'] = $faculty;
+            $faculty = Faculty::select('nameFacultad')->where('id',$facultie_id)->first();
+            $administrativeUnit['faculty'] = $faculty->nameFacultad;
             //solo hay un administrador por unidad
             $useradmin = $administrativeUnit->users()
                         ->where(['role_id'=>2,'role_status'=>1,'administrative_unit_status'=>1,'global_status'=>1])
@@ -44,7 +44,7 @@ class AdministrativeUnitController extends Controller
             }
             $administrativeUnits[$kad]=$administrativeUnit;        
         }
-        return response()->json(['Administrative_unit'=>$administrativeUnits],200);
+        return response()->json(['Administrative_unit'=>$administrativeUnits],$this-> successStatus);
     }
 
     /**
@@ -57,7 +57,12 @@ class AdministrativeUnitController extends Controller
         //
     }
 
-    public function register(Request $request,$idAdmi,$idUser)
+    /**
+     * Registra una unidad administrativa con/sin jefe *s*
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [ 
             
@@ -68,100 +73,116 @@ class AdministrativeUnitController extends Controller
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
         }
-        $input = $request->all(); 
-        $id_facultad = $input['faculties_id'];
+        $id_facultad = $request['faculties_id'];
         $facultad = Faculty::find($id_facultad);
         //no permite registrar mas de una unidad dentro de la misma facultad
-        if($facultad['inUse'] ==1)
-        {
+        if($facultad['inUse'] ==1){
               $message = 'La facultad '.$facultad['nameFacultad'].' ya tiene una unidad administrativa ';
               return response()->json(['message'=>$message], 200); 
         }
         $facultad['inUse']=1;
         $facultad->save();
-        $id_user = $input['idUser'];
+        $requestAdminUnit = $request->only('name','faculties_id');
+        $administrativeUnit = AdministrativeUnit::create($requestAdminUnit);
+        $id_user = $request['idUser'];
+        //si se le manda el id del usuario entonces registra a ese usuario como administrador de la unidad creada
         if($id_user!=null){
-         //si se le manda el id del usuario entonces registra a ese usuario como administrador de la unidad creada        if($tamInput==3){
-               $requestAdminUnit = $request->only('name','faculties_id');
-               $administrativeUnit = AdministrativeUnit::create($requestAdminUnit);
-               $user2 = User::find($id_user);
-               //if else
-               //$user2['administrative_units_id'] = $administrativeUnit['id'];
-               //$user2->update();
+               $user_admin_no_unit = User::find($id_user);
+               //caso usuario con asignacion de rol jefe reciente 
+               $admin_new = $user_admin_no_unit->roles()
+                            ->where(['role_id'=>2,'role_status'=>1,'administrative_unit_status'=>0,'global_status'=>1])
+                            ->get();
+                $admin_new_valor = count($admin_new);
+                if($admin_new_valor == 1){
+                    $admin_new_ru = $admin_new[0];
+                    $role_user_id = $admin_new_ru->pivot->id;
+                    $role_user = DB::table('role_user')
+                                ->where('id',$role_user_id)
+                                ->update(['administrative_unit_id'=>$administrativeUnit['id'],'administrative_unit_status'=>1,'updated_at' => now()]);
+                }
+                else{
+                    //caso usuario exjefe, quedo con rol pero sin unidad
+                    if($admin_new_valor==0){
+                        $user_admin_no_unit->roles()->attach(2,['administrative_unit_id'=>$administrativeUnit['id'],'administrative_unit_status'=>1]);
+                    }
+                }
                return response()->json(['message'=> "Registro exitoso"], $this-> successStatus); 
         }
         else{
-                $administrativeUnit = AdministrativeUnit::create($input);
                 return response()->json(['message'=>"Registro exitoso"], $this-> successStatus);
         }
     }
 
+    /**
+     * Asigna al jefe de una unidad administrativa *s*
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function assignHeadUnit($idU,$idA)
     {
-        //$user = User::where('id',$idU)->get();
-        //$countUsers = count($user);
-//
-        //$unitExist = AdministrativeUnit::where('id',$idA)->get();
-        //$countUnits = count($unitExist);
-//
-        //if($countUsers > 0)
-        //{
-        //    if($countUnits > 0)
-        //    {
-        //        $user2 = User::find($idU);
-        //        $user2['administrative_units_id'] = $idA;
-        //        $user2->update();
-        //        $message2 = 'Registro exitoso ';
-        //        return response()->json(['message'=>$message2], 200);
-        //    }
-        //    else
-        //    {
-        //        $message = 'La unidad Administrativa con id'. $idA.' no existe  ';
-        //        return response()->json(['message'=>$message], 200);
-        //    }
+        //DESHABILITAR al jefe actual de esta unidad, si es que lo tiene
+        $administrativeUnit = AdministrativeUnit::select('id')->where('id',$idA)->first();
+        $useradmin_old = $administrativeUnit->users()
+                        ->where(['role_id'=>2,'role_status'=>1,'administrative_unit_status'=>1,'global_status'=>1])
+                        ->get();
+        $valor = count($useradmin_old);
+        if($valor==1){
+            $useradmin_old_ru = $useradmin_old[0];
+            $role_usero_id = $useradmin_old_ru->pivot->id;
+            $role_user1 = DB::table('role_user')
+                        ->where('id',$role_usero_id)
+                        ->update(['administrative_unit_status'=>0,'global_status'=>0,'updated_at' => now()]);
+        }
+        //HABILITAR al nuevo jefe de esta unidad
+        $user_admin_no_unit = User::find($idU);
+        //caso usuario con asignacion de rol jefe reciente 
+        $admin_new = $user_admin_no_unit->roles()
+                    ->where(['role_id'=>2,'role_status'=>1,'administrative_unit_status'=>0,'global_status'=>1])
+                    ->get();
+        $admin_new_valor = count($admin_new);
+        if($admin_new_valor == 1){
+            $admin_new_ru = $admin_new[0];
+            $role_usern_id = $admin_new_ru->pivot->id;
+            $role_user2 = DB::table('role_user')
+                        ->where('id',$role_usern_id)
+                        ->update(['administrative_unit_id'=>$idA,'administrative_unit_status'=>1,'updated_at' => now()]);
+        }
+        else{
+            //caso usuario exjefe, quedo con rol pero sin unidad
+            if($admin_new_valor==0){
+                $user_admin_no_unit->roles()->attach(2,['administrative_unit_id'=>$idA,'administrative_unit_status'=>1]);
+            }
+        }
+        return response()->json(['message'=> "Asignacion de jefe exitosa"], $this-> successStatus);
+        //return response()->json(['message'=>true], 200);
+    }
 
-        //}
-        //else
-        //{
-        //    $message2 = 'El usuario con id'. $idU.' no existe  ';
-        //    return response()->json(['message'=>$message2], 200);
-        //}
-        $user = User::find($idU);
-        //$arregloRoles = $user->roles()->get();
-        //foreach($arregloRoles as $kr => $rol){
-        //    $namerol = $rol->nameRol;
-        //    if($namerol=='Jefe unidad de gasto'){
-        //        $rolestatus = $rol->pivot->role_status;
-        //        $adminstatus = $rol->pivot->administrative_unit_status;
-        //        $spenstatus = $rol->pivot->spending_unit_status;
-        //        if($rolestatus==1 && $adminstatus==0 && $spenstatus==0){
-        //            $resp2[] = $user;
-        //        }
-        //    }
-        //dd($ar);
-        //if(1==2){
+    /**
+     * Asigna personal a una unidad administrativa *s*
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function assignPersonal(Request $request){
+        $validator = Validator::make($request->all(), [ 
+            'idUser' => 'required', 
+            'idUnit' => 'required',  
+            'idRol' => 'required',
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
 
-        //}
-        //else{
-            $user->roles()->attach(1,['administrative_unit_id'=>$idA,'administrative_unit_status'=>1]);
-            //$yt=$user->roles()->get();
-            //$r=$yt[0];
-            //$e = $r->where('pivot_id',19);
-            $users = DB::table('role_user')
-              ->where('id', 19)
-              ->update(['updated_at' => now()]);
-              //->touch();
-              //->update(['administrative_unit_status' =>987]);
-              //->save();
-            //$e ->updateExistingPivot(1,['administrative_unit_status'=>111]);
-            dd('eer');
-            //dd($user->roles()->where('id',19)->get());
-
-            //$user->roles()->updateExistingPivot(1,['administrative_unit_status'=>76])->where('id',19);
-            //$user->update;
-        //}
-        //dd($are);
-        return response()->json(['message'=>true], 200);
+        $arr_id_roles = $request->idRol;
+        $user = User::find($request->idUser);
+        foreach($arr_id_roles as $jor => $id_one_rol){
+            //se le puede asignar todos los roles excepto administrador del sistema y jefe de unidad
+            if($id_one_rol!=1 && $id_one_rol!=2 && $id_one_rol!=3){
+                $rol_user_unit = $user->roles()
+                ->attach($id_one_rol,['administrative_unit_id'=>$request->idUnit,'administrative_unit_status'=>1]);
+            }
+        }
+        $message = $user->name." ".$user->lastName." se agrego al personal de su unidad";    
+        return response()->json(['message'=> $message], $this-> successStatus); 
     }
 
     public function getAdmiUser($idUnit)
