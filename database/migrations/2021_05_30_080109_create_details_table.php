@@ -17,6 +17,10 @@ class CreateDetailsTable extends Migration
             $table->id();
             $table->integer('unitPrice'); //precion unitario
             $table->integer('totalPrice');//precio total
+            $table->string('brand')->nullable();
+            $table->string('industry')->nullable();
+            $table->string('model')->nullable();
+            $table->string('warrantyTime')->nullable();
             $table->foreignId('request_details_id')->constrained();
             $table->foreignId('quotations_id')->constrained()->onDelete('cascade');
             $table->timestamps();

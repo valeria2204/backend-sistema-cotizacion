@@ -13,7 +13,7 @@ class SpendingUnit extends Model
 {
     //
     protected $fillable = [
-        'nameUnidadGasto','faculties_id', 'faculty', 'administrativeUnit',
+        'nameUnidadGasto','faculties_id'
     ];
 
     public function faculties(){
@@ -21,20 +21,20 @@ class SpendingUnit extends Model
     }
 
     public function users(){
-        return $this->belongsToMany(User::class)
-                    ->withPivot('role_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status')
+        return $this->belongsToMany(User::class,'role_user')
+                    ->withPivot('id','role_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                     ->withTimestamps();
     }
 
     public function roles(){
-        return $this->belongsToMany(Role::class)
-                    ->withPivot('user_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status')
+        return $this->belongsToMany(Role::class,'role_user')
+                    ->withPivot('id','user_id','administrative_unit_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                     ->withTimestamps();
     }
 
     public function administrativeUnits(){
-        return $this->belongsToMany(AdministrativeUnit::class)
-                    ->withPivot('user_id','role_id','role_status','administrative_unit_status','spending_unit_status')
+        return $this->belongsToMany(AdministrativeUnit::class,'role_user')
+                    ->withPivot('id','user_id','role_id','role_status','administrative_unit_status','spending_unit_status','global_status')
                     ->withTimestamps();
     }
 
