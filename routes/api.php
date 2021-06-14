@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
 
+
 Route::post('login', 'UserController@login');
 
 /**CopanyCode */
@@ -30,6 +31,8 @@ Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations
 Route::post("quoteResponse","QuoteResponseController@store");
 /**Dado un id de una cotizacion y un id de solicitud de cotizacion, entrega los detalles de esa cotizacion */
 Route::get("quote/{idCo}/{idRe}","QuoteResponseController@show");
+/**Dado un id de solicitud de cotizacion devuelve todas las cotizaciones con sus respectivos detalles */
+Route::get("listQuotation/{idRe}","QuoteResponseController@getQuotes");
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
