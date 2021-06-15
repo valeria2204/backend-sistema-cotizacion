@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Quotation;
 
 class QuotationSeeder extends Seeder
 {
@@ -11,6 +12,14 @@ class QuotationSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $Quotation = new Quotation();
+        $Quotation->offerValidity="2021-06-27";
+        $Quotation->deliveryTime="2021-06-27";
+        $Quotation->answerDate="2021-06-13";
+        $Quotation->paymentMethod="efectivo";
+        $Quotation->observation="Esto es una observacion";
+        $Quotation->company_codes_id=1;
+        $Quotation->business_id=1;
+        $Quotation->save();
     }
 }
