@@ -146,8 +146,9 @@ class QuoteResponseController extends Controller
                       $total = $price->totalPrice;
                       $totals = $totals + $total;
                     }
-                    $res['Items Cotizados'] = $nroDetails;
-                    $res['Total en Bs'] = $totals;
+                    $res['ItemsCotizados'] = $nroDetails;
+                    $res['TotalEnBs'] = $totals;
+                    $res['idCotizacion'] = $idQuo;
                     $lista[] = $res;
                     
         
