@@ -157,6 +157,34 @@ class AdministrativeUnitController extends Controller
         //return response()->json(['message'=>true], 200);
     }
 
+    /**
+     * Asigna personal a una unidad administrativa *s*
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function assignPersonal(Request $request){
+        $validator = Validator::make($request->all(), [ 
+            'idUser' => 'required', 
+            'idUnit' => 'required',  
+            'idRol' => 'required',
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+
+        $arr_id_roles = $request->idRol;
+        $user = User::find($request->idUser);
+        foreach($arr_id_roles as $jor => $id_one_rol){
+            //se le puede asignar todos los roles excepto administrador del sistema y jefe de unidad
+            if($id_one_rol!=1 && $id_one_rol!=2 && $id_one_rol!=3){
+                $rol_user_unit = $user->roles()
+                ->attach($id_one_rol,['administrative_unit_id'=>$request->idUnit,'administrative_unit_status'=>1]);
+            }
+        }
+        $message = $user->name." ".$user->lastName." se agrego al personal de su unidad";    
+        return response()->json(['message'=> $message], $this-> successStatus); 
+    }
+
     public function getAdmiUser($idUnit)
     {
         

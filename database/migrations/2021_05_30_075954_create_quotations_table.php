@@ -21,6 +21,7 @@ class CreateQuotationsTable extends Migration
             $table->string('paymentMethod'); //metodo de pago
             $table->string('observation')->nullable();
             $table->foreignId('company_codes_id')->constrained();
+            $table->foreignId('business_id')->constrained();
             $table->timestamps();
         });
     }

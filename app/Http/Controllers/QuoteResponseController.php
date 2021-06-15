@@ -7,6 +7,7 @@ use App\Quotation;
 use App\Detail;
 use App\RequestDetail;
 use App\Business;
+use App\CompanyCode;
 
 class QuoteResponseController extends Controller
 {
@@ -90,20 +91,74 @@ class QuoteResponseController extends Controller
  
         $requestDetail = RequestDetail::select('id','amount','unitMeasure','description')
                                         ->where('request_quotitations_id',$idRe)->get();
+        $quo = array();
+        $quo = $quote;
 
         foreach ($requestDetail as $key => $detail)
         {
             $idDetail = $detail->id;
-            $res = Detail::select('id','unitPrice','totalPrice')->where('request_details_id',$idDetail)
-            ->where('quotations_id',$idCo)->get();
-            $detail['detalle']= $res;
-        }
+
+            $req = RequestDetail::select('request_details.id','request_details.amount'
+             ,'request_details.unitMeasure','request_details.description','details.unitPrice','details.totalPrice')
+             ->join('details','request_details.id','=','details.request_details_id')
+             ->where('request_details.id','=',$idDetail)
+             ->where('details.quotations_id','=',$idCo)->get();
+            $quo[] = $req;
         
-        $quote['details'] = $requestDetail;
-        return $quote;
+        }
+
+        return response()->json(['Cotizacion'=>$quo], $this-> successStatus);
+       
         
     }
 
+    public function getQuotes($idReq)
+    {
+        //sacar nombres de empresa, numero de items cotizados, el total de todos los items cotizados
+        $lista = array();
+        $codesCompany = CompanyCode::where('request_quotitations_id',$idReq)->get();
+
+        $details = RequestDetail::where('request_quotitations_id',$idReq)->get();
+        $nroDetails = count($details);
+        
+        foreach($codesCompany as $key => $codeCompany)
+        {
+            $idCode = $codeCompany->id; 
+            $emailBussi = $codeCompany->email;
+            $quotations = Quotation::all();
+            foreach($quotations as $key2 => $quotation)
+            {
+                if($quotation['company_codes_id'] == $idCode) 
+                {
+                    $idQuo = $quotation->id;
+                    $empresa = Business::select('businesses.nameEmpresa')
+                    ->join('quotations','businesses.id','=','quotations.business_id')
+                    ->where('businesses.id','=',$idQuo)->get();
+                    $empresa2 = $empresa[0];
+                    $empresa3 = $empresa2['nameEmpresa'];
+                    $res['Empresa'] = $empresa3;
+
+                    $prices = Detail::select('totalPrice')->where('quotations_id',$idQuo)->get();
+                    $totals = 0;
+
+                    foreach($prices as $key3 => $price)
+                    {
+                      $total = $price->totalPrice;
+                      $totals = $totals + $total;
+                    }
+                    $res['Items Cotizados'] = $nroDetails;
+                    $res['Total en Bs'] = $totals;
+                    $lista[] = $res;
+                    
+        
+                
+                }
+            }
+        }
+
+        return response()->json(['Cotizaciones'=>$lista], $this-> successStatus);
+            
+    }
     /**
      * Update the specified resource in storage.
      *
