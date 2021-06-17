@@ -35,6 +35,7 @@ Route::post("quotitacion/response","QuoteResponseController@storageQuote");
 Route::post("quotitacion/response/{id}","QuoteResponseController@storageDetails");
 /**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quotitacion/response/file/{id}","QuoteResponseController@uploadFile");
+
 /**Dado un id de una cotizacion y un id de solicitud de cotizacion, entrega los detalles de esa cotizacion */
 Route::get("quote/{idCo}/{idRe}","QuoteResponseController@show");
 /**Dado un id de solicitud de cotizacion devuelve todas las cotizaciones con sus respectivos detalles */
@@ -180,4 +181,15 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('business','BusinessController@index');
     /**Devuelve las empresas segun el "rubro" que se quiere buscar */
     Route::get('business/searchRubro','BusinessController@searchRubro');
+
+    /*RESPUESTA EMPRESA COTIZACION DESDE LA UNIDAD ADMINISTRATIVA */
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("quotitacion/response/ua","QuoteResponseController@storageQuoteUA");
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("quotitacion/response/ua/{id}","QuoteResponseController@storageDetailsUA");
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("quotitacion/response/file/ua/{id}","QuoteResponseController@uploadFileUA");
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("quotitacion/response/file/uageneral/{id}","QuoteResponseController@uploadFileGeneralUA");
+    
 });
