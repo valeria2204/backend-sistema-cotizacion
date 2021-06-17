@@ -178,8 +178,8 @@ class QuoteResponseController extends Controller
         $lista = array();
         $codesCompany = CompanyCode::where('request_quotitations_id',$idReq)->get();
 
-        $details = RequestDetail::where('request_quotitations_id',$idReq)->get();
-        $nroDetails = count($details);
+        /*$details = RequestDetail::where('request_quotitations_id',$idReq)->get();
+        $nroDetails = count($details);*/
         
         foreach($codesCompany as $key => $codeCompany)
         {
@@ -199,6 +199,7 @@ class QuoteResponseController extends Controller
                     $res['Empresa'] = $empresa3;
 
                     $prices = Detail::select('totalPrice')->where('quotations_id',$idQuo)->get();
+                    $nroDetails = count($prices);
                     $totals = 0;
 
                     foreach($prices as $key3 => $price)
@@ -206,8 +207,9 @@ class QuoteResponseController extends Controller
                       $total = $price->totalPrice;
                       $totals = $totals + $total;
                     }
-                    $res['Items Cotizados'] = $nroDetails;
-                    $res['Total en Bs'] = $totals;
+                    $res['ItemsCotizados'] = $nroDetails;
+                    $res['TotalEnBs'] = $totals;
+                    $res['idCotizacion'] = $idQuo;
                     $lista[] = $res;
                     
         
