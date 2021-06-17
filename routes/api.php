@@ -37,6 +37,8 @@ Route::post("quotitacion/response/file/{id}","QuoteResponseController@uploadFile
 Route::get("quote/{idCo}/{idRe}","QuoteResponseController@show");
 /**Dado un id de solicitud de cotizacion devuelve todas las cotizaciones con sus respectivos detalles */
 Route::get("listQuotation/{idRe}","QuoteResponseController@getQuotes");
+/**Dado un id de solicitud de cotizacion devuelve una lista de datos para generar el cuadro comparativo */
+Route::get("getComparativeChart/{idRe}","QuoteResponseController@comparativeChart");
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
