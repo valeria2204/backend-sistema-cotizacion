@@ -26,8 +26,6 @@ Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations
 
 /*RESPUESTA EMPRESA COTIZACION */
 /**registra la Respuesta de cotizacion de la empresa*/
-Route::post("quoteResponse","QuoteResponseController@store");
-/**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quotitacion/response","QuoteResponseController@storageQuote");
 /**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quotitacion/response/{id}","QuoteResponseController@storageDetails");

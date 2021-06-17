@@ -21,33 +21,6 @@ class QuoteResponseController extends Controller
     {
         //
     }
-
-    /**
-     * Guarda la qotizacion y los detalles pero no esta en uso.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $quotationResponse = $request->only("offerValidity","deliveryTime","paymentMethod","answerDate","observation","company_codes_id");
-        $response['message']="Envio exitoso";
-        $quotation = Quotation::create($quotationResponse);
-        $details = $request->only("detalles");
-        foreach ($details['detalles'] as $key => $detailResponse) {
-            $detailResponse['quotations_id'] = $quotation->id;
-            $detail=Detail::create($detailResponse);
-        } 
-        $idempresa= $request->only("empresaId");
-        if($idempresa['empresaId']==0){
-            $empresa = $request->only("nameEmpresa","email","nit","rubro");
-            $newempresa = Business::create($empresa);
-        }
-        
-        $response['status']=true;
-        
-        return response()->json(["response"=>$response], $this-> successStatus);
-    }
     /**
      * Guarda la cotizaciocion de respuesta que registra la EMPRESA
      *
@@ -55,11 +28,23 @@ class QuoteResponseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function storageQuote(Request $request){
-        $quotationResponse = $request->only("offerValidity","deliveryTime","paymentMethod","answerDate","observation","company_codes_id");
-        $response['message']="Envio exitoso";
-        $quotation = Quotation::create($quotationResponse);
-        $response['id'] = $quotation->id;
-        return response()->json(["response"=>$response], $this-> successStatus);
+        try {
+            $idEmpresa = $request->only("business_id");
+            if ($idEmpresa["business_id"]==0) {
+                $dataEmpresa = $request->only("nameEmpresa","nit","rubro","email");
+                $newEmpresa = Business::create($dataEmpresa);
+                $idEmpresa["business_id"] = $newEmpresa["id"];
+            }
+            $quotationResponse = $request->only("offerValidity","deliveryTime","paymentMethod","answerDate","observation","company_codes_id");
+            $quotationResponse["business_id"] = $idEmpresa["business_id"];
+            $response['message']="Envio exitoso";
+            $quotation = Quotation::create($quotationResponse);
+            $response['id'] = $quotation->id;
+            return response()->json(["response"=>$response], $this-> successStatus);
+        } catch (\Throwable $th) {
+            $response['message']="Algo salio mal por favor informa a la unidad cotizante.";
+            return response()->json(["response"=>$response], $this-> successStatus);
+        }
     }
     public function storageDetails(Request $request,$id){
         $detailResponse = $request->only("unitPrice","totalPrice","request_details_id","brand","industry","model","warrantyTime");
