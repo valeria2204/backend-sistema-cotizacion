@@ -182,12 +182,12 @@ Route::group(['middleware' => 'auth:api'], function(){
 
     /*RESPUESTA EMPRESA COTIZACION DESDE LA UNIDAD ADMINISTRATIVA */
     /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
-    Route::post("quotitacion/response/ua","QuoteResponseController@storageQuoteUA");
+    Route::post("ua/quotitacion/response","QuoteResponseController@UAstorageQuote");
     /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
-    Route::post("quotitacion/response/ua/{id}","QuoteResponseController@storageDetailsUA");
+    Route::post("ua/quotitacion/response/{id}","QuoteResponseController@storageDetailsUA");
     /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
-    Route::post("quotitacion/response/file/ua/{id}","QuoteResponseController@uploadFileUA");
+    Route::post("ua/quotitacion/response/file/{id}","QuoteResponseController@uploadFileUA");
     /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
-    Route::post("quotitacion/response/file/uageneral/{id}","QuoteResponseController@uploadFileGeneralUA");
+    Route::post("ua/quotitacion/response/file/uageneral/{id}","QuoteResponseController@uploadFileGeneralUA");
     
 });

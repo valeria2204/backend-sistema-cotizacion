@@ -75,17 +75,32 @@ class QuoteResponseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storageQuoteUA(Request $request){
-        $quotationResponse = $request->only("offerValidity","deliveryTime","paymentMethod","answerDate","observation","company_codes_id");
-        $response['message']="Envio exitoso";
-        $quotation = Quotation::create($quotationResponse);
-        $response['id'] = $quotation->id;
-        return response()->json(["response"=>$response], $this-> successStatus);
+    public function UAstorageQuote(Request $request){
+        try {
+            $idEmpresa = $request->only("idEmpresa");
+            $id = $idEmpresa["idEmpresa"];
+            $empresa = Business::find($id);
+            $input['email']=$empresa->email;
+            $aux = $request->only("request_quotitations_id");
+            $input['request_quotitations_id']=$aux["request_quotitations_id"];
+            $input['code']="No code";
+            $CompanyCode= CompanyCode::create($input);
+            $quotationResponse = $request->only("offerValidity","deliveryTime","paymentMethod","answerDate","observation");
+            $quotationResponse["company_codes_id"]= $CompanyCode->id;
+            $quotationResponse["business_id"] = $id;
+            $response['message']="Envio exitoso";
+            $quotation = Quotation::create($quotationResponse);
+            $response['id'] = $quotation->id;
+            return response()->json(["response"=>$response], $this-> successStatus);
+        } catch (\Throwable $th) {
+            $response['message']="Algo salio mal por favor intente nuevamente.";
+            return response()->json(["response"=>$response], $this-> successStatus);
+        }
     }
     public function storageDetailsUA(Request $request,$id){
         $detailResponse = $request->only("unitPrice","totalPrice","request_details_id","brand","industry","model","warrantyTime");
         $detailResponse['quotations_id'] = $id;
-        $detail=Detail::create($detailResponse);
+        $detail = Detail::create($detailResponse);
         return response()->json(["response"=>$detail->id], $this-> successStatus);
     }
     public function uploadFileUA(Request $request,$id)
