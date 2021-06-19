@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
-
 
 Route::post('login', 'UserController@login');
 
@@ -28,8 +26,6 @@ Route::get('quotitation/details/{id}',"CompanyCodeController@detailsQuptitations
 
 /*RESPUESTA EMPRESA COTIZACION */
 /**registra la Respuesta de cotizacion de la empresa*/
-Route::post("quoteResponse","QuoteResponseController@store");
-/**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quotitacion/response","QuoteResponseController@storageQuote");
 /**registra la Respuesta de cotizacion de la empresa*/
 Route::post("quotitacion/response/{id}","QuoteResponseController@storageDetails");
@@ -40,6 +36,8 @@ Route::post("quotitacion/response/file/{id}","QuoteResponseController@uploadFile
 Route::get("quote/{idCo}/{idRe}","QuoteResponseController@show");
 /**Dado un id de solicitud de cotizacion devuelve todas las cotizaciones con sus respectivos detalles */
 Route::get("listQuotation/{idRe}","QuoteResponseController@getQuotes");
+/**Dado un id de solicitud de cotizacion devuelve una lista de datos para generar el cuadro comparativo */
+Route::get("getComparativeChart/{idRe}","QuoteResponseController@comparativeChart");
 
 Route::get("dowloadFile/{id}/{namefile}", "RequestQuotitationController@downloadFile");
 
@@ -181,4 +179,15 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('business','BusinessController@index');
     /**Devuelve las empresas segun el "rubro" que se quiere buscar */
     Route::get('business/searchRubro','BusinessController@searchRubro');
+
+    /*RESPUESTA EMPRESA COTIZACION DESDE LA UNIDAD ADMINISTRATIVA */
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("ua/quotitacion/response","QuoteResponseController@UAstorageQuote");
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("ua/quotitacion/response/{id}","QuoteResponseController@storageDetailsUA");
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("ua/quotitacion/response/file/{id}","QuoteResponseController@uploadFileUA");
+    /**registra la Respuesta de cotizacion de la empresa desde la unidad administrativa*/
+    Route::post("ua/quotitacion/response/file/uageneral/{id}","QuoteResponseController@uploadFileGeneralUA");
+    
 });
