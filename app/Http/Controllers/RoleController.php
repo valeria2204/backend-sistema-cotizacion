@@ -83,12 +83,38 @@ class RoleController extends Controller
         $tam = count($arr_permission);
         if($tam>0){
             $rol = Role::find($request->idRol);
-            $rol->permissions()->sync($arr_permission);
+            $rol->permissions()->syncWithoutDetaching($arr_permission);
             return response()->json(['message'=> "Actualizacion exitosa"], $this-> successStatus); 
         }
         else{
             return response()->json(['message'=> "No se cambio los permisos de este rol, no mando permisos"], $this-> successStatus);
         }   
+    }
+
+    /**
+     * Muestra los id de los permisos que tiene un rol *s*
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showPermissionsOfRol(Request $request)
+    {
+        $validator = Validator::make($request->all(), [ 
+            'idRol' => 'required', 
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+        $permissions = array();
+        $rol = Role::find($request->idRol);
+        $permisos = $rol->permissions()->get();
+        foreach($permisos as $kp => $perm){
+            $id_perm = $perm->id;
+            array_push($permissions,$id_perm);
+        }
+        return response()->json(['permissions'=> $permissions], $this-> successStatus); 
+           
     }
 
     /**

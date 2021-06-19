@@ -105,7 +105,7 @@ class UserController extends Controller
             }
             if($id_unit_a !=null){
                 $administrative_unit = AdministrativeUnit::find($id_unit_a);
-                $role['nameUnidadAdministrativa'] = $administrative_unit->nameUnidadGasto;
+                $role['nameUnidadAdministrativa'] = $administrative_unit->name;
             }
             else{
                 $role['nameUnidadAdministrativa'] = null;
