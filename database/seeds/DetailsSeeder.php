@@ -55,5 +55,27 @@ class DetailsSeeder extends Seeder
         $Detail->request_details_id=4;
         $Detail->quotations_id=1;
         $Detail->save();
+
+        $Detail = new Detail();
+        $Detail->unitPrice=3000;
+        $Detail->totalPrice=3000*3;
+        $Detail->brand="na";
+        $Detail->industry="italiano";
+        $Detail->model="na";
+        $Detail->warrantyTime="200 dias";
+        $Detail->request_details_id=1;
+        $Detail->quotations_id=2;
+        $Detail->save();
+
+        $Detail = new Detail();
+        $Detail->unitPrice=30;
+        $Detail->totalPrice=30*3;
+        $Detail->brand="na";
+        $Detail->industry="chino";
+        $Detail->model="na";
+        $Detail->warrantyTime="2 dias";
+        $Detail->request_details_id=3;
+        $Detail->quotations_id=2;
+        $Detail->save();
     }
 }
