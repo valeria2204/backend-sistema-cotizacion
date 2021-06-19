@@ -150,7 +150,7 @@ class UserController extends Controller
         return response()->json(['roles' => $roles], $this-> successStatus);
     }
     /**
-     * Devuelve una lista de usuarios mas sus roles *s*
+     * Devuelve una lista de usuarios mas sus roles *s* c
      *
      * @return \Illuminate\Http\Response
      */
@@ -159,10 +159,11 @@ class UserController extends Controller
         $users = User::select('id','name','lastName','ci','phone','email')->get();
         foreach ($users as $key =>$user)
         {
-             $rolesactindex = $user->roles()
+             $rolesactindexall = $user->roles()
                     ->where('role_status',1)
                     ->where('global_status',1)
                     ->get();
+            $rolesactindex = $rolesactindexall->unique('id');
              $valor = count($rolesactindex);
              if($valor>1){
                 $nameRol = "";
@@ -230,7 +231,7 @@ class UserController extends Controller
         //usuarios con rol de jefe administrativo
         $users_head_a = $rol_head_admin->users()->get();
          //usuarios sin duplicados
-         $users =$users_head_a->unique('id');
+        $users =$users_head_a->unique('id');
         foreach ($users as $ksu => $user){
             $admin_new = $user->roles()
                             ->where(['role_id'=>2,'role_status'=>1,'administrative_unit_status'=>1,'global_status'=>1])

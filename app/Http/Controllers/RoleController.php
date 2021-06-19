@@ -18,7 +18,6 @@ class RoleController extends Controller
     public function index()
     {
         $requestRols = Role::select('id','nameRol','description')->get();
-        $permissions = array();
         foreach($requestRols as $kr => $rol){
             $permisos = $rol->permissions()->get();
             $permissions = array();
@@ -84,7 +83,8 @@ class RoleController extends Controller
     {
         $validator = Validator::make($request->all(), [ 
             'idRol' => 'required',
-            'idPermission' => 'required', //se debe mandar si se quiere editar los permisos de ese rol 
+            'idPermission' => 'required', //se debe mandar si se quiere editar los permisos de ese rol
+            'description' => 'required', 
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
@@ -93,7 +93,9 @@ class RoleController extends Controller
         $tam = count($arr_permission);
         if($tam>0){
             $rol = Role::find($request->idRol);
-            $rol->permissions()->syncWithoutDetaching($arr_permission);
+            $rol->description = $request->description;
+            $rol->save();
+            $rol->permissions()->sync($arr_permission);
             return response()->json(['message'=> "Actualizacion exitosa"], $this-> successStatus); 
         }
         else{
