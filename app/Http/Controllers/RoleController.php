@@ -18,6 +18,16 @@ class RoleController extends Controller
     public function index()
     {
         $requestRols = Role::select('id','nameRol','description')->get();
+        $permissions = array();
+        foreach($requestRols as $kr => $rol){
+            $permisos = $rol->permissions()->get();
+            $permissions = array();
+            foreach($permisos as $kp => $perm){
+                $id_perm = $perm->id;
+                array_push($permissions,$id_perm);
+            }
+            $rol['permissions'] = $permissions;
+        }
         return response()->json(['roles'=> $requestRols],$this-> successStatus);
     }
 
@@ -74,7 +84,7 @@ class RoleController extends Controller
     {
         $validator = Validator::make($request->all(), [ 
             'idRol' => 'required',
-            //'idPermission' => 'required', se debe mandar si se quiere editar los permisos de ese rol 
+            'idPermission' => 'required', //se debe mandar si se quiere editar los permisos de ese rol 
         ]);
         if ($validator->fails()) { 
             return response()->json(['error'=>$validator->errors()], 401);            
@@ -89,32 +99,6 @@ class RoleController extends Controller
         else{
             return response()->json(['message'=> "No se cambio los permisos de este rol, no mando permisos"], $this-> successStatus);
         }   
-    }
-
-    /**
-     * Muestra los id de los permisos que tiene un rol *s*
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function showPermissionsOfRol(Request $request)
-    {
-        $validator = Validator::make($request->all(), [ 
-            'idRol' => 'required', 
-        ]);
-        if ($validator->fails()) { 
-            return response()->json(['error'=>$validator->errors()], 401);            
-        }
-        $permissions = array();
-        $rol = Role::find($request->idRol);
-        $permisos = $rol->permissions()->get();
-        foreach($permisos as $kp => $perm){
-            $id_perm = $perm->id;
-            array_push($permissions,$id_perm);
-        }
-        return response()->json(['permissions'=> $permissions], $this-> successStatus); 
-           
     }
 
     /**

@@ -122,8 +122,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('roles/new', 'RoleController@store');
     /**Recibe el id del rol y un arreglo de permisos y modifica los permisos de ese rol */
     Route::put('roles/edit', 'RoleController@updatePermissionsOfRol');
-    /**Recibe el id del rol y devuelve los permisos de ese rol */
-    Route::get('roles/show', 'RoleController@showPermissionsOfRol');
 
     /**PERMISSION CONTROLLER */
     Route::get('permissions','PermissionController@index');
