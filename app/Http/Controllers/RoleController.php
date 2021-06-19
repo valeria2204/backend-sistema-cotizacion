@@ -64,15 +64,31 @@ class RoleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Edita los permisos que tiene un rol *s*
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function updatePermissionsOfRol(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [ 
+            'idRol' => 'required',
+            //'idPermission' => 'required', se debe mandar si se quiere editar los permisos de ese rol 
+        ]);
+        if ($validator->fails()) { 
+            return response()->json(['error'=>$validator->errors()], 401);            
+        }
+        $arr_permission = $request->idPermission;
+        $tam = count($arr_permission);
+        if($tam>0){
+            $rol = Role::find($request->idRol);
+            $rol->permissions()->sync($arr_permission);
+            return response()->json(['message'=> "Actualizacion exitosa"], $this-> successStatus); 
+        }
+        else{
+            return response()->json(['message'=> "No se cambio los permisos de este rol, no mando permisos"], $this-> successStatus);
+        }   
     }
 
     /**
