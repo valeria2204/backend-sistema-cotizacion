@@ -159,8 +159,10 @@ class QuoteResponseController extends Controller
             $idDetail = $detail->id;
 
             $req = RequestDetail::select('request_details.id','request_details.amount'
-             ,'request_details.unitMeasure','request_details.description','details.unitPrice','details.totalPrice')
-             ->join('details','request_details.id','=','details.request_details_id')
+             ,'request_details.unitMeasure','request_details.description','details.unitPrice','details.totalPrice'
+             ,'details.brand','details.industry','details.model','details.warrantyTime')
+            //$req = RequestDetail::
+            ->join('details','request_details.id','=','details.request_details_id')
              ->where('request_details.id','=',$idDetail)
              ->where('details.quotations_id','=',$idCo)->get();
             $quo[] = $req;
