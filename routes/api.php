@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 //Route::get('verifyPasswordChange/{id}', 'UserController@verifyPasswordChange');
-Route::post('quotitation/quoteReport', 'QuoteReportController@store');
-Route::get('quotitation/quoteReport/{id}', 'QuoteReportController@show');
 
 Route::post('login', 'UserController@login');
 

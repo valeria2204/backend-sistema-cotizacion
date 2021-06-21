@@ -61,10 +61,9 @@ class QuoteReportController extends Controller
         }
         
         $input = $request->all();
-        
         $quoteReport = QuoteReport::create($input);
         // Se finaliza la cotizacion
-        $requestQuotitation = RequestQuotitation::find($idRequest['request_quotitations_id']);
+        $requestQuotitation = RequestQuotitation::find($request['request_quotitations_id']);
         $requestQuotitation['statusResponse'] = 'Finalizado';
         $requestQuotitation->update();
         return response()->json(['message'=> "Registro exitoso"], $this-> successStatus);
