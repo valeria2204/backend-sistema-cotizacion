@@ -117,12 +117,12 @@ class QuoteResponseController extends Controller
             $name = $id. "-" . $name_File . "." .$extension;
             $file->move(public_path('FilesResponseBusiness/'),$name);
         }
-       
-        return response()->json(["messaje"=>"Archivos guardados"]);
+        return response()->json(["message"=>"se guardo el archivo"]);
+        //return response()->json(["messaje"=>"Archivos guardados"]);
     }
     public function uploadFileGeneralUA(Request $request,$id)
     {
-        /**El id es el id de la respuesta guardada */
+        $contador = 0;
         $files = $request->file();
         foreach ($files as $file) {
             $filename = $file->getClientOriginalName();
@@ -131,12 +131,13 @@ class QuoteResponseController extends Controller
             $name_File = str_replace(" ","_",$filename);
     
             $extension = $file->getClientOriginalExtension();
-    
+            $contador = $contador+1;
             $name = $id. "-" . $name_File . "." .$extension;
             $file->move(public_path('FilesResponseBusinessUA/'),$name);
         }
+        return response()->json(["message"=>"se guardaron los archivos"]);
+        //return response()->json(["messaje"=>"Archivos guardados ".$contador." id:".$id]);
        
-        return response()->json(["messaje"=>"Archivos guardados"]);
     }
     /**
      * Display the specified resource.
@@ -182,33 +183,28 @@ class QuoteResponseController extends Controller
         
         foreach($codesCompany as $key => $codeCompany)
         {
-            $idCode = $codeCompany->id; 
-            $emailBussi = $codeCompany->email;
+            $idCode = $codeCompany->id;
             $quotations = Quotation::where('company_codes_id',$idCode)->get();
-
+            
             foreach($quotations as $key2 => $quotation)
-            {
-                    $idQuo = $quotation->id;
-                    $empresa = Business::select('businesses.nameEmpresa')
-                    ->join('quotations','businesses.id','=','quotations.business_id')
-                    ->where('businesses.id','=',$idQuo)->get();
-                    $empresa2 = $empresa[0];
-                    $empresa3 = $empresa2['nameEmpresa'];
-                    $res['Empresa'] = $empresa3;
+            {       
+                $idQuo = $quotation->id;
+                $idEmpresa = $quotation->business_id;
+                $empresa = Business::select('nameEmpresa')->where('id','=',$idEmpresa)->get();
+                $res['Empresa'] = $empresa[0]->nameEmpresa;
+                $prices = Detail::select('totalPrice')->where('quotations_id',$idQuo)->get();
+                $nroDetails = count($prices);
+                $totals = 0;
 
-                    $prices = Detail::select('totalPrice')->where('quotations_id',$idQuo)->get();
-                    $nroDetails = count($prices);
-                    $totals = 0;
-
-                    foreach($prices as $key3 => $price)
-                    {
-                      $total = $price->totalPrice;
-                      $totals = $totals + $total;
-                    }
-                    $res['ItemsCotizados'] = $nroDetails;
-                    $res['TotalEnBs'] = $totals;
-                    $res['idCotizacion'] = $idQuo;
-                    $lista[] = $res;
+                foreach($prices as $key3 => $price)
+                {
+                    $total = $price->totalPrice;
+                    $totals = $totals + $total;
+                }
+                $res['ItemsCotizados'] = $nroDetails;
+                $res['TotalEnBs'] = $totals;
+                $res['idCotizacion'] = $idQuo;
+                $lista[] = $res;
                     
             }
         }
