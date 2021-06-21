@@ -189,17 +189,14 @@ class QuoteResponseController extends Controller
 
             foreach($quotations as $key2 => $quotation)
             {
-                    $idQuo = $quotation->id;
-                    $empresa = Business::select('businesses.nameEmpresa')
-                    ->join('quotations','businesses.id','=','quotations.business_id')
-                    ->where('businesses.id','=',$idQuo)->get();
-                    $empresa2 = $empresa[0];
-                    $empresa3 = $empresa2['nameEmpresa'];
-                    $res['Empresa'] = $empresa3;
+                $idQuo = $quotation->id;
+                $idEmpresa = $quotation->business_id;
+                $empresa = Business::select('nameEmpresa')->where('id','=',$idEmpresa)->get();
+                $res['Empresa'] = $empresa[0]->nameEmpresa;
 
-                    $prices = Detail::select('totalPrice')->where('quotations_id',$idQuo)->get();
-                    $nroDetails = count($prices);
-                    $totals = 0;
+                $prices = Detail::select('totalPrice')->where('quotations_id',$idQuo)->get();
+                $nroDetails = count($prices);
+                $totals = 0;
 
                     foreach($prices as $key3 => $price)
                     {
@@ -234,33 +231,35 @@ class QuoteResponseController extends Controller
            
             foreach($codesCompany as $key => $codeCompany)
             {
-                $idQuo = $codeCompany->id; 
-                $empresa = Business::select('businesses.nameEmpresa')
-                ->join('quotations','businesses.id','=','quotations.business_id')
-                ->where('businesses.id','=',$idQuo)->get();
-                $empresa2 = $empresa[0]; 
-                $nameEmpresa = $empresa2['nameEmpresa'];
-                $list['Empresa'] =$nameEmpresa;
+                $idCode = $codeCompany->id; 
+                $quotations = Quotation::where('company_codes_id',$idCode)->get();
+
+                foreach($quotations as $key2 => $quotation)
+                {
+                    $idQuo = $quotation->id;
+                    $idEmpresa = $quotation->business_id;
+                    $empresa = Business::select('nameEmpresa')->where('id','=',$idEmpresa)->get();
+                    $list['Empresa'] =$empresa[0]->nameEmpresa;
+
+                    $detail = Detail::select('totalPrice')->where('quotations_id',$idQuo)
+                    ->where('request_details_id',$idDe)->get();
+                    $existDetail = count ($detail);
                 
-
-                $detail = Detail::select('totalPrice')->where('quotations_id',$idQuo)
-                ->where('request_details_id',$idDe)->get();
-                $existDetail = count ($detail);
-
-                if($existDetail > 0)
-                {
-                   $total = $detail[0];
-                   $totalPrice = $total['totalPrice'];
-                   $list['total'] = $totalPrice;
-                }
-                else
-                {
-                    $totalPrice = null;
+                    if($existDetail > 0)
+                    {
+                    $total = $detail[0];
+                    $totalPrice = $total['totalPrice'];
                     $list['total'] = $totalPrice;
-                        
+                    }
+                    else
+                    {
+                        $totalPrice = null;
+                        $list['total'] = $totalPrice;
+                            
+                    }
+                    
+                    $chart[] = $list;
                 }
-                
-                $chart[] = $list;
                     
             }
             
