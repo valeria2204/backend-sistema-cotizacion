@@ -166,8 +166,20 @@ class QuoteResponseController extends Controller
             ->join('details','request_details.id','=','details.request_details_id')
              ->where('request_details.id','=',$idDetail)
              ->where('details.quotations_id','=',$idCo)->get();
+             $reqdet = $req[0];
+             if($reqdet->brand==null){
+                $reqdet->brand ='';
+             }
+             if($reqdet->industry==null){
+                $reqdet->industry ='';
+             }
+             if($reqdet->model==null){
+                $reqdet->model ='';
+             }
+             if($reqdet->warrantyTime==null){
+                $reqdet->warrantyTime ='';
+             }
             $quo[] = $req;
-        
         }
 
         return response()->json(['Cotizacion'=>$quo], $this-> successStatus);
