@@ -119,12 +119,12 @@ class QuoteResponseController extends Controller
             $name = $id. "-" . $name_File . "." .$extension;
             $file->move(public_path('FilesResponseBusiness/'),$name);
         }
-       
-        return response()->json(["messaje"=>"Archivos guardados"]);
+        return response()->json(["message"=>"se guardo el archivo"]);
+        //return response()->json(["messaje"=>"Archivos guardados"]);
     }
     public function uploadFileGeneralUA(Request $request,$id)
     {
-        /**El id es el id de la respuesta guardada */
+        $contador = 0;
         $files = $request->file();
         foreach ($files as $file) {
             $filename = $file->getClientOriginalName();
@@ -133,12 +133,13 @@ class QuoteResponseController extends Controller
             $name_File = str_replace(" ","_",$filename);
     
             $extension = $file->getClientOriginalExtension();
-    
+            $contador = $contador+1;
             $name = $id. "-" . $name_File . "." .$extension;
             $file->move(public_path('FilesResponseBusinessUA/'),$name);
         }
+        return response()->json(["message"=>"se guardaron los archivos"]);
+        //return response()->json(["messaje"=>"Archivos guardados ".$contador." id:".$id]);
        
-        return response()->json(["messaje"=>"Archivos guardados"]);
     }
     /**
      * Devuelve todos los datos de una cotizacion
@@ -155,11 +156,10 @@ class QuoteResponseController extends Controller
                                         ->where('request_quotitations_id',$idRe)->get();
         $quo = array();
         $quo = $quote;
-
         foreach ($requestDetail as $key => $detail)
         {
             $idDetail = $detail->id;
-
+            
             $req = RequestDetail::select('request_details.id','request_details.amount'
              ,'request_details.unitMeasure','request_details.description','details.id as idDetail','details.unitPrice','details.totalPrice'
              ,'details.brand','details.industry','details.model','details.warrantyTime')
@@ -167,12 +167,18 @@ class QuoteResponseController extends Controller
              ->where('request_details.id','=',$idDetail)
              ->where('details.quotations_id','=',$idCo)->get();
             $quo[] = $req;
-        
         }
-
-        return response()->json(['Cotizacion'=>$quo], $this-> successStatus);
-       
-        
+        $responseQuo = array();
+        $responseQuo[] = $quo[0]; //siempre hace refencia no cambiara
+        for ($i=0; $i < count($quo) ; $i++) { 
+            if($i>0){
+                $tamanio = count($quo[$i]);
+                if($tamanio>0){
+                    $responseQuo[] = $quo[$i];
+                }
+            }
+        }
+        return response()->json(['Cotizacion'=>$responseQuo], $this-> successStatus);
     }
 
     public function getQuotes($idReq)
@@ -183,30 +189,28 @@ class QuoteResponseController extends Controller
         
         foreach($codesCompany as $key => $codeCompany)
         {
-            $idCode = $codeCompany->id; 
-            $emailBussi = $codeCompany->email;
+            $idCode = $codeCompany->id;
             $quotations = Quotation::where('company_codes_id',$idCode)->get();
-
+            
             foreach($quotations as $key2 => $quotation)
-            {
+            {       
                 $idQuo = $quotation->id;
                 $idEmpresa = $quotation->business_id;
                 $empresa = Business::select('nameEmpresa')->where('id','=',$idEmpresa)->get();
                 $res['Empresa'] = $empresa[0]->nameEmpresa;
-
                 $prices = Detail::select('totalPrice')->where('quotations_id',$idQuo)->get();
                 $nroDetails = count($prices);
                 $totals = 0;
 
-                    foreach($prices as $key3 => $price)
-                    {
-                      $total = $price->totalPrice;
-                      $totals = $totals + $total;
-                    }
-                    $res['ItemsCotizados'] = $nroDetails;
-                    $res['TotalEnBs'] = $totals;
-                    $res['idCotizacion'] = $idQuo;
-                    $lista[] = $res;
+                foreach($prices as $key3 => $price)
+                {
+                    $total = $price->totalPrice;
+                    $totals = $totals + $total;
+                }
+                $res['ItemsCotizados'] = $nroDetails;
+                $res['TotalEnBs'] = $totals;
+                $res['idCotizacion'] = $idQuo;
+                $lista[] = $res;
                     
             }
         }
@@ -288,6 +292,24 @@ class QuoteResponseController extends Controller
     public function showNameFilesDetailsBusiness($idDetailOffert)
     { 
         $directory = public_path().'/FilesResponseBusiness'; 
+        $listDir = $this-> dirToArrayOffer($directory,$idDetailOffert);
+        return response()->json($listDir,200);
+    }
+    //muestra el archivo de un detalle de la cotizacion
+    public function showFileBusinessManualUA($namefile){
+        $path = public_path('/FilesResponseBusinessUA\\'.$namefile);
+        return response()->file($path);
+    }
+
+    /**
+     * devuelve los nombres de archivos adjuntos al detalle de la cotizacion (empresa)
+     * segun el id de una cotizacion
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showNameFileBusinessManualUA($idDetailOffert)
+    { 
+        $directory = public_path().'/FilesResponseBusinessUA'; 
         $listDir = $this-> dirToArrayOffer($directory,$idDetailOffert);
         return response()->json($listDir,200);
     }
