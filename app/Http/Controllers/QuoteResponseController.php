@@ -232,7 +232,7 @@ class QuoteResponseController extends Controller
        {
            $idDe = $reDetail->id;
           // $chart[] = $reDetail;
-           
+           $nombreEmpresas = array();
             foreach($codesCompany as $key => $codeCompany)
             {
                 $idCode = $codeCompany->id; 
@@ -244,22 +244,20 @@ class QuoteResponseController extends Controller
                     $idEmpresa = $quotation->business_id;
                     $empresa = Business::select('nameEmpresa')->where('id','=',$idEmpresa)->get();
                     $list['Empresa'] =$empresa[0]->nameEmpresa;
-
-                    $detail = Detail::select('totalPrice')->where('quotations_id',$idQuo)
+                    $nombreEmpresas[]= $empresa[0]->nameEmpresa;
+                    $detail = Detail::select('unitPrice','totalPrice')->where('quotations_id',$idQuo)
                     ->where('request_details_id',$idDe)->get();
                     $existDetail = count ($detail);
                 
                     if($existDetail > 0)
                     {
-                    $total = $detail[0];
-                    $totalPrice = $total['totalPrice'];
-                    $list['total'] = $totalPrice;
+                        $detalle = $detail[0];
+                        $totalPrice = $detalle['totalPrice'];
+                        $list['total'] = $totalPrice;
                     }
                     else
                     {
-                        $totalPrice = null;
-                        $list['total'] = $totalPrice;
-                            
+                        $list['total'] = null;                        
                     }
                     
                     $chart[] = $list;
@@ -270,10 +268,10 @@ class QuoteResponseController extends Controller
             $reDetail['cotizaciones'] = $chart;
             $chart = null;
             $res[] = $reDetail;
-        }    
 
+        }    
         
-        return response()->json(['comparativeChart'=>$res], $this-> successStatus);
+        return response()->json(['comparativeChart'=>$res, "businesses"=>$nombreEmpresas], $this-> successStatus);
 
     }
     
