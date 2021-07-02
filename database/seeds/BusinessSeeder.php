@@ -24,7 +24,7 @@ class BusinessSeeder extends Seeder
         $Business = new Business();
         $Business->nameEmpresa="Soft Computers";
         $Business->nit="12222254";
-        $Business->email="softComputers@gmail.com";
+        $Business->email="softcomputers@gmail.com";
         $Business->phone="7598555";
         $Business->direction="Av. Ayacucho #218";
         $Business->rubro="Venta de equipos informaticos";
@@ -114,7 +114,7 @@ class BusinessSeeder extends Seeder
         $Business = new Business();
         $Business->nameEmpresa="Muebles LaFuente";
         $Business->nit="17848899";
-        $Business->email="301280Oeliasg@gmail.com";
+        $Business->email="elias301280Og@gmail.com";
         $Business->phone="76933144";
         $Business->direction="Zona Molle Molle Tiquipaya";
         $Business->rubro="Venta y fabrica de muebles";
