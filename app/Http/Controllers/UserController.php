@@ -23,7 +23,6 @@ class UserController extends Controller
      */ 
     public function login(){ 
         if(Auth::attempt(['userName' => request('userName'), 'password' => request('password')])){ 
-            dd('234'); 
             $user = Auth::user();
 
             $success['token'] =  $user->createToken('MyApp')-> accessToken;
@@ -158,9 +157,7 @@ class UserController extends Controller
      */
     public function index()
     {
- 
         $users = User::select('id','name','lastName','ci','phone','email','direction','userName')->get();
-        dd('uu');
         foreach ($users as $key =>$user)
         {
              $rolesactindexall = $user->roles()
