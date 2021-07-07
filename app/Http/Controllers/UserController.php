@@ -11,6 +11,7 @@ use App\AdministrativeUnit;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\TryCatch;
 use Validator;
 
 class UserController extends Controller
@@ -22,16 +23,19 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response 
      */ 
     public function login(){
-        return response()->json(['message'=>'llegue'],$this-> successStatus);
-        if(Auth::attempt(['userName' => request('userName'), 'password' => request('password')])){ 
-            $user = Auth::user();
-
-            $success['token'] =  $user->createToken('MyApp')-> accessToken;
-            return response()->json(['success' => $success], $this-> successStatus);
-        } 
-        else{ 
-            return response()->json(['error'=>'Datos incorrectos. Por favor revise su nombre de usuario y contraseña'], 401); 
-        } 
+        //return response()->json(['message'=>'llegue'],$this-> successStatus);
+        try {
+            if(Auth::attempt(['userName' => request('userName'), 'password' => request('password')])){ 
+                $user = Auth::user();
+                $success['token'] =  $user->createToken('MyApp')-> accessToken;
+                return response()->json(['success' => $success], $this-> successStatus);
+            } 
+            else{ 
+                return response()->json(['error'=>'Datos incorrectos. Por favor revise su nombre de usuario y contraseña'], 401); 
+            } 
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>$th->getMessage()],$this-> successStatus);
+        }
     }
 
     /** 
