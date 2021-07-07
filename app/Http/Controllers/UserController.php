@@ -21,7 +21,8 @@ class UserController extends Controller
      * 
      * @return \Illuminate\Http\Response 
      */ 
-    public function login(){ 
+    public function login(){
+        return response()->json(['message'=>'llegue'],$this-> successStatus);
         if(Auth::attempt(['userName' => request('userName'), 'password' => request('password')])){ 
             $user = Auth::user();
 
