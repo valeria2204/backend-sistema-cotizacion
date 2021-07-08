@@ -24,6 +24,9 @@ class CompanyCodeController extends Controller
             $company = $companyCode[0];
             $company['status']=true;
             $empresa = Business::where('email',$company->email)->get();
+            $codeupdate =  CompanyCode::find($company->id);
+            $codeupdate['code'] = 'No code';
+            $codeupdate->update();
            $existeEmpresa = count($empresa);
            if($existeEmpresa>0){
                $company['empresa']= $empresa[0];
