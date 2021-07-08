@@ -28,6 +28,7 @@ class CompanyCodeController extends Controller
            if($existeEmpresa>0){
                $company['empresa']= $empresa[0];
            }
+           
             return response()->json($company, 200); 
         }else{
             $companyCode['status']=false;
