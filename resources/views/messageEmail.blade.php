@@ -6,10 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        body{
-            font-family:"Gill Sans Extrabold", Helvetica, sans-serif
-        }
-
+    
         h1{
             color:#ffff;
             font-size: 30px;
