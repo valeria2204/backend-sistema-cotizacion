@@ -27,18 +27,22 @@ class EmailController extends Controller
      */
     public function store(Request $request,$id)
     {
-        $emails = $request->emails;
+        try {
+            $emails = $request->emails;
         foreach ($emails as $key => $email) {
             $input['email']=$email;
             $input['request_quotitations_id']=$id;
             $input['code']=substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6);
             $request['code']=$input['code'];
             $request['link']="http://devsociety.tis.cs.umss.edu.bo/ingresoCodigo";
-            CompanyCode::create($input);
+            //CompanyCode::create($input);
             Mail::to($email)->send(new EmailModel($request));
             
         }
-        return response()->json(['result'=>"El mensaje ha sido enviado exitosamente!"],200); 
+        return response()->json(['result'=>"El mensaje ha sido enviado exitosamente!"],200);
+        } catch (\Throwable $th) {
+            return response()->json(['result'=>$th->getMessage()]);
+        } 
     }
 
     /**

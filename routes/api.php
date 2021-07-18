@@ -126,7 +126,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     /**resive los emails y la descripcion del mensage que se enviara a las empresas o a la empresa
      * y resive el id a la solicitud a la que pertenece*/
     Route::post('sendEmail/{id}','EmailController@store');
-    Route::post('sendEmail','EmailController@store');
+    //Route::post('sendEmail','EmailController@store');
 
     /**ROL CONTROLLER */
     /**Devuleve la lista de todos los roles */
